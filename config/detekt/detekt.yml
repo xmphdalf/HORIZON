@@ -1,0 +1,99 @@
+# Overrides on top of the detekt defaults. buildUponDefaultConfig is true, so
+# only deviations are written here. The build fails on any finding.
+
+build:
+  maxIssues: 0
+
+comments:
+  # Section 6.1 of scaffolding.md: comments explain why, never what. These rules
+  # catch the two failure modes that section names explicitly.
+  CommentOverPrivateFunction:
+    active: true
+  CommentOverPrivateProperty:
+    active: true
+  UndocumentedPublicClass:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/*Preview*.kt']
+  UndocumentedPublicFunction:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/*Preview*.kt']
+  UndocumentedPublicProperty:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/*Preview*.kt']
+
+complexity:
+  LongMethod:
+    active: true
+    threshold: 40
+  LongParameterList:
+    active: true
+    functionThreshold: 7
+    constructorThreshold: 8
+    ignoreDefaultParameters: true
+  TooManyFunctions:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+    thresholdInFiles: 20
+    thresholdInClasses: 20
+
+exceptions:
+  # Section 6.2: every catch either handles the failure or rethrows.
+  TooGenericExceptionCaught:
+    active: true
+  SwallowedException:
+    active: true
+
+empty-blocks:
+  EmptyCatchBlock:
+    active: true
+
+potential-bugs:
+  # Section 6.2 forbids !!. This rule needs type resolution, which detekt does
+  # not have here, so the noBangBang task in build-logic enforces it for real.
+  # It stays enabled so the intent is visible where the rest of the rules live.
+  UnsafeCallOnNullableType:
+    active: true
+
+naming:
+  FunctionNaming:
+    # Composables are PascalCase by convention.
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    active: true
+
+style:
+  ForbiddenComment:
+    active: true
+    # A bare TODO is forbidden. TODO(#42) carries an issue number and passes.
+    comments:
+      - reason: 'TODO and FIXME must carry an issue number, as TODO(#42).'
+        value: 'TODO:'
+      - reason: 'TODO and FIXME must carry an issue number, as TODO(#42).'
+        value: 'FIXME:'
+      - reason: 'Commented-out code is forbidden. Git remembers it.'
+        value: 'STOPSHIP'
+  MagicNumber:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreEnums: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+  ReturnCount:
+    active: true
+    max: 3
+  ThrowsCount:
+    active: true
+    max: 3
+
+formatting:
+  # detekt-formatting wraps ktlint. Findings are errors like everything else.
+  active: true
+  android: true
+  autoCorrect: false
+  MaximumLineLength:
+    active: true
+    maxLineLength: 120

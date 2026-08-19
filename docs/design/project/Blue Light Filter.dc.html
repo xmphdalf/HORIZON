@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#08090B; font-family:'Outfit',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#F2A65A; text-decoration:none; border-bottom:1px solid rgba(242,166,90,.35); }
+  a:hover { color:#FFC08A; border-bottom-color:rgba(255,192,138,.7); }
+  @keyframes caret { 0%,100% { opacity:.25 } 50% { opacity:.9 } }
+</style>
+</helmet>
+
+<section id="3a" style="padding:64px 72px 40px;display:flex;flex-direction:column;gap:48px;color:#DDE2E6">
+
+  <div style="display:flex;align-items:flex-start;gap:28px;max-width:1100px">
+    <div style="flex:none;width:34px;height:34px;border-radius:10px;background:rgba(242,166,90,.14);color:#F2A65A;font:500 13px 'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center">3a</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:#6C7580">Turn 3 · App icon, five options</div>
+      <h1 style="margin:0;font:200 40px/1.1 'Outfit';letter-spacing:-.02em;color:#EDF0F2;max-width:24ch">Five icons, one arc.</h1>
+      <p style="margin:0;max-width:70ch;font:300 15px/1.7 'Outfit';color:#8B949E;text-wrap:pretty">Same constraint as the app: no illustration, no gradient as decoration, no glow, no pure white. Each option is drawn from geometry already in the product, the arc, the ramp, the knob, so the launcher icon is recognisably the same object as the Home screen readout. All shown at 108px, then at 40px and 24px, because a launcher icon that only works large is a logo, not an icon.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start">
+
+    <div style="width:212px;display:flex;flex-direction:column;gap:14px">
+      <div data-screen-label="Icon A" style="width:212px;height:212px;border-radius:48px;background:#0E0A07;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 120 120" style="width:132px">
+          <path d="M18 84 A42 42 0 0 1 102 84" pathLength="100" fill="none" stroke="rgba(210,180,140,.16)" stroke-width="7" stroke-linecap="round"></path>
+          <path d="M18 84 A42 42 0 0 1 88 56" pathLength="100" fill="none" stroke="#C97A34" stroke-width="7" stroke-linecap="round"></path>
+          <circle cx="88" cy="56" r="9.5" fill="#0E0A07" stroke="#F2A65A" stroke-width="4"></circle>
+        </svg>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">A · THE KNOB</div>
+        <div style="font:300 13px/1.65 'Outfit';color:#8B949E;text-wrap:pretty">The Home readout, cropped. Literally the same object the user drags, so the icon is a promise about the interaction. Strongest recognition, most conventional silhouette.</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:12px;padding-top:2px">
+        <div style="width:40px;height:40px;border-radius:11px;background:#0E0A07;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:26px"><path d="M18 84 A42 42 0 0 1 102 84" fill="none" stroke="rgba(210,180,140,.20)" stroke-width="9" stroke-linecap="round"></path><path d="M18 84 A42 42 0 0 1 88 56" fill="none" stroke="#C97A34" stroke-width="9" stroke-linecap="round"></path><circle cx="88" cy="56" r="10" fill="#0E0A07" stroke="#F2A65A" stroke-width="5"></circle></svg></div>
+        <div style="width:24px;height:24px;border-radius:7px;background:#0E0A07;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:16px"><path d="M18 84 A42 42 0 0 1 102 84" fill="none" stroke="rgba(210,180,140,.24)" stroke-width="12" stroke-linecap="round"></path><path d="M18 84 A42 42 0 0 1 88 56" fill="none" stroke="#C97A34" stroke-width="12" stroke-linecap="round"></path></svg></div>
+        <span style="font:300 11px 'Outfit';color:#5C646E;padding-bottom:4px">knob drops at 24px</span>
+      </div>
+    </div>
+
+    <div style="width:212px;display:flex;flex-direction:column;gap:14px">
+      <div data-screen-label="Icon B" style="width:212px;height:212px;border-radius:48px;background:#0E0A07;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <svg viewBox="0 0 120 120" style="width:212px">
+          <path d="M0 78 A60 60 0 0 1 120 78" fill="#170A02"></path>
+          <path d="M0 78 A60 60 0 0 1 120 78" fill="none" stroke="#C97A34" stroke-width="6"></path>
+          <circle cx="60" cy="78" r="17" fill="#F2A65A"></circle>
+        </svg>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">B · HORIZON</div>
+        <div style="font:300 13px/1.65 'Outfit';color:#8B949E;text-wrap:pretty">A sun half-set behind the arc, read as a horizon line. The most literal statement of the product idea and the boldest silhouette. Risk: closest to generic weather and sunset iconography.</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:12px;padding-top:2px">
+        <div style="width:40px;height:40px;border-radius:11px;background:#0E0A07;overflow:hidden;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:40px"><path d="M0 78 A60 60 0 0 1 120 78" fill="#170A02"></path><path d="M0 78 A60 60 0 0 1 120 78" fill="none" stroke="#C97A34" stroke-width="8"></path><circle cx="60" cy="78" r="18" fill="#F2A65A"></circle></svg></div>
+        <div style="width:24px;height:24px;border-radius:7px;background:#0E0A07;overflow:hidden;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:24px"><path d="M0 78 A60 60 0 0 1 120 78" fill="#170A02"></path><path d="M0 78 A60 60 0 0 1 120 78" fill="none" stroke="#C97A34" stroke-width="10"></path><circle cx="60" cy="78" r="20" fill="#F2A65A"></circle></svg></div>
+        <span style="font:300 11px 'Outfit';color:#5C646E;padding-bottom:4px">holds at 24px</span>
+      </div>
+    </div>
+
+    <div style="width:212px;display:flex;flex-direction:column;gap:14px">
+      <div data-screen-label="Icon C" style="width:212px;height:212px;border-radius:48px;background:#0E0A07;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 120 120" style="width:150px">
+          <path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#6E7C8C" stroke-width="8" stroke-linecap="round" stroke-dasharray="33 100"></path>
+          <path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#DE8F41" stroke-width="8" stroke-linecap="round" stroke-dasharray="30 100" stroke-dashoffset="-35"></path>
+          <path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="8" stroke-linecap="round" stroke-dasharray="30 100" stroke-dashoffset="-70"></path>
+        </svg>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">C · THE RAMP</div>
+        <div style="font:300 13px/1.65 'Outfit';color:#8B949E;text-wrap:pretty">The arc segmented into the three sampled points of the Horizon ramp, cool to ember, left to right. The design system's own diagram used as the mark. Most distinctive, least immediately legible as "screen".</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:12px;padding-top:2px">
+        <div style="width:40px;height:40px;border-radius:11px;background:#0E0A07;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:30px"><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#6E7C8C" stroke-width="11" stroke-linecap="round" stroke-dasharray="31 100"></path><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#DE8F41" stroke-width="11" stroke-linecap="round" stroke-dasharray="28 100" stroke-dashoffset="-36"></path><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="11" stroke-linecap="round" stroke-dasharray="28 100" stroke-dashoffset="-72"></path></svg></div>
+        <div style="width:24px;height:24px;border-radius:7px;background:#0E0A07;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:19px"><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#6E7C8C" stroke-width="15" stroke-linecap="butt" stroke-dasharray="33 100"></path><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#DE8F41" stroke-width="15" stroke-linecap="butt" stroke-dasharray="34 100" stroke-dashoffset="-33"></path><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="15" stroke-linecap="butt" stroke-dasharray="34 100" stroke-dashoffset="-67"></path></svg></div>
+        <span style="font:300 11px 'Outfit';color:#5C646E;padding-bottom:4px">reads as a stripe at 24px</span>
+      </div>
+    </div>
+
+    <div style="width:212px;display:flex;flex-direction:column;gap:14px">
+      <div data-screen-label="Icon D" style="width:212px;height:212px;border-radius:48px;background:#170A02;border:1px solid rgba(220,150,90,.12);display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 120 120" style="width:140px">
+          <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(220,150,90,.18)" stroke-width="7"></circle>
+          <path d="M60 20 A40 40 0 0 1 60 100 Z" fill="#C97A34"></path>
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#8E4F1E" stroke-width="7"></circle>
+        </svg>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">D · HALF LIGHT</div>
+        <div style="font:300 13px/1.65 'Outfit';color:#8B949E;text-wrap:pretty">A ring half filled, the dimming axis rather than the warmth axis. Quietest and most utility-like, sits comfortably beside system icons. Risk: reads as a generic brightness or contrast toggle.</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:12px;padding-top:2px">
+        <div style="width:40px;height:40px;border-radius:11px;background:#170A02;border:1px solid rgba(220,150,90,.12);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:28px"><circle cx="60" cy="60" r="40" fill="none" stroke="rgba(220,150,90,.22)" stroke-width="10"></circle><path d="M60 20 A40 40 0 0 1 60 100 Z" fill="#C97A34"></path><circle cx="60" cy="60" r="40" fill="none" stroke="#8E4F1E" stroke-width="10"></circle></svg></div>
+        <div style="width:24px;height:24px;border-radius:7px;background:#170A02;border:1px solid rgba(220,150,90,.12);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:18px"><circle cx="60" cy="60" r="40" fill="none" stroke="rgba(220,150,90,.26)" stroke-width="13"></circle><path d="M60 20 A40 40 0 0 1 60 100 Z" fill="#C97A34"></path><circle cx="60" cy="60" r="40" fill="none" stroke="#8E4F1E" stroke-width="13"></circle></svg></div>
+        <span style="font:300 11px 'Outfit';color:#5C646E;padding-bottom:4px">holds at 24px</span>
+      </div>
+    </div>
+
+    <div style="width:212px;display:flex;flex-direction:column;gap:14px">
+      <div data-screen-label="Icon E" style="width:212px;height:212px;border-radius:48px;background:#0B0806;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 120 120" style="width:120px">
+          <rect x="34" y="24" width="52" height="66" rx="9" fill="none" stroke="rgba(210,180,140,.22)" stroke-width="6"></rect>
+          <path d="M37 62 L83 62 L83 84 A6 6 0 0 1 77 90 L43 90 A6 6 0 0 1 37 84 Z" fill="#C97A34"></path>
+          <circle cx="60" cy="106" r="5" fill="rgba(210,180,140,.22)"></circle>
+        </svg>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">E · THE FILLING SCREEN</div>
+        <div style="font:300 13px/1.65 'Outfit';color:#8B949E;text-wrap:pretty">A phone outline with warmth rising from the bottom edge, the tint filling the screen. The only option that names the object being tinted. Most explanatory, most literal, least abstract of the five.</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:12px;padding-top:2px">
+        <div style="width:40px;height:40px;border-radius:11px;background:#0B0806;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:24px"><rect x="34" y="24" width="52" height="66" rx="9" fill="none" stroke="rgba(210,180,140,.28)" stroke-width="9"></rect><path d="M39 62 L81 62 L81 82 A5 5 0 0 1 76 87 L44 87 A5 5 0 0 1 39 82 Z" fill="#C97A34"></path></svg></div>
+        <div style="width:24px;height:24px;border-radius:7px;background:#0B0806;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:15px"><rect x="34" y="24" width="52" height="66" rx="9" fill="none" stroke="rgba(210,180,140,.34)" stroke-width="12"></rect><path d="M41 62 L79 62 L79 80 L41 80 Z" fill="#C97A34"></path></svg></div>
+        <span style="font:300 11px 'Outfit';color:#5C646E;padding-bottom:4px">crowded at 24px</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">All five on a dark launcher, actual size</div>
+      <div style="width:340px;border-radius:32px;background:#08090B;border:1px solid rgba(180,200,220,.08);padding:26px 22px;display:flex;justify-content:space-between">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px">
+          <div style="width:52px;height:52px;border-radius:15px;background:#0E0A07;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:34px"><path d="M18 84 A42 42 0 0 1 102 84" fill="none" stroke="rgba(210,180,140,.20)" stroke-width="8" stroke-linecap="round"></path><path d="M18 84 A42 42 0 0 1 88 56" fill="none" stroke="#C97A34" stroke-width="8" stroke-linecap="round"></path><circle cx="88" cy="56" r="9" fill="#0E0A07" stroke="#F2A65A" stroke-width="4"></circle></svg></div>
+          <span style="font:300 10px 'Outfit';color:#6C7580">A</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px">
+          <div style="width:52px;height:52px;border-radius:15px;background:#0E0A07;overflow:hidden;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:52px"><path d="M0 78 A60 60 0 0 1 120 78" fill="#170A02"></path><path d="M0 78 A60 60 0 0 1 120 78" fill="none" stroke="#C97A34" stroke-width="7"></path><circle cx="60" cy="78" r="17" fill="#F2A65A"></circle></svg></div>
+          <span style="font:300 10px 'Outfit';color:#6C7580">B</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px">
+          <div style="width:52px;height:52px;border-radius:15px;background:#0E0A07;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:38px"><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#6E7C8C" stroke-width="10" stroke-linecap="round" stroke-dasharray="31 100"></path><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#DE8F41" stroke-width="10" stroke-linecap="round" stroke-dasharray="28 100" stroke-dashoffset="-36"></path><path d="M14 88 A46 46 0 0 1 106 88" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="10" stroke-linecap="round" stroke-dasharray="28 100" stroke-dashoffset="-72"></path></svg></div>
+          <span style="font:300 10px 'Outfit';color:#6C7580">C</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px">
+          <div style="width:52px;height:52px;border-radius:15px;background:#170A02;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:34px"><circle cx="60" cy="60" r="40" fill="none" stroke="rgba(220,150,90,.20)" stroke-width="9"></circle><path d="M60 20 A40 40 0 0 1 60 100 Z" fill="#C97A34"></path><circle cx="60" cy="60" r="40" fill="none" stroke="#8E4F1E" stroke-width="9"></circle></svg></div>
+          <span style="font:300 10px 'Outfit';color:#6C7580">D</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px">
+          <div style="width:52px;height:52px;border-radius:15px;background:#0B0806;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 120 120" style="width:30px"><rect x="34" y="24" width="52" height="66" rx="9" fill="none" stroke="rgba(210,180,140,.26)" stroke-width="8"></rect><path d="M38 62 L82 62 L82 83 A6 6 0 0 1 76 89 L44 89 A6 6 0 0 1 38 83 Z" fill="#C97A34"></path></svg></div>
+          <span style="font:300 10px 'Outfit';color:#6C7580">E</span>
+        </div>
+      </div>
+      <div style="width:340px;font:300 12px/1.65 'Outfit';color:#5C646E;text-wrap:pretty">Every option keeps a near-black ground rather than a bright plate, so the icon itself does not light the room when the launcher opens at 1 a.m. That is unusual on a home screen and reads as deliberate.</div>
+    </div>
+
+    <sc-if value="{{ notes }}" hint-placeholder-val="{{ true }}">
+    <div style="width:320px;display:flex;flex-direction:column;gap:13px;font:300 13px/1.7 'Outfit';color:#8B949E">
+      <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Notes</div>
+      <div><b style="color:#CBD3DA;font-weight:500">My pick: A.</b> It is the only option that is already in the app, the knob on the arc the user drags every time. The icon and the interface teach each other, and nothing else in the launcher looks like it.</div>
+      <div><b style="color:#CBD3DA;font-weight:500">Runner-up: B</b> if you want the strongest silhouette at 24px and are willing to live near sunset iconography.</div>
+      <div><b style="color:#CBD3DA;font-weight:500">Adaptive icon.</b> Foreground is the arc alone, background the flat near-black surface, so Android's mask crops safely at any shape. Nothing critical enters the outer 18% of the canvas.</div>
+      <div><b style="color:#CBD3DA;font-weight:500">Monochrome and themed-icon variant.</b> All five reduce to a single-colour stroke without losing meaning, since none depends on the colour to be read, only on the arc's fill fraction.</div>
+      <div><b style="color:#CBD3DA;font-weight:500">The icon does not track state.</b> No badge, no fill reflecting the current warmth. A launcher icon that changes is an attention mechanic, and this product does not have those.</div>
+      <div><b style="color:#CBD3DA;font-weight:500">Notification small icon</b> is the same arc at 24px, stroke only, no knob, which is option A's 24px rendering exactly.</div>
+    </div>
+    </sc-if>
+  </div>
+
+</section>
+
+<section id="2a" style="padding:40px 72px 40px;display:flex;flex-direction:column;gap:56px;color:#DDE2E6">
+
+  <div style="display:flex;align-items:flex-start;gap:28px;max-width:1100px">
+    <div style="flex:none;width:34px;height:34px;border-radius:10px;background:rgba(242,166,90,.14);color:#F2A65A;font:500 13px 'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center">2a</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:#6C7580">Turn 2 · Mission banner &amp; donate flow</div>
+      <h1 style="margin:0;font:200 40px/1.1 'Outfit';letter-spacing:-.02em;color:#EDF0F2;max-width:24ch">A note in the room, not a card on top of it.</h1>
+      <p style="margin:0;max-width:68ch;font:300 15px/1.7 'Outfit';color:#8B949E;text-wrap:pretty">Built entirely from the existing tokens: surface/1 ground, a hairline at 10% of the surface's own hue, radius 12–20, text/lo body, and the same 420ms crossfade. It samples the Horizon ramp like every other surface, so it warms and dims with the app. Nothing in it is brighter or more saturated than the preset chips sitting beneath it, the accent appears once, at 4px, on the primary action only.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">A</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Collapsed · three sizes</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">Pick the quietest one that still invites a tap</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start">
+
+      <div style="width:400px;display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">S1 · 34px inline row · quietest</div>
+          <div style="width:296px;height:34px;display:flex;align-items:center;gap:10px;padding:0 4px">
+            <div style="width:16px;height:16px;border-radius:9px;border:1px solid rgba(180,200,220,.22);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#6E7C8C"></div></div>
+            <span style="font:300 13px 'Outfit';color:#7E8894;flex:1">No ads. No tracking. No price.</span>
+            <span style="font:300 13px 'Outfit';color:#5C646E">→</span>
+          </div>
+          <div style="font:300 12px/1.6 'Outfit';color:#5C646E;max-width:44ch">No container at all, it reads as one more line of the screen's own text. Tap target extends to 48px invisibly.</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">S2 · 44px pill · recommended</div>
+          <div style="width:296px;height:44px;border-radius:12px;background:#101216;border:1px solid rgba(180,200,220,.10);display:flex;align-items:center;gap:11px;padding:0 14px">
+            <div style="width:18px;height:18px;border-radius:10px;border:1px solid rgba(180,200,220,.24);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#6E7C8C"></div></div>
+            <span style="font:300 13px 'Outfit';color:#8B949E;flex:1">Free forever. Here's why</span>
+            <span style="font:300 13px 'Outfit';color:#5C646E">→</span>
+          </div>
+          <div style="font:300 12px/1.6 'Outfit';color:#5C646E;max-width:44ch">surface/1 with the standard hairline, the same treatment as an inactive preset chip, one step quieter. This is the one I'd ship.</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">S3 · 62px two-line · warmest, least quiet</div>
+          <div style="width:296px;border-radius:14px;background:#101216;border:1px solid rgba(180,200,220,.10);display:flex;align-items:center;gap:12px;padding:13px 14px">
+            <div style="width:20px;height:20px;border-radius:11px;border:1px solid rgba(180,200,220,.24);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#6E7C8C"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+              <span style="font:400 13px 'Outfit';color:#BAC3CB">A short note from the maker</span>
+              <span style="font:300 12px 'Outfit';color:#6C7580">Free forever, and here's why</span>
+            </div>
+            <span style="font:300 13px 'Outfit';color:#5C646E">→</span>
+          </div>
+          <div style="font:300 12px/1.6 'Outfit';color:#5C646E;max-width:44ch">Two lines start to read as a module. Included for comparison, it's the point where it stops feeling native.</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">Already seen · permanent state</div>
+          <div style="width:296px;height:34px;display:flex;align-items:center;gap:10px;padding:0 4px">
+            <div style="width:16px;height:16px;border-radius:9px;border:1px solid rgba(180,200,220,.18);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#4E555E"></div></div>
+          </div>
+          <div style="font:300 12px/1.6 'Outfit';color:#5C646E;max-width:44ch">After one expansion it drops to the bare ring, permanently. Still tappable, still 48px, never badged, never re-expanded, never animated again. TalkBack keeps the full label: "A note from the maker. Button."</div>
+        </div>
+      </div>
+
+      <div style="width:330px;display:flex;flex-direction:column;gap:14px">
+        <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">S2, tinted · 1700K · 14%</div>
+        <div style="border-radius:20px;background:#170A02;border:1px solid rgba(220,150,90,.14);padding:26px 18px;display:flex;flex-direction:column;gap:18px">
+          <div style="width:296px;height:44px;border-radius:12px;background:#231004;border:1px solid rgba(220,150,90,.11);display:flex;align-items:center;gap:11px;padding:0 14px">
+            <div style="width:18px;height:18px;border-radius:10px;border:1px solid rgba(220,150,90,.22);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#C97A34"></div></div>
+            <span style="font:300 13px 'Outfit';color:#80532C;flex:1">Free forever. Here's why</span>
+            <span style="font:300 13px 'Outfit';color:#6E4A2C">→</span>
+          </div>
+          <div style="width:296px;height:34px;display:flex;align-items:center;gap:10px;padding:0 4px">
+            <div style="width:16px;height:16px;border-radius:9px;border:1px solid rgba(220,150,90,.16);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#6E4A2C"></div></div>
+          </div>
+        </div>
+        <div style="font:300 12px/1.7 'Outfit';color:#5C646E;text-wrap:pretty">Same tokens, sampled at the deep end of the ramp: surface/1 becomes #231004, the hairline rotates to the surface's own hue, the dot takes the amber accent. It crossfades with everything else on the screen, it is never repainted independently, so it can't flicker during a scheduled ramp.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">B</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Expanded card</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">Unfolds in place · equal-weight actions</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">Untinted · filter off</div>
+        <div data-screen-label="Mission card / Untinted" style="width:330px;border-radius:20px;background:#101216;border:1px solid rgba(180,200,220,.10);padding:22px 20px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:11px">
+            <div style="width:18px;height:18px;border-radius:10px;border:1px solid rgba(180,200,220,.28);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#6E7C8C"></div></div>
+            <span style="font:400 15px 'Outfit';color:#DDE2E6;flex:1">I build apps that ask for nothing.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:11px;font:300 13px/1.7 'Outfit';color:#8B949E;text-wrap:pretty">
+            <div>No ads. No accounts. No tracking. No servers keeping your data, because there are no servers at all. Everything here lives on your phone and stays on your phone.</div>
+            <div>I'd like that to be ordinary rather than remarkable. Software you can install without reading a privacy policy. Works offline. Free for life, not a trial, not a launch price.</div>
+            <div>If it's made your nights easier, you're welcome to keep the lamp on. Or not. Nothing changes either way, it's all already unlocked.</div>
+          </div>
+          <div style="display:flex;gap:8px;padding-top:2px">
+            <div style="flex:1;height:50px;border-radius:12px;background:rgba(110,124,140,.14);border:1px solid rgba(180,200,220,.16);display:flex;align-items:center;justify-content:center;gap:8px;font:400 14px 'Outfit';color:#CBD3DA">Keep the lamp on ☕</div>
+            <div style="flex:1;height:50px;border-radius:12px;background:rgba(110,124,140,.14);border:1px solid rgba(180,200,220,.16);display:flex;align-items:center;justify-content:center;font:400 14px 'Outfit';color:#CBD3DA">Not now</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">Tinted · 1700K · 14%</div>
+        <div data-screen-label="Mission card / Tinted" style="width:330px;border-radius:20px;background:#231004;border:1px solid rgba(220,150,90,.12);padding:22px 20px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:11px">
+            <div style="width:18px;height:18px;border-radius:10px;border:1px solid rgba(220,150,90,.26);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#C97A34"></div></div>
+            <span style="font:400 15px 'Outfit';color:#BE854A;flex:1">I build apps that ask for nothing.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:11px;font:300 13px/1.7 'Outfit';color:#8A5B34;text-wrap:pretty">
+            <div>No ads. No accounts. No tracking. No servers keeping your data, because there are no servers at all. Everything here lives on your phone and stays on your phone.</div>
+            <div>I'd like that to be ordinary rather than remarkable. Software you can install without reading a privacy policy. Works offline. Free for life, not a trial, not a launch price.</div>
+            <div>If it's made your nights easier, you're welcome to keep the lamp on. Or not. Nothing changes either way, it's all already unlocked.</div>
+          </div>
+          <div style="display:flex;gap:8px;padding-top:2px">
+            <div style="flex:1;height:50px;border-radius:12px;background:rgba(201,122,52,.13);border:1px solid rgba(201,122,52,.26);display:flex;align-items:center;justify-content:center;gap:8px;font:400 14px 'Outfit';color:#B98653">Keep the lamp on ☕</div>
+            <div style="flex:1;height:50px;border-radius:12px;background:rgba(201,122,52,.13);border:1px solid rgba(201,122,52,.26);display:flex;align-items:center;justify-content:center;font:400 14px 'Outfit';color:#B98653">Not now</div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{ notes }}" hint-placeholder-val="{{ true }}">
+      <div style="width:300px;display:flex;flex-direction:column;gap:13px;padding-top:26px;font:300 13px/1.7 'Outfit';color:#8B949E">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Motion · unfold, annotated</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Expand · 520ms</b> cubic-bezier(.32,.02,.2,1) on height only, measured to content. The pill's own text stays in place and becomes the card's first line, nothing cross-fades out, so it reads as unfolding rather than replacing.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Body copy · 260ms fade, 120ms in</b>, opacity only, no translate. Actions fade last at 400ms so the card is readable before it is actionable.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Collapse · 440ms</b>, the same curve reversed, straight to the bare ring, it never returns to the text pill, because that state no longer exists for this user.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Layout push.</b> Content below shifts down with the same duration and curve, so the screen moves as one sheet. No overlay, no scrim, no elevation change, the card stays on surface/1.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Reduced motion.</b> Height snaps, opacity still crossfades at 120ms. Never an instant appearance.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Never self-initiated.</b> No entrance animation, no pulse, no badge, no attention loop, the component only ever moves in response to a touch.</div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">C</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Donate sheet, thank-you, placement</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">App's existing sheet style · nothing preselected</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">Donate sheet</div>
+        <div data-screen-label="Donate sheet" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#0B0806;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#665A4E">1:31</div>
+          <div style="flex:1;opacity:.22;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:30px">
+            <svg viewBox="0 0 300 170" style="width:260px"><path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" fill="none" stroke="rgba(210,180,140,.16)" stroke-width="2"></path><path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" stroke-dasharray="100" stroke-dashoffset="8" fill="none" stroke="#8E4F1E" stroke-width="4" stroke-linecap="round"></path></svg>
+            <div style="font:200 80px/1 'Outfit';color:#BE854A;font-variant-numeric:tabular-nums">1700</div>
+          </div>
+          <div style="border-radius:26px 26px 38px 38px;background:#160E08;border-top:1px solid rgba(210,180,140,.14);padding:20px 22px 30px;display:flex;flex-direction:column;gap:16px">
+            <div style="width:44px;height:4px;border-radius:2px;background:rgba(210,180,140,.20);align-self:center"></div>
+            <div style="font:300 22px 'Outfit';color:#DFCDB8">Keep the lamp on</div>
+            <div style="display:flex;flex-direction:column;gap:10px;font:300 13px/1.7 'Outfit';color:#8C7A64;text-wrap:pretty">
+              <div>There's no premium version to buy, you already have all of it. This is just a tip jar.</div>
+              <div>₹0 is a completely valid answer, and honestly the most common one. Enjoy the app guilt-free.</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:56px;border-radius:12px;background:rgba(210,180,140,.05);border:1px solid rgba(210,180,140,.14);display:flex;align-items:center;justify-content:center;font:400 15px 'JetBrains Mono',monospace;color:#C0B3A6">₹100</div>
+              <div style="flex:1;height:56px;border-radius:12px;background:rgba(210,180,140,.05);border:1px solid rgba(210,180,140,.14);display:flex;align-items:center;justify-content:center;font:400 15px 'JetBrains Mono',monospace;color:#C0B3A6">₹300</div>
+              <div style="flex:1;height:56px;border-radius:12px;background:rgba(210,180,140,.05);border:1px solid rgba(210,180,140,.14);display:flex;align-items:center;justify-content:center;font:400 15px 'JetBrains Mono',monospace;color:#C0B3A6">₹700</div>
+              <div style="flex:1;height:56px;border-radius:12px;background:rgba(210,180,140,.05);border:1px solid rgba(210,180,140,.14);display:flex;align-items:center;justify-content:center;font:400 14px 'Outfit';color:#C0B3A6">Custom</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:56px;border-radius:12px;background:rgba(210,180,140,.05);border:1px solid rgba(210,180,140,.14);display:flex;align-items:center;justify-content:center;font:400 15px 'Outfit';color:#C0B3A6">I'm good, thanks</div>
+              <div style="flex:1;height:56px;border-radius:12px;background:rgba(242,166,90,.14);border:1px solid rgba(242,166,90,.30);display:flex;align-items:center;justify-content:center;font:400 15px 'Outfit';color:#EFC392">Continue</div>
+            </div>
+            <div style="font:300 11px/1.6 'Outfit';color:#5C646E;text-align:center">One-time. Handled by the store, nothing is sent anywhere by this app.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px;width:340px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">Custom amount · accepts zero</div>
+          <div style="border-radius:20px;background:#160E08;border:1px solid rgba(210,180,140,.14);padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#7E7062">CUSTOM AMOUNT</div>
+            <div style="height:64px;border-radius:14px;background:rgba(242,166,90,.06);border:1px solid rgba(242,166,90,.28);display:flex;align-items:center;padding:0 18px;gap:8px">
+              <span style="font:300 24px 'JetBrains Mono',monospace;color:#8C7A64">₹</span>
+              <span style="font:300 30px 'JetBrains Mono',monospace;color:#EFDAC0;font-variant-numeric:tabular-nums">0</span>
+              <div style="width:2px;height:28px;background:#F2A65A;animation:caret 1.3s ease-in-out infinite"></div>
+            </div>
+            <div style="font:300 12px/1.6 'Outfit';color:#7E7062">Zero is accepted and takes you straight back to the app. No confirmation, no second ask.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#5C646E">Thank-you state</div>
+          <div data-screen-label="Donate / Thank you" style="border-radius:20px;background:#160E08;border:1px solid rgba(210,180,140,.14);padding:26px 22px 22px;display:flex;flex-direction:column;gap:14px;align-items:center">
+            <svg viewBox="0 0 40 26" style="width:40px"><path d="M4 22 A16 16 0 0 1 36 22" pathLength="100" fill="none" stroke="rgba(210,180,140,.18)" stroke-width="2.5"></path><path d="M4 22 A16 16 0 0 1 36 22" pathLength="100" fill="none" stroke="#C97A34" stroke-width="2.5" stroke-linecap="round"></path></svg>
+            <div style="font:300 18px/1.55 'Outfit';color:#DFCDB8;text-align:center;text-wrap:pretty">Thank you. That keeps this one alive, and the next one free. 🕯</div>
+            <div style="height:50px;align-self:stretch;border-radius:12px;border:1px solid rgba(210,180,140,.16);display:flex;align-items:center;justify-content:center;font:400 14px 'Outfit';color:#C0B3A6">Back to the app</div>
+          </div>
+          <div style="font:300 12px/1.6 'Outfit';color:#5C646E">The arc completes, the one and only place in the product where it fills all the way. Auto-dismisses after 6s if untouched.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">Placement in context · home, mild warmth</div>
+        <div data-screen-label="Home / With banner" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#100C09;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#6B5F51"><span>22:10</span><div style="display:flex;gap:5px;align-items:center"><div style="width:12px;height:4px;border-radius:2px;background:#4A4136"></div><div style="width:14px;height:7px;border-radius:2px;background:#4A4136"></div></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px">
+            <svg viewBox="0 0 300 170" style="width:280px">
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" fill="none" stroke="rgba(210,180,140,.12)" stroke-width="2" stroke-linecap="round"></path>
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" stroke-dasharray="100" stroke-dashoffset="60" fill="none" stroke="#C08A4E" stroke-width="4" stroke-linecap="round"></path>
+              <circle cx="112" cy="59" r="6.5" fill="#100C09" stroke="#F2A65A" stroke-width="2.5"></circle>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div style="display:flex;align-items:baseline;gap:5px;color:#E0C29B"><span style="font:200 96px/1 'Outfit';letter-spacing:-.04em;font-variant-numeric:tabular-nums">3400</span><span style="font:300 26px 'Outfit';opacity:.55">K</span></div>
+              <div style="font:400 13px 'JetBrains Mono',monospace;color:#8C7A64;font-variant-numeric:tabular-nums">82 % BRIGHTNESS</div>
+            </div>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:14px">
+            <div style="height:44px;border-radius:12px;background:#191310;border:1px solid rgba(210,180,140,.10);display:flex;align-items:center;gap:11px;padding:0 14px">
+              <div style="width:18px;height:18px;border-radius:10px;border:1px solid rgba(210,180,140,.22);flex:none;display:flex;align-items:center;justify-content:center"><div style="width:4px;height:4px;border-radius:3px;background:#B98A52"></div></div>
+              <span style="font:300 13px 'Outfit';color:#8C7A64;flex:1">Free forever. Here's why</span>
+              <span style="font:300 13px 'Outfit';color:#6B5F51">→</span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:42px;border-radius:12px;background:rgba(242,166,90,.14);border:1px solid rgba(242,166,90,.32);display:flex;align-items:center;justify-content:center;gap:7px;font:500 13px 'Outfit';color:#EFC392"><div style="width:5px;height:5px;border-radius:3px;background:#F2A65A"></div>Reading</div>
+              <div style="flex:1;height:42px;border-radius:12px;border:1px solid rgba(210,180,140,.13);display:flex;align-items:center;justify-content:center;font:400 13px 'Outfit';color:#7E7062">Deep Night</div>
+              <div style="width:42px;height:42px;border-radius:12px;border:1px solid rgba(210,180,140,.13);display:flex;align-items:center;justify-content:center;font:300 18px 'Outfit';color:#7E7062">+</div>
+            </div>
+            <div style="height:66px;border-radius:20px;background:rgba(242,166,90,.16);border:1px solid rgba(242,166,90,.34);display:flex;align-items:center;justify-content:center;gap:12px">
+              <div style="width:9px;height:9px;border-radius:5px;background:#F2A65A"></div>
+              <span style="font:500 16px 'Outfit';color:#F0D2AE">Filter on</span>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px;font:300 12px/1.6 'Outfit';color:#5C646E;text-wrap:pretty">It sits above the preset chips, not below the power control, inside the thumb zone but behind both real controls in the reading order, and quieter than either.</div>
+      </div>
+
+      <sc-if value="{{ notes }}" hint-placeholder-val="{{ true }}">
+      <div style="width:300px;display:flex;flex-direction:column;gap:13px;font:300 13px/1.7 'Outfit';color:#8B949E">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Accessibility &amp; fairness pass</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Equal weight, measured.</b> "Not now" and "Keep the lamp on" share the same height, radius, fill, border, font, weight, and colour, they differ only in label, and the pair is 50/50 by width. Nothing is ghosted and nothing is default-focused.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">No preselection.</b> All four amounts render identically; there is no "popular" marker, no recommended fill, and Continue stays inert until an amount is chosen. "I'm good, thanks" is a full-size 56px button beside it, not a text link.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">TalkBack.</b> Collapsed: "A note from the maker. Button. Opens in place." Expanded card is one region announced in reading order, ending "Keep the lamp on, button. Not now, button. Both dismiss this note." Amounts read "100 rupees, one of four options, none selected."</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Large fonts.</b> Every surface is min-height. At 200% the pill wraps to two lines and grows; the action pair stacks vertically, keeping identical widths so neither gains prominence. The sheet scrolls rather than truncating.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Dark-room.</b> Body copy holds 4.7:1 on surface/1 at both ends of the ramp. No element here exceeds the luminance of the preset chips, and the amber accent appears at 4px only.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Emoji.</b> ☕ and 🕯 are the only two in the product and both sit after a full text label, so nothing depends on them. Drop them and the copy still reads.</div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+</section>
+
+<section style="padding:40px 72px 140px;display:flex;flex-direction:column;gap:80px;color:#DDE2E6">
+
+  <div style="display:flex;align-items:flex-start;gap:28px;max-width:1100px">
+    <div style="flex:none;width:34px;height:34px;border-radius:10px;background:rgba(242,166,90,.14);color:#F2A65A;font:500 13px 'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center">1a</div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:#6C7580">Direction 3 · Horizon</div>
+      <h1 style="margin:0;font:200 48px/1.05 'Outfit';letter-spacing:-.02em;color:#EDF0F2;max-width:20ch">One arc, one ramp, one gesture.</h1>
+      <p style="margin:0;max-width:68ch;font:300 16px/1.7 'Outfit';color:#8B949E;text-wrap:pretty">The day is drawn as an arc, and that same arc geometry appears on Home, on the widget, and in the notification, so the schedule and the manual control are visibly the same object. Colour runs one continuous ramp from cool-grey dawn to ember night; every surface samples from it, so the app looks different at 1 a.m. than at noon. Type is geometric and quiet, numerals tabular. No pure white anywhere in the product except the panic action.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">01</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Home / main control</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">Freeform 2-axis drag · no track, no slider · the arc is the only readout</div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">State A · off · 06:40 dawn ramp</div>
+        <div data-screen-label="Home / Off" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(180,200,220,.12);background:#08090B;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#4E555E"><span>6:40</span><div style="display:flex;gap:5px;align-items:center"><div style="width:12px;height:4px;border-radius:2px;background:#343A41"></div><div style="width:14px;height:7px;border-radius:2px;background:#343A41"></div></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
+            <svg viewBox="0 0 300 170" style="width:280px">
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" fill="none" stroke="rgba(180,200,220,.11)" stroke-width="2" stroke-linecap="round"></path>
+              <circle cx="20" cy="150" r="5" fill="#3B434C"></circle>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+              <div style="font:200 68px/1 'Outfit';letter-spacing:-.03em;color:#3F4750">Off</div>
+              <div style="font:300 14px/1.6 'Outfit';color:#5C646E;text-align:center;max-width:24ch;text-wrap:pretty">Drag up to warm the screen. Drag left to dim past the system minimum.</div>
+            </div>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:42px;border-radius:12px;border:1px solid rgba(180,200,220,.10);display:flex;align-items:center;justify-content:center;font:400 13px 'Outfit';color:#5C646E">Reading</div>
+              <div style="flex:1;height:42px;border-radius:12px;border:1px solid rgba(180,200,220,.10);display:flex;align-items:center;justify-content:center;font:400 13px 'Outfit';color:#5C646E">Deep Night</div>
+              <div style="width:42px;height:42px;border-radius:12px;border:1px solid rgba(180,200,220,.10);display:flex;align-items:center;justify-content:center;font:300 18px 'Outfit';color:#5C646E">+</div>
+            </div>
+            <div style="height:66px;border-radius:20px;background:rgba(180,200,220,.05);border:1px solid rgba(180,200,220,.14);display:flex;align-items:center;justify-content:center;gap:12px">
+              <div style="width:9px;height:9px;border-radius:5px;border:2px solid #5C646E"></div>
+              <span style="font:500 16px 'Outfit';color:#AEB7C0">Turn filter on</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">State B · mild · 3400K · 82%</div>
+        <div data-screen-label="Home / Mild" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#100C09;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#6B5F51"><span>22:10</span><div style="display:flex;gap:5px;align-items:center"><div style="width:12px;height:4px;border-radius:2px;background:#4A4136"></div><div style="width:14px;height:7px;border-radius:2px;background:#4A4136"></div></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px">
+            <svg viewBox="0 0 300 170" style="width:280px">
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" fill="none" stroke="rgba(210,180,140,.12)" stroke-width="2" stroke-linecap="round"></path>
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" stroke-dasharray="100" stroke-dashoffset="60" fill="none" stroke="#C08A4E" stroke-width="4" stroke-linecap="round"></path>
+              <circle cx="112" cy="59" r="6.5" fill="#100C09" stroke="#F2A65A" stroke-width="2.5"></circle>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div style="display:flex;align-items:baseline;gap:5px;color:#E0C29B"><span style="font:200 96px/1 'Outfit';letter-spacing:-.04em;font-variant-numeric:tabular-nums">3400</span><span style="font:300 26px 'Outfit';opacity:.55">K</span></div>
+              <div style="font:400 13px 'JetBrains Mono',monospace;color:#8C7A64;font-variant-numeric:tabular-nums">82 % BRIGHTNESS</div>
+            </div>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:42px;border-radius:12px;background:rgba(242,166,90,.14);border:1px solid rgba(242,166,90,.32);display:flex;align-items:center;justify-content:center;gap:7px;font:500 13px 'Outfit';color:#EFC392"><div style="width:5px;height:5px;border-radius:3px;background:#F2A65A"></div>Reading</div>
+              <div style="flex:1;height:42px;border-radius:12px;border:1px solid rgba(210,180,140,.13);display:flex;align-items:center;justify-content:center;font:400 13px 'Outfit';color:#7E7062">Deep Night</div>
+              <div style="width:42px;height:42px;border-radius:12px;border:1px solid rgba(210,180,140,.13);display:flex;align-items:center;justify-content:center;font:300 18px 'Outfit';color:#7E7062">+</div>
+            </div>
+            <div style="height:66px;border-radius:20px;background:rgba(242,166,90,.16);border:1px solid rgba(242,166,90,.34);display:flex;align-items:center;justify-content:center;gap:12px">
+              <div style="width:9px;height:9px;border-radius:5px;background:#F2A65A"></div>
+              <span style="font:500 16px 'Outfit';color:#F0D2AE">Filter on</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">State C · deep night · 1700K · 14%</div>
+        <div data-screen-label="Home / Deep night" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(220,150,90,.16);background:#170A02;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#6E4A2C"><span>1:14</span><div style="display:flex;gap:5px;align-items:center"><div style="width:12px;height:4px;border-radius:2px;background:#4C321C"></div><div style="width:14px;height:7px;border-radius:2px;background:#4C321C"></div></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px">
+            <svg viewBox="0 0 300 170" style="width:280px">
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" fill="none" stroke="rgba(220,150,90,.12)" stroke-width="2" stroke-linecap="round"></path>
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" stroke-dasharray="100" stroke-dashoffset="8" fill="none" stroke="#8E4F1E" stroke-width="4" stroke-linecap="round"></path>
+              <circle cx="257" cy="106" r="6.5" fill="#170A02" stroke="#C97A34" stroke-width="2.5"></circle>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div style="display:flex;align-items:baseline;gap:5px;color:#BE854A"><span style="font:200 96px/1 'Outfit';letter-spacing:-.04em;font-variant-numeric:tabular-nums">1700</span><span style="font:300 26px 'Outfit';opacity:.55">K</span></div>
+              <div style="font:400 13px 'JetBrains Mono',monospace;color:#80532C;font-variant-numeric:tabular-nums">14 % BRIGHTNESS</div>
+            </div>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:42px;border-radius:12px;border:1px solid rgba(220,150,90,.13);display:flex;align-items:center;justify-content:center;font:400 13px 'Outfit';color:#7E5330">Reading</div>
+              <div style="flex:1;height:42px;border-radius:12px;background:rgba(201,122,52,.14);border:1px solid rgba(201,122,52,.30);display:flex;align-items:center;justify-content:center;gap:7px;font:500 13px 'Outfit';color:#CE9155"><div style="width:5px;height:5px;border-radius:3px;background:#C97A34"></div>Deep Night</div>
+              <div style="width:42px;height:42px;border-radius:12px;border:1px solid rgba(220,150,90,.13);display:flex;align-items:center;justify-content:center;font:300 18px 'Outfit';color:#7E5330">+</div>
+            </div>
+            <div style="height:66px;border-radius:20px;background:rgba(201,122,52,.13);border:1px solid rgba(201,122,52,.28);display:flex;align-items:center;justify-content:center;gap:12px">
+              <div style="width:9px;height:9px;border-radius:5px;background:#C97A34"></div>
+              <span style="font:500 16px 'Outfit';color:#B98653">Filter on</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Live · drag inside this one</div>
+        <div data-screen-label="Home / Interactive" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.20);overflow:hidden;display:flex;flex-direction:column;touch-action:none;cursor:grab;transition:background 420ms cubic-bezier(.32,.02,.2,1);background:{{ live.bg }}" onPointerDown="{{ onDown }}" onPointerMove="{{ onMove }}" onPointerUp="{{ onUp }}" onPointerCancel="{{ onUp }}">
+          <div style="height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:{{ live.faint }}"><span>1:14</span><div style="display:flex;gap:5px;align-items:center"><div style="width:12px;height:4px;border-radius:2px;background:{{ live.faint }}"></div><div style="width:14px;height:7px;border-radius:2px;background:{{ live.faint }}"></div></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px">
+            <svg viewBox="0 0 300 170" style="width:280px">
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" fill="none" stroke="{{ live.arcTrack }}" stroke-width="2" stroke-linecap="round"></path>
+              <path d="M20 150 A130 130 0 0 1 280 150" pathLength="100" stroke-dasharray="100" fill="none" stroke-width="4" stroke-linecap="round" stroke-dashoffset="{{ live.arcOffset }}" stroke="{{ live.arcFill }}"></path>
+              <circle r="6.5" stroke-width="2.5" cx="{{ live.knobX }}" cy="{{ live.knobY }}" fill="{{ live.bg }}" stroke="{{ live.accent }}"></circle>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity 620ms cubic-bezier(.32,.02,.2,1);opacity:{{ live.valueOpacity }}">
+              <div style="display:flex;align-items:baseline;gap:5px;transition:color 420ms cubic-bezier(.32,.02,.2,1);color:{{ live.text }}"><span style="font:200 96px/1 'Outfit';letter-spacing:-.04em;font-variant-numeric:tabular-nums">{{ live.kelvin }}</span><span style="font:300 26px 'Outfit';opacity:.55">K</span></div>
+              <div style="font:400 13px 'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;color:{{ live.sub }}">{{ live.dim }} % BRIGHTNESS</div>
+            </div>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:42px;border-radius:12px;border:1px solid {{ live.hairline }};display:flex;align-items:center;justify-content:center;font:400 13px 'Outfit';color:{{ live.sub }}">Reading</div>
+              <div style="flex:1;height:42px;border-radius:12px;border:1px solid {{ live.hairline }};display:flex;align-items:center;justify-content:center;font:400 13px 'Outfit';color:{{ live.sub }}">Deep Night</div>
+              <div style="width:42px;height:42px;border-radius:12px;border:1px solid {{ live.hairline }};display:flex;align-items:center;justify-content:center;font:300 18px 'Outfit';color:{{ live.sub }}">+</div>
+            </div>
+            <div style="height:66px;border-radius:20px;transition:background 420ms cubic-bezier(.32,.02,.2,1);background:{{ live.buttonBg }};border:1px solid {{ live.buttonBorder }};display:flex;align-items:center;justify-content:center;gap:12px">
+              <div style="width:9px;height:9px;border-radius:5px;background:{{ live.accent }}"></div>
+              <span style="font:500 16px 'Outfit';color:{{ live.text }}">Filter on</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{ notes }}" hint-placeholder-val="{{ true }}">
+      <div style="width:320px;display:flex;flex-direction:column;gap:14px;padding-top:30px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Gesture model · annotated</div>
+        <div style="display:flex;flex-direction:column;gap:13px;font:300 13px/1.7 'Outfit';color:#8B949E">
+          <div><b style="color:#CBD3DA;font-weight:500">Anywhere is the control.</b> Pointer-down anywhere below the status bar arms the gesture. There is no track to find in the dark and nothing to aim at, the value moves relative to where you started, so touching never causes a jump.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Vertical = warmth.</b> Full screen height spans 4600K → 1600K, about 4.5K per pixel. Deliberately coarse: a 40px thumb twitch moves ~180K, below the noticeable-difference threshold in a dark room.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Horizontal = dimming.</b> Full width spans 100% → 8%. Rightward always brightens, so the recovery direction is the same as the reading direction of the arc.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Axis dominance.</b> Diagonal drags apply both, but the dominant axis is weighted 1.4× so a sloppy vertical drag doesn't dim by accident. No axis lock, locking feels broken when your eyes are closed.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">The arc is the readout.</b> The knob rides the same arc the Schedule screen draws; warmth is its position along the day. No progress bar, no track, no ticks.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Detents.</b> Soft snap within ±60K of any preset value, one haptic tick each, pullable and never sticky. Ticks are the only feedback available with the screen at 8%.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Numerals fade back.</b> Full opacity while touching; 500ms after release they crossfade to 22% over 600ms. They never move, so the fade reads as light dropping, not as an element leaving.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">TalkBack.</b> The surface exposes two seekbars, Warmth and Brightness, with 10% increments, spoken values, and volume-key adjustment. The gesture is an enhancement, never the only path.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Dark-room readability.</b> Body text holds ≥4.6:1 against its surface at every point on the ramp, but the largest numerals sit at 3.2:1 on purpose, they are 96px, and a higher ratio here is glare, not legibility.</div>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">02</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Schedule</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">The same arc, at full size · anchors dragged, never typed</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Sun-linked · default</div>
+        <div data-screen-label="Schedule / Sun-linked" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#0E0A07;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#665A4E">1:16</div>
+          <div style="padding:10px 24px 0;display:flex;flex-direction:column;gap:5px">
+            <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.18em;color:#7E7062">SCHEDULE</div>
+            <div style="font:300 24px 'Outfit';color:#DFCDB8">Follows the sun</div>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 300 260" style="width:100%">
+              <defs>
+                <linearGradient id="hrz" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#8E4F1E"></stop><stop offset=".45" stop-color="#C97A34"></stop><stop offset="1" stop-color="#6E7C8C"></stop>
+                </linearGradient>
+              </defs>
+              <path d="M22 205 A128 128 0 0 1 278 205" pathLength="100" fill="none" stroke="rgba(210,180,140,.10)" stroke-width="2"></path>
+              <path d="M22 205 A128 128 0 0 1 78 100" pathLength="100" fill="none" stroke="url(#hrz)" stroke-width="5" stroke-linecap="round"></path>
+              <path d="M222 100 A128 128 0 0 1 278 205" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="5" stroke-linecap="round"></path>
+              <line x1="22" y1="205" x2="278" y2="205" stroke="rgba(210,180,140,.13)" stroke-width="1" stroke-dasharray="2 6"></line>
+              <circle cx="78" cy="100" r="10" fill="#0E0A07" stroke="#F2A65A" stroke-width="2.5"></circle>
+              <circle cx="78" cy="100" r="19" fill="none" stroke="rgba(242,166,90,.18)" stroke-width="1"></circle>
+              <circle cx="222" cy="100" r="10" fill="#0E0A07" stroke="#F2A65A" stroke-width="2.5"></circle>
+              <circle cx="150" cy="78" r="2.5" fill="rgba(210,180,140,.4)"></circle>
+              <text x="150" y="140" text-anchor="middle" fill="#7E7062" style="font:400 10px 'JetBrains Mono',monospace;letter-spacing:.14em">MIDNIGHT</text>
+              <text x="66" y="88" text-anchor="end" fill="#E0C29B" style="font:400 15px 'JetBrains Mono',monospace">20:41</text>
+              <text x="66" y="104" text-anchor="end" fill="#8C7A64" style="font:300 11px 'Outfit'">30 min before sunset</text>
+              <text x="234" y="88" fill="#E0C29B" style="font:400 15px 'JetBrains Mono',monospace">06:12</text>
+              <text x="234" y="104" fill="#8C7A64" style="font:300 11px 'Outfit'">at sunrise</text>
+              <text x="24" y="228" text-anchor="middle" fill="#665A4E" style="font:400 10px 'JetBrains Mono',monospace">18:00</text>
+              <text x="276" y="228" text-anchor="middle" fill="#665A4E" style="font:400 10px 'JetBrains Mono',monospace">09:00</text>
+            </svg>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:14px">
+            <div style="font:300 13px/1.6 'Outfit';color:#8C7A64;text-wrap:pretty">Drag an anchor along the arc to offset it from sunset or sunrise. The offset is held, so it follows the sun through the year.</div>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:50px;border-radius:14px;background:rgba(242,166,90,.14);border:1px solid rgba(242,166,90,.32);display:flex;align-items:center;justify-content:center;gap:7px;font:500 14px 'Outfit';color:#EFC392"><div style="width:5px;height:5px;border-radius:3px;background:#F2A65A"></div>Sun-linked</div>
+              <div style="flex:1;height:50px;border-radius:14px;border:1px solid rgba(210,180,140,.13);display:flex;align-items:center;justify-content:center;font:400 14px 'Outfit';color:#7E7062">Fixed times</div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;height:46px;border-top:1px solid rgba(210,180,140,.08);padding:0 4px"><span style="font:300 14px 'Outfit';color:#A8988A">Ramp over</span><span style="font:400 14px 'JetBrains Mono',monospace;color:#E0C29B">45 min</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Variant · fixed clock times</div>
+        <div data-screen-label="Schedule / Fixed" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#0E0A07;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#665A4E">1:16</div>
+          <div style="padding:10px 24px 0;display:flex;flex-direction:column;gap:5px">
+            <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.18em;color:#7E7062">SCHEDULE</div>
+            <div style="font:300 24px 'Outfit';color:#DFCDB8">Fixed times</div>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 300 260" style="width:100%">
+              <path d="M22 205 A128 128 0 0 1 278 205" pathLength="100" fill="none" stroke="rgba(210,180,140,.10)" stroke-width="2"></path>
+              <path d="M22 205 A128 128 0 0 1 100 92" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="5" stroke-linecap="round"></path>
+              <path d="M244 148 A128 128 0 0 1 278 205" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="5" stroke-linecap="round"></path>
+              <circle cx="78" cy="100" r="3" fill="none" stroke="rgba(210,180,140,.30)" stroke-width="1"></circle>
+              <circle cx="222" cy="100" r="3" fill="none" stroke="rgba(210,180,140,.30)" stroke-width="1"></circle>
+              <circle cx="100" cy="92" r="10" fill="#0E0A07" stroke="#F2A65A" stroke-width="2.5"></circle>
+              <circle cx="244" cy="148" r="10" fill="#0E0A07" stroke="#F2A65A" stroke-width="2.5"></circle>
+              <text x="88" y="78" text-anchor="end" fill="#E0C29B" style="font:400 16px 'JetBrains Mono',monospace">22:00</text>
+              <text x="88" y="94" text-anchor="end" fill="#8C7A64" style="font:300 11px 'Outfit'">every night</text>
+              <text x="258" y="142" fill="#E0C29B" style="font:400 16px 'JetBrains Mono',monospace">07:30</text>
+              <text x="258" y="158" fill="#8C7A64" style="font:300 11px 'Outfit'">every day</text>
+              <text x="150" y="140" text-anchor="middle" fill="#7E7062" style="font:400 10px 'JetBrains Mono',monospace;letter-spacing:.14em">MIDNIGHT</text>
+              <text x="150" y="240" text-anchor="middle" fill="#665A4E" style="font:300 10px 'Outfit'">faint rings mark real sunset and sunrise</text>
+            </svg>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:14px">
+            <div style="font:300 13px/1.6 'Outfit';color:#8C7A64;text-wrap:pretty">Sun positions stay drawn faintly behind the arc, so a fixed schedule can still be read against real daylight.</div>
+            <div style="display:flex;gap:8px">
+              <div style="flex:1;height:50px;border-radius:14px;border:1px solid rgba(210,180,140,.13);display:flex;align-items:center;justify-content:center;font:400 14px 'Outfit';color:#7E7062">Sun-linked</div>
+              <div style="flex:1;height:50px;border-radius:14px;background:rgba(242,166,90,.14);border:1px solid rgba(242,166,90,.32);display:flex;align-items:center;justify-content:center;gap:7px;font:500 14px 'Outfit';color:#EFC392"><div style="width:5px;height:5px;border-radius:3px;background:#F2A65A"></div>Fixed times</div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;height:46px;border-top:1px solid rgba(210,180,140,.08);padding:0 4px"><span style="font:300 14px 'Outfit';color:#A8988A">Ramp over</span><span style="font:400 14px 'JetBrains Mono',monospace;color:#E0C29B">20 min</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Variant · shift worker, inverted</div>
+        <div data-screen-label="Schedule / Shift" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#0E0A07;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#665A4E">13:16</div>
+          <div style="padding:10px 24px 0;display:flex;flex-direction:column;gap:5px">
+            <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.18em;color:#7E7062">SCHEDULE</div>
+            <div style="font:300 24px 'Outfit';color:#DFCDB8">Inverted · night shift</div>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 300 260" style="width:100%">
+              <path d="M22 205 A128 128 0 0 1 278 205" pathLength="100" fill="none" stroke="rgba(210,180,140,.10)" stroke-width="2"></path>
+              <path d="M104 88 A128 128 0 0 1 214 96" pathLength="100" fill="none" stroke="#8E4F1E" stroke-width="5" stroke-linecap="round"></path>
+              <circle cx="104" cy="88" r="10" fill="#0E0A07" stroke="#F2A65A" stroke-width="2.5"></circle>
+              <circle cx="214" cy="96" r="10" fill="#0E0A07" stroke="#F2A65A" stroke-width="2.5"></circle>
+              <text x="92" y="74" text-anchor="end" fill="#E0C29B" style="font:400 15px 'JetBrains Mono',monospace">07:00</text>
+              <text x="92" y="90" text-anchor="end" fill="#8C7A64" style="font:300 11px 'Outfit'">after shift</text>
+              <text x="226" y="82" fill="#E0C29B" style="font:400 15px 'JetBrains Mono',monospace">15:00</text>
+              <text x="226" y="98" fill="#8C7A64" style="font:300 11px 'Outfit'">wake</text>
+              <text x="150" y="140" text-anchor="middle" fill="#7E7062" style="font:400 10px 'JetBrains Mono',monospace;letter-spacing:.14em">NOON</text>
+              <text x="150" y="160" text-anchor="middle" fill="#665A4E" style="font:300 11px 'Outfit'">filter held on through daylight</text>
+            </svg>
+          </div>
+          <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:14px">
+            <div style="font:300 13px/1.6 'Outfit';color:#8C7A64;text-wrap:pretty">Inverting fills the middle of the arc instead of its ends. The day still reads as one continuous curve, so a daytime sleep block never looks like an error.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 18px;border-radius:16px;background:rgba(242,166,90,.06);border:1px solid rgba(210,180,140,.12)">
+              <span style="font:400 14px 'Outfit';color:#D3C0AC">Invert schedule</span>
+              <div style="width:48px;height:28px;border-radius:8px;background:rgba(242,166,90,.28);display:flex;align-items:center;justify-content:flex-end;padding:3px"><div style="width:22px;height:22px;border-radius:6px;background:#F2A65A"></div></div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;height:46px;border-top:1px solid rgba(210,180,140,.08);padding:0 4px"><span style="font:300 14px 'Outfit';color:#A8988A">Days</span><span style="font:400 13px 'JetBrains Mono',monospace;color:#E0C29B">MON–FRI</span></div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{ notes }}" hint-placeholder-val="{{ true }}">
+      <div style="width:300px;display:flex;flex-direction:column;gap:13px;padding-top:30px;font:300 13px/1.7 'Outfit';color:#8B949E">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Schedule notes</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Orientation.</b> The arc always runs 18:00 → 09:00 left to right, night at the base of both ends. Evening is on the left because that is where the thumb starts a drag.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Anchor targets.</b> The visible ring is 20px, the touch target 56px, with a concentric hairline showing the grab radius so it can be found without a hit.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Offsets by drag.</b> Dragging past sunset reads "30 min before sunset"; the label rewrites live in 5-minute steps with a tick at exact sunset. No number entry anywhere.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Ramp.</b> A scheduled start crossfades over the set duration, the arc's fill grows at the same rate the screen warms. No toast, no notification sound, nothing that announces itself.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">TalkBack.</b> Each anchor is a seekbar in 5-minute increments announcing "Start, 30 minutes before sunset, 8:41 PM".</div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">03 · 04</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Presets &amp; Advanced</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">The list is the swatch set · advanced is one section, not a page</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Presets · list</div>
+        <div data-screen-label="Presets / List" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#0B0806;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#665A4E">1:19</div>
+          <div style="padding:10px 24px 18px;display:flex;flex-direction:column;gap:5px">
+            <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.18em;color:#7E7062">PRESETS</div>
+            <div style="font:300 24px 'Outfit';color:#DFCDB8">Four ways to look</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:0 16px">
+            <sc-for list="{{ presets }}" as="p" hint-placeholder-count="4">
+              <div style="min-height:84px;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:16px;background:{{ p.rowBg }};border:1px solid {{ p.rowBorder }}">
+                <div style="width:36px;height:36px;border-radius:10px;flex:none;background:{{ p.swatch }};border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font:500 11px 'JetBrains Mono',monospace;color:{{ p.glyphColor }}">{{ p.glyph }}</div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+                  <div style="font:500 16px 'Outfit';color:{{ p.title }}">{{ p.name }}</div>
+                  <div style="font:400 12px 'JetBrains Mono',monospace;color:{{ p.meta }};font-variant-numeric:tabular-nums">{{ p.spec }}</div>
+                </div>
+                <div style="font:300 12px 'Outfit';color:{{ p.meta }}">{{ p.state }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:18px 22px 34px">
+            <div style="height:58px;border-radius:18px;border:1px dashed rgba(210,180,140,.20);display:flex;align-items:center;justify-content:center;font:500 15px 'Outfit';color:#A8988A">+ Save current as preset</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Presets · create / rename / delete</div>
+        <div data-screen-label="Presets / Edit" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#0B0806;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#665A4E">1:20</div>
+          <div style="opacity:.28;display:flex;flex-direction:column;gap:8px;padding:14px 16px 0">
+            <div style="height:84px;border-radius:18px;background:rgba(242,166,90,.06)"></div>
+            <div style="height:84px;border-radius:18px;background:rgba(242,166,90,.06)"></div>
+            <div style="height:84px;border-radius:18px;background:rgba(242,166,90,.06)"></div>
+          </div>
+          <div style="margin-top:auto;border-radius:26px 26px 38px 38px;background:#160E08;border-top:1px solid rgba(210,180,140,.14);padding:22px 22px 34px;display:flex;flex-direction:column;gap:18px">
+            <div style="width:44px;height:4px;border-radius:2px;background:rgba(210,180,140,.20);align-self:center"></div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:36px;height:36px;border-radius:10px;background:#C97A34;display:flex;align-items:center;justify-content:center;font:500 11px 'JetBrains Mono',monospace;color:#F0D2AE">DN</div>
+              <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.18em;color:#7E7062">RENAME PRESET</div>
+            </div>
+            <div style="height:58px;border-radius:14px;background:rgba(242,166,90,.07);border:1px solid rgba(242,166,90,.30);display:flex;align-items:center;padding:0 18px;gap:3px">
+              <span style="font:400 19px 'Outfit';color:#EFDAC0">Deep Night</span>
+              <div style="width:2px;height:24px;background:#F2A65A;animation:caret 1.3s ease-in-out infinite"></div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px">
+              <span style="font:300 13px 'Outfit';color:#6C7580">Used by widget &amp; tile</span>
+              <span style="font:400 13px 'JetBrains Mono',monospace;color:#8C7A64">1700K · 14%</span>
+            </div>
+            <div style="display:flex;gap:10px">
+              <div style="flex:1;height:56px;border-radius:16px;border:1px solid rgba(217,110,86,.34);display:flex;align-items:center;justify-content:center;font:500 15px 'Outfit';color:#D97E62">Delete</div>
+              <div style="flex:1.4;height:56px;border-radius:16px;background:rgba(242,166,90,.18);border:1px solid rgba(242,166,90,.38);display:flex;align-items:center;justify-content:center;font:500 15px 'Outfit';color:#F0D2AE">Save</div>
+            </div>
+            <div style="font:300 12px/1.6 'Outfit';color:#5C646E;text-align:center;text-wrap:pretty">Delete is undoable for 8 seconds from an inline strip. No confirmation dialog, a dialog would light the room.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Settings · advanced expanded</div>
+        <div data-screen-label="Advanced" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#0B0806;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#665A4E">1:24</div>
+          <div style="padding:10px 24px 14px;display:flex;flex-direction:column;gap:5px">
+            <div style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.18em;color:#7E7062">SETTINGS</div>
+            <div style="font:300 24px 'Outfit';color:#DFCDB8">Advanced</div>
+          </div>
+          <div style="flex:1;padding:0 20px;display:flex;flex-direction:column;gap:2px;overflow:hidden">
+            <div style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 4px"><span style="font:300 15px 'Outfit';color:#C0B3A6">Dim below system minimum</span><div style="width:46px;height:26px;border-radius:7px;background:rgba(242,166,90,.28);display:flex;align-items:center;justify-content:flex-end;padding:3px"><div style="width:20px;height:20px;border-radius:5px;background:#F2A65A"></div></div></div>
+            <div style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;border-top:1px solid rgba(210,180,140,.07)"><span style="font:300 15px 'Outfit';color:#C0B3A6">Keep filter over keyboard</span><div style="width:46px;height:26px;border-radius:7px;background:rgba(210,180,140,.09);display:flex;align-items:center;padding:3px"><div style="width:20px;height:20px;border-radius:5px;background:#4E4740"></div></div></div>
+            <div style="border-top:1px solid rgba(210,180,140,.07);padding:16px 4px 12px;display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8C7A64">PER-CHANNEL</span><span style="font:300 12px 'Outfit';color:#5C646E">reset</span></div>
+              <div style="display:flex;flex-direction:column;gap:16px;font-variant-numeric:tabular-nums">
+                <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;font:400 12px 'JetBrains Mono',monospace;color:#D9765E">R</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(210,180,140,.10);position:relative"><div style="position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:3px;background:#D9765E"></div><div style="position:absolute;left:100%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:6px;background:#1A100C;border:1.5px solid #D9765E"></div></div><span style="width:34px;text-align:right;font:400 12px 'JetBrains Mono',monospace;color:#C0B3A6">100</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;font:400 12px 'JetBrains Mono',monospace;color:#8FA57C">G</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(210,180,140,.10);position:relative"><div style="position:absolute;left:0;top:0;bottom:0;width:62%;border-radius:3px;background:#8FA57C"></div><div style="position:absolute;left:62%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:6px;background:#131610;border:1.5px solid #8FA57C"></div></div><span style="width:34px;text-align:right;font:400 12px 'JetBrains Mono',monospace;color:#C0B3A6">62</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span style="width:12px;font:400 12px 'JetBrains Mono',monospace;color:#6E86A8">B</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(210,180,140,.10);position:relative"><div style="position:absolute;left:0;top:0;bottom:0;width:18%;border-radius:3px;background:#6E86A8"></div><div style="position:absolute;left:18%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:6px;background:#0F1319;border:1.5px solid #6E86A8"></div></div><span style="width:34px;text-align:right;font:400 12px 'JetBrains Mono',monospace;color:#C0B3A6">18</span></div>
+              </div>
+            </div>
+            <div style="border-top:1px solid rgba(210,180,140,.07);padding:14px 4px 0;display:flex;flex-direction:column;gap:2px">
+              <span style="font:400 12px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#8C7A64;padding-bottom:8px">PER-APP RULES</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;height:46px"><span style="font:300 14px 'Outfit';color:#C0B3A6">Camera</span><span style="font:400 12px 'JetBrains Mono',monospace;color:#7E7062">FILTER OFF</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;height:46px;border-top:1px solid rgba(210,180,140,.05)"><span style="font:300 14px 'Outfit';color:#C0B3A6">Photos</span><span style="font:400 12px 'JetBrains Mono',monospace;color:#7E7062">FILTER OFF</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;height:46px;border-top:1px solid rgba(210,180,140,.05)"><span style="font:300 14px 'Outfit';color:#C0B3A6">Maps</span><span style="font:400 12px 'JetBrains Mono',monospace;color:#7E7062">2400K MAX</span></div>
+              <div style="display:flex;align-items:center;height:46px;border-top:1px solid rgba(210,180,140,.05)"><span style="font:400 14px 'Outfit';color:#A8988A">+ Add app</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{ notes }}" hint-placeholder-val="{{ true }}">
+      <div style="width:300px;display:flex;flex-direction:column;gap:13px;padding-top:30px;font:300 13px/1.7 'Outfit';color:#8B949E">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Presets &amp; advanced notes</div>
+        <div><b style="color:#CBD3DA;font-weight:500">No colour-only meaning.</b> Every row carries a two-letter monogram and a numeric spec, so Migraine is identifiable greyscaled, with the swatch removed, or read aloud.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Migraine is squared.</b> Its swatch is the only one with a 4px radius rather than 10px, a second, non-colour signal that it is the outlier preset.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">One level deep.</b> Advanced is a section on Settings, expanded in place. Per-app rules add rows to that same section; there is no third screen anywhere in the product.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Channel sliders are the exception.</b> This is the only place a track is drawn: per-channel work is precise by nature and the audience for it is awake.</div>
+        <div><b style="color:#CBD3DA;font-weight:500">Large font sizes.</b> Rows are min-height, not fixed. At 200% system font the spec line wraps under the title and the swatch holds 36px.</div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">05 · 07</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Notification, tile, widget, panic</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">Primary UI, where most real interaction happens</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+      <div style="display:flex;flex-direction:column;gap:22px;width:370px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Notification · collapsed</div>
+          <div data-screen-label="Notification / Collapsed" style="border-radius:22px;background:#150D07;border:1px solid rgba(210,180,140,.12);padding:16px 18px;display:flex;align-items:center;gap:14px">
+            <svg viewBox="0 0 40 26" style="width:32px;flex:none"><path d="M4 22 A16 16 0 0 1 36 22" pathLength="100" fill="none" stroke="rgba(210,180,140,.20)" stroke-width="2.5"></path><path d="M4 22 A16 16 0 0 1 31 11" pathLength="100" fill="none" stroke="#C97A34" stroke-width="2.5" stroke-linecap="round"></path></svg>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+              <div style="font:500 14px 'Outfit';color:#DFCDB8">Filter on · 1700K · 14%</div>
+              <div style="font:300 12px 'Outfit';color:#8C7A64">Deep Night · until sunrise, 6:12</div>
+            </div>
+            <div style="height:34px;padding:0 16px;border-radius:10px;background:rgba(233,236,238,.90);display:flex;align-items:center;font:500 12px 'Outfit';letter-spacing:.04em;color:#191410">TURN OFF</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Notification · expanded · panic action first</div>
+          <div data-screen-label="Notification / Expanded" style="border-radius:22px;background:#150D07;border:1px solid rgba(210,180,140,.14);padding:16px 18px 18px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;gap:14px">
+              <svg viewBox="0 0 40 26" style="width:32px;flex:none"><path d="M4 22 A16 16 0 0 1 36 22" pathLength="100" fill="none" stroke="rgba(210,180,140,.20)" stroke-width="2.5"></path><path d="M4 22 A16 16 0 0 1 31 11" pathLength="100" fill="none" stroke="#C97A34" stroke-width="2.5" stroke-linecap="round"></path></svg>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                <div style="font:500 14px 'Outfit';color:#DFCDB8">Filter on · 1700K · 14%</div>
+                <div style="font:300 12px 'Outfit';color:#8C7A64">Deep Night · until sunrise, 6:12</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:stretch">
+              <div style="flex:2.2;height:58px;border-radius:14px;background:rgba(233,236,238,.90);display:flex;align-items:center;justify-content:center;gap:9px"><div style="width:8px;height:8px;border-radius:4px;background:#191410"></div><span style="font:600 13px 'Outfit';letter-spacing:.06em;color:#191410">TURN OFF NOW</span></div>
+              <div style="flex:1;height:58px;border-radius:14px;border:1px solid rgba(210,180,140,.16);display:flex;align-items:center;justify-content:center;font:300 24px 'Outfit';color:#D3C0AC">−</div>
+              <div style="flex:1;height:58px;border-radius:14px;border:1px solid rgba(210,180,140,.16);display:flex;align-items:center;justify-content:center;font:300 24px 'Outfit';color:#D3C0AC">+</div>
+              <div style="flex:1.5;height:58px;border-radius:14px;border:1px solid rgba(210,180,140,.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px"><span style="font:500 13px 'Outfit';color:#D3C0AC">Pause</span><span style="font:400 10px 'JetBrains Mono',monospace;color:#8C7A64">1 HR</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 120 8" style="flex:1"><line x1="2" y1="4" x2="118" y2="4" stroke="rgba(210,180,140,.14)" stroke-width="2" stroke-linecap="round"></line><line x1="2" y1="4" x2="86" y2="4" stroke="#8E4F1E" stroke-width="2" stroke-linecap="round"></line><circle cx="86" cy="4" r="3" fill="#C97A34"></circle></svg>
+              <span style="font:400 11px 'JetBrains Mono',monospace;color:#8C7A64">STEP 5 / 7</span>
+            </div>
+            <div style="font:300 11px/1.6 'Outfit';color:#5C646E;text-wrap:pretty">Panic sits first, is the one light surface in the product, and is the widest target, it has to be findable at 8% brightness with the screen almost black. It never changes position, so it can be hit from muscle memory.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:22px;width:370px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Quick settings tile · on / off</div>
+          <div style="display:flex;gap:10px">
+            <div data-screen-label="QS tile / On" style="flex:1;height:92px;border-radius:20px;background:rgba(242,166,90,.20);border:1px solid rgba(242,166,90,.34);padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between">
+              <svg viewBox="0 0 40 26" style="width:30px"><path d="M4 22 A16 16 0 0 1 36 22" pathLength="100" fill="none" stroke="rgba(255,210,170,.30)" stroke-width="2.5"></path><path d="M4 22 A16 16 0 0 1 31 11" pathLength="100" fill="none" stroke="#F2A65A" stroke-width="2.5" stroke-linecap="round"></path></svg>
+              <div style="display:flex;flex-direction:column"><span style="font:500 13px 'Outfit';color:#F0D2AE">Filter</span><span style="font:400 11px 'JetBrains Mono',monospace;color:#C29A72">1700K · ON</span></div>
+            </div>
+            <div data-screen-label="QS tile / Off" style="flex:1;height:92px;border-radius:20px;background:rgba(180,200,220,.05);border:1px solid rgba(180,200,220,.10);padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between">
+              <svg viewBox="0 0 40 26" style="width:30px"><path d="M4 22 A16 16 0 0 1 36 22" pathLength="100" fill="none" stroke="rgba(180,200,220,.22)" stroke-width="2.5"></path></svg>
+              <div style="display:flex;flex-direction:column"><span style="font:500 13px 'Outfit';color:#7E8894">Filter</span><span style="font:400 11px 'JetBrains Mono',monospace;color:#4E555E">OFF</span></div>
+            </div>
+          </div>
+          <div style="font:300 12px/1.6 'Outfit';color:#5C646E">The arc's fill is the tile's state indicator: empty when off, filled to the current warmth when on. Long-press cycles the last three presets in place, no dialog, no app launch.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">Home screen widget · 4×1 and 2×2</div>
+          <div data-screen-label="Widget / 4x1" style="border-radius:20px;background:#140D08;border:1px solid rgba(210,180,140,.12);padding:14px 18px;display:flex;align-items:center;gap:16px">
+            <svg viewBox="0 0 40 26" style="width:34px;flex:none"><path d="M4 22 A16 16 0 0 1 36 22" pathLength="100" fill="none" stroke="rgba(210,180,140,.20)" stroke-width="2.5"></path><path d="M4 22 A16 16 0 0 1 31 11" pathLength="100" fill="none" stroke="#C97A34" stroke-width="2.5" stroke-linecap="round"></path></svg>
+            <div style="display:flex;flex-direction:column;flex:1"><span style="font:300 24px 'Outfit';color:#E0C29B;font-variant-numeric:tabular-nums">1700K</span><span style="font:300 11px 'Outfit';color:#8C7A64">Deep Night · on</span></div>
+            <div style="display:flex;gap:8px">
+              <div style="width:46px;height:46px;border-radius:12px;border:1px solid rgba(210,180,140,.16);display:flex;align-items:center;justify-content:center;font:300 20px 'Outfit';color:#C0B3A6">−</div>
+              <div style="width:46px;height:46px;border-radius:12px;border:1px solid rgba(210,180,140,.16);display:flex;align-items:center;justify-content:center;font:300 20px 'Outfit';color:#C0B3A6">+</div>
+              <div style="width:46px;height:46px;border-radius:12px;background:rgba(242,166,90,.18);border:1px solid rgba(242,166,90,.34);display:flex;align-items:center;justify-content:center"><div style="width:10px;height:10px;border-radius:5px;background:#F2A65A"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <div data-screen-label="Widget / 2x2" style="width:172px;height:172px;border-radius:26px;background:#140D08;border:1px solid rgba(210,180,140,.12);padding:16px;display:flex;flex-direction:column;justify-content:space-between">
+              <svg viewBox="0 0 300 100" style="width:100%"><path d="M10 90 A140 140 0 0 1 290 90" pathLength="100" fill="none" stroke="rgba(210,180,140,.14)" stroke-width="6" stroke-linecap="round"></path><path d="M10 90 A140 140 0 0 1 250 42" pathLength="100" fill="none" stroke="#C97A34" stroke-width="6" stroke-linecap="round"></path></svg>
+              <div style="display:flex;flex-direction:column;gap:1px"><span style="font:300 30px 'Outfit';color:#E0C29B;font-variant-numeric:tabular-nums">1700K</span><span style="font:400 10px 'JetBrains Mono',monospace;letter-spacing:.12em;color:#8C7A64">DEEP NIGHT · ON</span></div>
+              <div style="height:44px;border-radius:12px;background:rgba(233,236,238,.88);display:flex;align-items:center;justify-content:center;font:600 12px 'Outfit';letter-spacing:.06em;color:#191410">TURN OFF</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:10px;font:300 12px/1.6 'Outfit';color:#5C646E">
+              <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Panic disable</div>
+              <div>Primary path is the notification action, always first in the row and always light-on-dark.</div>
+              <div>Also on the 2×2 widget and the launcher icon's long-press menu. Never behind an unlock, never behind a confirm.</div>
+              <div>Restores system brightness as well as removing the tint, the two are what actually left the screen unreadable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#5C646E">After panic · at 8% brightness</div>
+        <div data-screen-label="Panic disable" style="width:340px;height:300px;border-radius:38px;border:1px solid rgba(210,180,140,.14);background:#040404;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:22px">
+          <div style="border-radius:16px;background:rgba(233,236,238,.92);padding:16px 18px;display:flex;align-items:center;gap:14px">
+            <div style="width:9px;height:9px;border-radius:5px;background:#191410;flex:none"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+              <span style="font:600 14px 'Outfit';color:#191410">Filter off · brightness restored</span>
+              <span style="font:300 12px 'Outfit';color:#4E4740">Tap to undo · 8s</span>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px;font:300 12px/1.6 'Outfit';color:#5C646E">The strip is the only element in the product allowed above 80% luminance, and it appears only after the user has asked for light.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">06</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Permission explainer</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">One screen · earns back a permission shaped like malware</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+      <div data-screen-label="Permission explainer" style="width:340px;height:720px;border-radius:38px;border:1px solid rgba(180,200,220,.12);background:#0A0B0D;overflow:hidden;display:flex;flex-direction:column">
+        <div style="height:46px;display:flex;align-items:center;padding:0 24px;font:400 12px 'JetBrains Mono',monospace;color:#4E555E">1:02</div>
+        <div style="flex:1;min-height:0;padding:16px 26px 0;display:flex;flex-direction:column;gap:14px">
+          <div style="font:200 26px/1.25 'Outfit';color:#E9ECEE;letter-spacing:-.01em;text-wrap:pretty">Android will ask whether this app can draw over other apps.</div>
+          <div style="font:300 14px/1.65 'Outfit';color:#8B949E;text-wrap:pretty">That is the only way to tint a screen. The warm layer sits on top of whatever you are looking at, it cannot read it, tap it, or record it.</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:13px;align-items:flex-start"><div style="width:5px;height:5px;border-radius:3px;background:#F2A65A;margin-top:7px;flex:none"></div><div style="font:300 13px/1.6 'Outfit';color:#BAC3CB"><b style="font-weight:500;color:#DDE2E6">No internet permission at all.</b> The app cannot open a connection, so nothing can leave your phone.</div></div>
+            <div style="display:flex;gap:13px;align-items:flex-start"><div style="width:5px;height:5px;border-radius:3px;background:#F2A65A;margin-top:7px;flex:none"></div><div style="font:300 13px/1.6 'Outfit';color:#BAC3CB">No accounts, no analytics, no ads, no payments.</div></div>
+            <div style="display:flex;gap:13px;align-items:flex-start"><div style="width:5px;height:5px;border-radius:3px;background:#F2A65A;margin-top:7px;flex:none"></div><div style="font:300 13px/1.6 'Outfit';color:#BAC3CB">Revoke it in Android settings any time. The app keeps working; it just stops tinting.</div></div>
+          </div>
+          <div style="margin-top:auto;padding:14px 0 12px;border-top:1px solid rgba(180,200,220,.08);font:400 11px/1.65 'JetBrains Mono',monospace;color:#5C646E">PERMISSIONS REQUESTED<br>SYSTEM_ALERT_WINDOW · WRITE_SETTINGS<br><span style="color:#4E555E">That is the complete list.</span></div>
+        </div>
+        <div style="padding:0 22px 34px;display:flex;flex-direction:column;gap:10px">
+          <div style="height:64px;border-radius:20px;background:rgba(242,166,90,.18);border:1px solid rgba(242,166,90,.36);display:flex;align-items:center;justify-content:center;font:500 16px 'Outfit';color:#F0D2AE">Open Android settings</div>
+          <div style="height:52px;display:flex;align-items:center;justify-content:center;font:400 14px 'Outfit';color:#8B949E">Not now</div>
+        </div>
+      </div>
+      <sc-if value="{{ notes }}" hint-placeholder-val="{{ true }}">
+      <div style="width:320px;display:flex;flex-direction:column;gap:13px;padding-top:4px;font:300 13px/1.7 'Outfit';color:#8B949E">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#F2A65A">Why this reads as trustworthy</div>
+        <div>It names the alarming thing first, in Android's own words, before asking for anything. Nothing hides behind "learn more".</div>
+        <div>Every claim is falsifiable, a permission list the user can verify in Settings, not a promise about intentions.</div>
+        <div>"Not now" is a real exit at full weight, never greyed. A dead end here is what makes a permission feel coerced.</div>
+        <div>No illustration, no shield, no green checkmarks, no lock icons. Reassurance graphics are what malware uses; a plain list is what an honest utility uses.</div>
+        <div>This screen appears cool-grey because the filter is not running yet. It is the only screen in the product the user sees before the ramp exists, and the first tint after granting is the reward.</div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-bottom:1px solid rgba(180,200,220,.08);padding-bottom:12px">
+      <div style="font:500 13px 'JetBrains Mono',monospace;letter-spacing:.16em;color:#F2A65A">DS</div>
+      <div style="font:400 20px 'Outfit';color:#DDE2E6">Design system</div>
+      <div style="font:300 14px 'Outfit';color:#6C7580">One ramp · elevation without shadow · motion like light</div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+
+      <div style="width:560px;border-radius:22px;border:1px solid rgba(180,200,220,.09);padding:24px;display:flex;flex-direction:column;gap:18px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">THE HORIZON RAMP · every token samples this</div>
+        <div style="display:grid;grid-template-columns:96px repeat(4,1fr);gap:8px;align-items:center;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">
+          <div></div><div style="text-align:center">OFF / DAY</div><div style="text-align:center">3400 K</div><div style="text-align:center">2400 K</div><div style="text-align:center">1700 K</div>
+          <div>surface/0</div>
+          <div style="height:42px;border-radius:8px;background:#08090B;border:1px solid rgba(255,255,255,.05)"></div>
+          <div style="height:42px;border-radius:8px;background:#100C09;border:1px solid rgba(255,255,255,.05)"></div>
+          <div style="height:42px;border-radius:8px;background:#140B05;border:1px solid rgba(255,255,255,.05)"></div>
+          <div style="height:42px;border-radius:8px;background:#170A02;border:1px solid rgba(255,255,255,.05)"></div>
+          <div>surface/1</div>
+          <div style="height:42px;border-radius:8px;background:#101216"></div>
+          <div style="height:42px;border-radius:8px;background:#191310"></div>
+          <div style="height:42px;border-radius:8px;background:#1E120A"></div>
+          <div style="height:42px;border-radius:8px;background:#231004"></div>
+          <div>surface/2</div>
+          <div style="height:42px;border-radius:8px;background:#171A1F"></div>
+          <div style="height:42px;border-radius:8px;background:#221A15"></div>
+          <div style="height:42px;border-radius:8px;background:#29190F"></div>
+          <div style="height:42px;border-radius:8px;background:#2F1606"></div>
+          <div>text/hi</div>
+          <div style="height:42px;border-radius:8px;background:#E9ECEE"></div>
+          <div style="height:42px;border-radius:8px;background:#E5D2BC"></div>
+          <div style="height:42px;border-radius:8px;background:#DEC198"></div>
+          <div style="height:42px;border-radius:8px;background:#D3A876"></div>
+          <div>text/lo</div>
+          <div style="height:42px;border-radius:8px;background:#6C7580"></div>
+          <div style="height:42px;border-radius:8px;background:#7E7062"></div>
+          <div style="height:42px;border-radius:8px;background:#846248"></div>
+          <div style="height:42px;border-radius:8px;background:#80532C"></div>
+          <div>accent</div>
+          <div style="height:42px;border-radius:8px;background:#6E7C8C"></div>
+          <div style="height:42px;border-radius:8px;background:#F2A65A"></div>
+          <div style="height:42px;border-radius:8px;background:#DE8F41"></div>
+          <div style="height:42px;border-radius:8px;background:#C97A34"></div>
+        </div>
+        <div style="font:300 12px/1.7 'Outfit';color:#8B949E;text-wrap:pretty">Tokens are not fixed values, they are functions of two inputs: warmth and dim. Every surface interpolates in Oklch along this row, so hue rotates and chroma rises together while lightness stays pinned to its step, a 2400K surface is never brighter than the same token at 3400K. Dim multiplies lightness afterwards, uniformly, which is why contrast ratios hold at every brightness.</div>
+      </div>
+
+      <div style="width:330px;border-radius:22px;border:1px solid rgba(180,200,220,.09);padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">TYPE SCALE · OUTFIT + JETBRAINS MONO</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="width:74px;flex:none;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">value/96</span><span style="font:200 40px/1 'Outfit';color:#DDE2E6;letter-spacing:-.03em">1700</span></div>
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="width:74px;flex:none;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">display/30</span><span style="font:200 26px 'Outfit';color:#DDE2E6">Follows the sun</span></div>
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="width:74px;flex:none;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">title/24</span><span style="font:300 22px 'Outfit';color:#DDE2E6">Deep Night</span></div>
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="width:74px;flex:none;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">body/15</span><span style="font:300 15px 'Outfit';color:#BAC3CB">Drag up to warm the screen</span></div>
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="width:74px;flex:none;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">label/13</span><span style="font:500 13px 'Outfit';color:#BAC3CB">Turn filter on</span></div>
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="width:74px;flex:none;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">spec/12</span><span style="font:400 12px 'JetBrains Mono',monospace;color:#8B949E;font-variant-numeric:tabular-nums">1700K · 14%</span></div>
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="width:74px;flex:none;font:400 10px 'JetBrains Mono',monospace;color:#6C7580">eyebrow/11</span><span style="font:400 11px 'JetBrains Mono',monospace;letter-spacing:.18em;color:#8B949E">SCHEDULE</span></div>
+        </div>
+        <div style="font:300 12px/1.7 'Outfit';color:#8B949E;padding-top:2px;text-wrap:pretty">Weights stop at 500, bold text on a dim screen reads as glare. All numerals tabular, so a changing value never shifts layout. Everything scales with the system font setting except the 96px value, which caps at 1.3× to stay on one line.</div>
+      </div>
+
+      <div style="width:330px;border-radius:22px;border:1px solid rgba(180,200,220,.09);padding:24px;display:flex;flex-direction:column;gap:18px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">SPACING, RADII, ELEVATION</div>
+        <div style="display:flex;flex-direction:column;gap:9px;font:400 12px 'JetBrains Mono',monospace;color:#8B949E">
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:26px">4</span><div style="height:12px;width:4px;background:#3D4650"></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:26px">8</span><div style="height:12px;width:8px;background:#4A545F"></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:26px">16</span><div style="height:12px;width:16px;background:#59636E"></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:26px">22</span><div style="height:12px;width:22px;background:#68727D"></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:26px">34</span><div style="height:12px;width:34px;background:#77818C"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-end">
+          <div style="width:52px;height:52px;border-radius:7px;background:#1B1F25;display:flex;align-items:flex-end;justify-content:center;font:400 10px 'JetBrains Mono',monospace;color:#8B949E;padding-bottom:4px">7</div>
+          <div style="width:52px;height:52px;border-radius:12px;background:#1B1F25;display:flex;align-items:flex-end;justify-content:center;font:400 10px 'JetBrains Mono',monospace;color:#8B949E;padding-bottom:4px">12</div>
+          <div style="width:52px;height:52px;border-radius:20px;background:#1B1F25;display:flex;align-items:flex-end;justify-content:center;font:400 10px 'JetBrains Mono',monospace;color:#8B949E;padding-bottom:4px">20</div>
+          <div style="width:52px;height:52px;border-radius:26px;background:#1B1F25;display:flex;align-items:flex-end;justify-content:center;font:400 10px 'JetBrains Mono',monospace;color:#8B949E;padding-bottom:4px">26</div>
+        </div>
+        <div style="font:300 12px/1.7 'Outfit';color:#8B949E;text-wrap:pretty"><b style="font-weight:500;color:#CBD3DA">Elevation on true black.</b> No shadows, a shadow needs light behind the surface to exist. A raised surface is +1 step on the ramp (about +3% lightness) plus, only where a boundary must be unambiguous, a 1px hairline at 8–14% of the surface's own hue. Three levels, no more: ground, sheet, control.</div>
+      </div>
+
+      <div style="width:560px;border-radius:22px;border:1px solid rgba(180,200,220,.09);padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">MOTION · BEHAVES LIKE LIGHT</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font:300 13px/1.7 'Outfit';color:#8B949E">
+          <div><b style="color:#CBD3DA;font-weight:500">Colour crossfade · 420ms</b><br>cubic-bezier(.32,.02,.2,1). Every tint change interpolates; nothing steps. Values under the thumb update in real time, surfaces trail slightly behind, that lag is what makes it feel like light rather than a repaint.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Value fade-back · 600ms</b><br>Numerals hold 500ms after release, then fall to 22% opacity. No motion, only opacity.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Scheduled ramp · the full duration</b><br>A 45-minute ramp is a 45-minute crossfade. It is never announced; the only trace is the notification's subtitle rewriting itself.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">No springs.</b> No overshoot, no bounce, no scale-in. Sheets rise 520ms with a soft-out curve and fade their scrim rather than sliding fast.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Haptics carry the precision.</b> One light tick per preset detent, one heavier tick at range ends. The screen may be unreadable; the ticks are not.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Reduced motion.</b> Crossfades shorten to 120ms but are never removed, an instant tint change is a flash, which is the one thing this product must never do.</div>
+        </div>
+      </div>
+
+      <div style="width:330px;border-radius:22px;border:1px solid rgba(180,200,220,.09);padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;color:#F2A65A">DARK-ROOM &amp; ACCESSIBILITY</div>
+        <div style="display:flex;flex-direction:column;gap:12px;font:300 13px/1.7 'Outfit';color:#8B949E">
+          <div><b style="color:#CBD3DA;font-weight:500">No pure white, ever</b>, text/hi tops out at #E9ECEE, and only the panic strip is allowed a light background.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Nothing appears without being asked for.</b> No modals, no toasts, no snackbars that were not caused by a touch.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Bottom third holds every primary control</b>, power, presets, and the sheet actions all sit within 260px of the bottom edge.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">Targets 44px minimum</b>, 56px for anything used in the dark, and the arc anchors get 56px invisible padding.</div>
+          <div><b style="color:#CBD3DA;font-weight:500">TalkBack</b> reads state before name ("On, filter, 1700 kelvin"), and every colour-carrying element also carries a monogram or a spec.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;notes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Spec&quot;}}">
+const CLAMP = (v, a, b) => Math.min(b, Math.max(a, v));
+const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+const scale = (c, k) => c.map(v => Math.round(v * k));
+
+class Component extends DCLogic {
+  state = { kelvin: 2400, dim: 55, touching: false };
+
+  onDown = e => {
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    this.start = { x: e.clientX, y: e.clientY, k: this.state.kelvin, d: this.state.dim };
+    this.setState({ touching: true });
+  };
+
+  onMove = e => {
+    if (!this.start) return;
+    const dy = e.clientY - this.start.y, dx = e.clientX - this.start.x;
+    const wK = Math.abs(dy) >= Math.abs(dx) ? 1 : 1 / 1.4;
+    const wD = Math.abs(dx) > Math.abs(dy) ? 1 : 1 / 1.4;
+    this.setState({
+      kelvin: Math.round(CLAMP(this.start.k + dy * 4.5 * wK, 1600, 4600) / 50) * 50,
+      dim: Math.round(CLAMP(this.start.d + dx * 0.16 * wD, 8, 100))
+    });
+  };
+
+  onUp = () => { this.start = null; this.setState({ touching: false }); };
+
+  renderVals() {
+    const { kelvin, dim, touching } = this.state;
+    const t = CLAMP((4600 - kelvin) / 3000, 0, 1);
+    const b = 0.45 + 0.55 * (dim / 100);
+
+    const bg = scale(mix([8, 9, 11], [23, 10, 2], t), 0.55 + 0.45 * b);
+    const text = scale(mix([233, 236, 238], [211, 168, 118], t), b);
+    const sub = scale(mix([108, 117, 128], [128, 83, 44], t), 0.7 + 0.3 * b);
+    const faint = scale(mix([62, 67, 73], [76, 50, 28], t), 0.7 + 0.3 * b);
+    const accent = scale(mix([110, 124, 140], [201, 122, 52], t), 0.65 + 0.35 * b);
+    const hair = `rgba(${mix([180, 200, 220], [220, 150, 90], t).join(',')},.12)`;
+
+    // knob on the arc: M20 150 A130 130 0 0 1 280 150, swept by warmth
+    const ang = Math.PI * (1 - t);
+    return {
+      notes: this.props.notes ?? true,
+      presets: [
+        { name: 'Reading', spec: '3400K · 82%', glyph: 'RD', state: '', swatch: '#B98A52', glyphColor: '#241705', title: '#DFCDB8', meta: '#8C7A64', rowBg: 'rgba(242,166,90,.05)', rowBorder: 'rgba(210,180,140,.12)' },
+        { name: 'Deep Night', spec: '1700K · 14%', glyph: 'DN', state: 'active', swatch: '#8E4F1E', glyphColor: '#F0D2AE', title: '#EFC392', meta: '#A88463', rowBg: 'rgba(242,166,90,.11)', rowBorder: 'rgba(242,166,90,.30)' },
+        { name: 'Migraine', spec: '1000K · 8% · red only', glyph: 'MG', state: '', swatch: '#7E2418', glyphColor: '#F2C4B4', title: '#DFCDB8', meta: '#8C7A64', rowBg: 'rgba(217,110,86,.05)', rowBorder: 'rgba(217,110,86,.20)' },
+        { name: 'Custom', spec: '2400K · 55%', glyph: 'CU', state: '', swatch: 'transparent', glyphColor: '#8C7A64', title: '#DFCDB8', meta: '#8C7A64', rowBg: 'rgba(210,180,140,.03)', rowBorder: 'rgba(210,180,140,.10)' }
+      ],
+      live: {
+        kelvin,
+        dim,
+        bg: rgb(bg),
+        text: rgb(text),
+        sub: rgb(sub),
+        faint: rgb(faint),
+        accent: rgb(accent),
+        hairline: hair,
+        arcTrack: `rgba(${mix([180, 200, 220], [220, 150, 90], t).join(',')},.11)`,
+        arcFill: rgb(scale(mix([90, 102, 116], [142, 79, 30], t), 0.7 + 0.3 * b)),
+        arcOffset: Math.round(100 - t * 100),
+        knobX: (150 - 130 * Math.cos(ang)).toFixed(1),
+        knobY: (150 - 130 * Math.sin(ang)).toFixed(1),
+        valueOpacity: touching ? 1 : 0.38
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

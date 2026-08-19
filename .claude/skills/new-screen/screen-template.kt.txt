@@ -1,0 +1,130 @@
+// Template for a Horizon feature module. Replace Example with the screen name.
+// Four files, in this order. Nothing here is optional.
+
+// ---------------------------------------------------------------------------
+// ExampleState.kt
+// ---------------------------------------------------------------------------
+package dev.horizon.feature.example
+
+import androidx.compose.runtime.Immutable
+import dev.horizon.core.model.DimPercent
+import dev.horizon.core.model.Kelvin
+
+@Immutable
+internal data class ExampleState(
+    val warmth: Kelvin,
+    val dim: DimPercent,
+    val isEnabled: Boolean,
+)
+
+/** Everything the user can do on this screen. */
+internal sealed interface ExampleEvent {
+    data class WarmthChanged(val value: Kelvin) : ExampleEvent
+    data class DimChanged(val value: DimPercent) : ExampleEvent
+    data object Toggled : ExampleEvent
+}
+
+// ---------------------------------------------------------------------------
+// ExamplePresenter.kt
+// ---------------------------------------------------------------------------
+package dev.horizon.feature.example
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+// A plain class, not a ViewModel. Constructor injection, no service locator.
+// Take a ViewModel only when the screen genuinely needs that lifecycle.
+internal class ExamplePresenter(
+    private val scope: CoroutineScope,
+    initial: ExampleState,
+) {
+    private val _state = MutableStateFlow(initial)
+    val state: StateFlow<ExampleState> = _state.asStateFlow()
+
+    fun onEvent(event: ExampleEvent) {
+        // `when` with no else branch, so the compiler catches a new event type.
+        when (event) {
+            is ExampleEvent.WarmthChanged -> _state.value = _state.value.copy(warmth = event.value)
+            is ExampleEvent.DimChanged -> _state.value = _state.value.copy(dim = event.value)
+            ExampleEvent.Toggled -> _state.value = _state.value.copy(isEnabled = !_state.value.isEnabled)
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// ExampleScreen.kt
+// ---------------------------------------------------------------------------
+package dev.horizon.feature.example
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+/**
+ * The screen. Takes state and a lambda, never a presenter.
+ *
+ * This is the one public declaration in the module. Everything else is internal.
+ */
+@Composable
+public fun ExampleScreen(
+    state: ExampleState,
+    onEvent: (ExampleEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        // During a drag, read the changing value inside drawBehind or
+        // graphicsLayer so composition and layout are skipped and only the draw
+        // phase runs. requirement.md N-05: no dropped frames at 120 Hz.
+    }
+}
+
+// ---------------------------------------------------------------------------
+// ExamplePreviews.kt
+// ---------------------------------------------------------------------------
+package dev.horizon.feature.example
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import dev.horizon.core.model.DimPercent
+import dev.horizon.core.model.Kelvin
+
+// Three ramp points plus one at 200 percent font scale. All four are required
+// for every screen. The ramp values are in docs/design-system.md.
+
+@Preview(name = "Off")
+@Composable
+private fun ExampleOffPreview() {
+    ExampleScreen(
+        state = ExampleState(Kelvin(Kelvin.DRAG_MAX), DimPercent(100), isEnabled = false),
+        onEvent = {},
+    )
+}
+
+@Preview(name = "Mild")
+@Composable
+private fun ExampleMildPreview() {
+    ExampleScreen(
+        state = ExampleState(Kelvin(3400), DimPercent(82), isEnabled = true),
+        onEvent = {},
+    )
+}
+
+@Preview(name = "Deep night")
+@Composable
+private fun ExampleDeepNightPreview() {
+    ExampleScreen(
+        state = ExampleState(Kelvin(1700), DimPercent(14), isEnabled = true),
+        onEvent = {},
+    )
+}
+
+@Preview(name = "Deep night at 200 percent font", fontScale = 2.0f)
+@Composable
+private fun ExampleLargeFontPreview() {
+    ExampleScreen(
+        state = ExampleState(Kelvin(1700), DimPercent(14), isEnabled = true),
+        onEvent = {},
+    )
+}

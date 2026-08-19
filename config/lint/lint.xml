@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!--
+      warningsAsErrors is on, so every check below is a build failure unless it
+      is explicitly downgraded here. Downgrades need a reason.
+    -->
+
+    <!-- The four commitments in requirement.md section 2 are enforced here as
+         well as in the dependency audit, so a violation fails at two layers. -->
+    <issue id="MissingApplicationIcon" severity="ignore">
+        <!-- The launcher icon lands with the app module, not the scaffold. -->
+    </issue>
+
+    <!-- Requirement N-07: TalkBack support and font scaling to 200 percent. -->
+    <issue id="ContentDescription" severity="error" />
+    <issue id="ClickableViewAccessibility" severity="error" />
+    <issue id="LabelFor" severity="error" />
+    <issue id="SetTextI18n" severity="error" />
+
+    <!--
+      Requirement N-08, fully offline, is not enforced here. Lint has no issue
+      that covers "a URL that reaches code at runtime", and the layers that do
+      cover it are better placed: the app declares no INTERNET permission,
+      dependencyAudit rejects every networking library, and the privacy-auditor
+      agent greps for URL literals before a release.
+    -->
+
+    <!-- Vector drawables and unused resources bear directly on the 6 MB budget
+         in requirement.md N-03. -->
+    <issue id="UnusedResources" severity="error" />
+    <issue id="IconDuplicates" severity="error" />
+
+    <!-- Gradle dependency freshness is reported by a scheduled job, not by every
+         local build, so it does not block work in progress. -->
+    <issue id="GradleDependency" severity="informational" />
+    <issue id="NewerVersionAvailable" severity="informational" />
+    <issue id="AndroidGradlePluginVersion" severity="informational" />
+
+    <!-- compileSdk is 37 while targetSdk stays 36: Compose requires compiling
+         against 37, and 36 is the Play requirement in requirement.md 4.4. The
+         gap this check flags is deliberate, not a stale targetSdk. Recorded in
+         docs/architecture.md and scaffolding.md section 1. -->
+    <issue id="OldTargetApi" severity="informational" />
+
+    <!-- allowBackup is false, which is itself the data-extraction policy: with
+         it false, Android ignores every other backup-related manifest
+         attribute, dataExtractionRules included, so an @xml resource here
+         would be dead configuration this check cannot see is unnecessary.
+         https://developer.android.com/guide/topics/manifest/application-element#allowbackup -->
+    <issue id="DataExtractionRules" severity="informational" />
+</lint>

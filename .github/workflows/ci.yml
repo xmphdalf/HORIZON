@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+jobs:
+  build:
+    name: Build, test, and gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # Steps 1, 2, 5, 6, and 7 of scaffolding.md section 8 all run here:
+      # `check` carries detekt, lint, the unit tests, moduleDirection,
+      # noBangBang, dependencyAudit, and permissionAudit.
+      - name: Check
+        run: ./gradlew check --stacktrace
+
+      # The gates themselves are tested, so a broken gate fails CI rather than
+      # silently passing everything.
+      - name: Test the build gates
+        run: ./gradlew -p build-logic test --stacktrace
+
+      - name: Assemble release
+        run: ./gradlew :app:assembleRelease --stacktrace
+
+      # Step 6: APK size against the 6 MB budget in requirement.md N-03.
+      - name: APK size
+        run: ./gradlew :app:apkSizeCheckRelease --stacktrace
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/
+          retention-days: 14
+
+  # A belt-and-braces check on the commitment that the whole product rests on.
+  # `permissionAudit` already covers the merged manifest; this catches an
+  # INTERNET declaration anywhere in the tree, including files no variant builds.
+  commitments:
+    name: No network
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: No INTERNET permission anywhere
+        run: |
+          if grep -rn "android.permission.INTERNET" --include="*.xml" .; then
+            echo "::error::INTERNET permission found. See requirement.md section 8."
+            exit 1
+          fi
+          echo "No INTERNET permission declared."
+
+  instrumented:
+    name: Instrumented tests, API ${{ matrix.api-level }}
+    runs-on: ubuntu-latest
+    # Only worth the emulator boot once there are instrumented tests to run.
+    # surface/overlay is where they will land first.
+    if: false
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [26, 36]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          disable-animations: true
+          script: ./gradlew connectedCheck --stacktrace

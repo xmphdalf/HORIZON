@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # Nothing ships that has not passed the same gates as a pull request.
+      - name: Check
+        run: ./gradlew check --stacktrace
+
+      - name: Test the build gates
+        run: ./gradlew -p build-logic test --stacktrace
+
+      # requirement.md N-09. A user must be able to verify the published binary
+      # against this source, which is part of the privacy claim rather than a
+      # nicety, so the build is done twice and compared.
+      - name: Build twice and compare
+        run: |
+          ./gradlew :app:assembleRelease --stacktrace
+          find app/build/outputs/apk/release -name '*.apk' -exec sha256sum {} \; > /tmp/first.txt
+          cat /tmp/first.txt
+
+          ./gradlew clean
+          ./gradlew :app:assembleRelease --stacktrace
+          find app/build/outputs/apk/release -name '*.apk' -exec sha256sum {} \; > /tmp/second.txt
+          cat /tmp/second.txt
+
+          if ! diff <(cut -d' ' -f1 /tmp/first.txt) <(cut -d' ' -f1 /tmp/second.txt); then
+            echo "::error::Build is not reproducible. See requirement.md N-09."
+            exit 1
+          fi
+          echo "Build is reproducible."
+
+      - name: APK size
+        run: ./gradlew :app:apkSizeCheckRelease --stacktrace
+
+      - name: Publish the checksum alongside the artifact
+        run: |
+          # Clones repackaged with ads are inevitable under a free licence. The
+          # published checksum is how a user tells an official build apart.
+          cp /tmp/second.txt app/build/outputs/apk/release/SHA256SUMS.txt
+          cat app/build/outputs/apk/release/SHA256SUMS.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: |
+            app/build/outputs/apk/release/*.apk
+            app/build/outputs/apk/release/SHA256SUMS.txt
+          retention-days: 90
+
+      # TODO(#3): signing runs locally until a key exists. The keystore is never
+      # committed and never read by tooling; see SECURITY.md.

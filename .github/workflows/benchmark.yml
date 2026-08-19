@@ -1,0 +1,64 @@
+name: Benchmark
+
+on:
+  pull_request:
+    # Only the modules whose changes can move the two numbers in requirement.md
+    # N-04 and N-05. Running this on a documentation change wastes an emulator
+    # boot and trains people to ignore the result.
+    paths:
+      - 'surface/overlay/**'
+      - 'core/tokens/**'
+      - 'core/design/**'
+      - 'feature/home/**'
+      - 'baselineprofile/**'
+      - 'benchmark/**'
+
+concurrency:
+  group: benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+jobs:
+  macrobenchmark:
+    name: Cold start and drag frame timing
+    runs-on: ubuntu-latest
+    # Emulator numbers are not comparable to a physical device baseline, so this
+    # stays off until a self-hosted runner with real hardware exists. Enabling it
+    # on a hosted runner would produce numbers that look authoritative and are
+    # not, which is worse than no measurement.
+    if: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run macrobenchmarks
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          disable-animations: true
+          script: ./gradlew :benchmark:connectedBenchmarkAndroidTest --stacktrace
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark/build/outputs/connected_android_test_additional_output/
+          retention-days: 30

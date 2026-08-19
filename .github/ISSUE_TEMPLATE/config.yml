@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/mihirlathiya/horizon/security/advisories/new
+    about: Report privately through a security advisory, not a public issue. See SECURITY.md.
+  - name: Manufacturer battery manager killing the filter
+    url: https://dontkillmyapp.com/
+    about: If the filter stops on its own, check your skin's settings here first. Then open a bug report with what you found.

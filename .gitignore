@@ -1,0 +1,32 @@
+# Gradle. `build/` matches a directory named exactly build at any depth, so it
+# covers build-logic/convention/build without touching build-logic itself.
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+
+# Kotlin
+.kotlin/
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+release/
+
+# Signing material. Never committed, and also denied in .claude/settings.json.
+*.jks
+*.keystore
+keystore/
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Claude Code personal overrides. Shared explicitly so the whole team ignores it.
+**/.claude/settings.local.json
+
+# The design handoff bundle under docs/design/ is tracked deliberately.
+# Do not add an ignore rule for it.
