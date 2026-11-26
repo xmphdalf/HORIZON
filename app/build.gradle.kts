@@ -14,6 +14,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.uiautomator)
     implementation(project(":core:model"))
     implementation(project(":core:common"))
     implementation(project(":core:tokens"))

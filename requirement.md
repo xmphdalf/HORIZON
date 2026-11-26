@@ -165,7 +165,7 @@ This list is the complete set. The in-app permission screen must show exactly th
 |---|---|---|
 | `SYSTEM_ALERT_WINDOW` | The overlay itself | No |
 | `WRITE_SETTINGS` | Lowering and restoring system brightness, required to dim past the touch opacity ceiling (4.1) | No |
-| `FOREGROUND_SERVICE` and its service type | Keeping the overlay alive | No |
+| `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SPECIAL_USE` | Keeping the overlay alive | No |
 | `POST_NOTIFICATIONS` | The control notification | Yes |
 | `RECEIVE_BOOT_COMPLETED` | Restore state after reboot | Yes |
 | `PACKAGE_USAGE_STATS` | Per-app rules (F-19). Feature disabled if denied. | Yes |

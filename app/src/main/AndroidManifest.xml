@@ -1,26 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--
-      This list is audited by the permissionAudit task against the table in
-      requirement.md section 8. Adding a permission here without adding it there
-      fails the build.
-
-      INTERNET is never declared. That is requirement.md section 8 and the third
-      of the four commitments, and it is what makes the privacy claim checkable
-      rather than a promise.
-
-      Only the two non-optional permissions are declared so far. The remaining
-      five in the section 8 table land with the features that need them, in the
-      same commit as their docs and their entry on the in-app permission screen,
-      per the definition of done in scaffolding.md section 11.
-    -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <application
-        android:allowBackup="false"
-        android:label="Horizon"
-        android:supportsRtl="true" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <application android:allowBackup="false" android:icon="@mipmap/horizon"
+        android:label="Horizon" android:theme="@android:style/Theme.Material.NoActionBar" android:supportsRtl="true">
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name="dev.horizon.surface.overlay.FilterService"
+            android:foregroundServiceType="specialUse" android:exported="false">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-enabled screen warmth and dimming overlay with an immediate notification off action" />
+        </service>
+    </application>
 </manifest>

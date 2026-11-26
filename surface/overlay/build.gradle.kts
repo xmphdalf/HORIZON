@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.coroutines.android)
     implementation(project(":core:model"))
     implementation(project(":core:common"))
     implementation(project(":core:tokens"))
