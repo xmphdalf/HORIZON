@@ -1,5 +1,6 @@
 package dev.horizon.filter
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -36,9 +37,14 @@ class ManualFilterTest {
             device.wait(Until.findObject(By.text("Filter on")), 5000)
             device.wait(Until.findObject(By.text("Deep Night")), 5000).click()
             device.pressHome()
-            device.openNotification()
-            device.wait(Until.findObject(By.textContains("Turn off")), 5000).click()
-            assertTrue(device.wait(Until.gone(By.textContains("Turn off")), 5000))
+            // Android versions collapse and capitalize action labels differently in the shade.
+            val manager = requireNotNull(context.getSystemService(NotificationManager::class.java))
+            val notification = manager.activeNotifications.single { it.id == 1 }.notification
+            val off = notification.actions.first()
+            assertEquals("Turn off", off.title.toString())
+            off.actionIntent.send()
+            context.startActivity(Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            assertTrue(device.wait(Until.hasObject(By.text("Turn filter on")), 5000))
             instrumentation.waitForIdleSync()
             assertEquals(original, Settings.System.getInt(context.contentResolver, brightness))
             assertEquals(mode, Settings.System.getInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS_MODE))
