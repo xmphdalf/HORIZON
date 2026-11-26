@@ -7,11 +7,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
     private fun change(k: Int, percent: Int, commit: Boolean) {
         kelvin = k
         dim = percent
-        if (commit) prefs.edit().putInt("kelvin", k).putInt("dim", percent).apply()
+        if (commit) prefs.edit { putInt("kelvin", k).putInt("dim", percent) }
         if (service?.active?.value == true) service?.update(k, percent, commit)
         else if (!starting && (commit || canStart())) enable()
     }
@@ -94,7 +95,7 @@ class MainActivity : ComponentActivity() {
             .setNegativeButton("Decline") { _, _ -> granting = false }
             .setOnCancelListener { granting = false }
             .setPositiveButton("Open settings") { _, _ ->
-                grant.launch(Intent(action, Uri.parse("package:$packageName")))
+                grant.launch(Intent(action, "package:$packageName".toUri()))
             }.show()
     }
 
@@ -103,7 +104,7 @@ class MainActivity : ComponentActivity() {
             PackageManager.PERMISSION_GRANTED && !prefs.getBoolean("asked_notifications", false)
         ) {
             granting = true
-            prefs.edit().putBoolean("asked_notifications", true).apply()
+            prefs.edit { putBoolean("asked_notifications", true) }
             notifications.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else startFilter()
     }
@@ -121,7 +122,7 @@ class MainActivity : ComponentActivity() {
             .setMessage("Save the current ${kelvin} K and $dim% brightness.")
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Save") { _, _ ->
-                prefs.edit().putInt("custom_k", kelvin).putInt("custom_dim", dim).apply()
+                prefs.edit { putInt("custom_k", kelvin).putInt("custom_dim", dim) }
             }
         if (prefs.contains("custom_k")) dialog.setNeutralButton("Apply saved") { _, _ ->
             change(prefs.getInt("custom_k", kelvin), prefs.getInt("custom_dim", dim), true)
