@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.view.WindowManager
+import android.view.inspector.WindowInspector
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -36,6 +38,25 @@ class ManualFilterTest {
             device.wait(Until.findObject(By.text("Turn filter on")), 5000).click()
             device.wait(Until.findObject(By.text("Filter on")), 5000)
             device.wait(Until.findObject(By.text("Deep Night")), 5000).click()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val screen = instrumentation.uiAutomation.takeScreenshot()
+                try {
+                    instrumentation.runOnMainSync {
+                        val tint = WindowInspector.getGlobalWindowViews().single {
+                            (it.layoutParams as? WindowManager.LayoutParams)?.type ==
+                                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                        }
+                        val origin = IntArray(2)
+                        tint.getLocationOnScreen(origin)
+                        assertEquals(0, origin[0])
+                        assertEquals(0, origin[1])
+                        assertEquals(screen.width, tint.width)
+                        assertEquals(screen.height, tint.height)
+                    }
+                } finally {
+                    screen.recycle()
+                }
+            }
             device.pressHome()
             // Android versions collapse and capitalize action labels differently in the shade.
             val manager = requireNotNull(context.getSystemService(NotificationManager::class.java))
