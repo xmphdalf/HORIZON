@@ -75,9 +75,6 @@ jobs:
   instrumented:
     name: Instrumented tests, API ${{ matrix.api-level }}
     runs-on: ubuntu-latest
-    # Only worth the emulator boot once there are instrumented tests to run.
-    # surface/overlay is where they will land first.
-    if: false
     strategy:
       fail-fast: false
       matrix:
@@ -106,4 +103,4 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           disable-animations: true
-          script: ./gradlew connectedCheck --stacktrace
+          script: ./gradlew :app:connectedDebugAndroidTest --stacktrace
