@@ -146,9 +146,7 @@ Weights stop at 500. Bold text on a dim screen reads as glare. All numerals are
 tabular so a changing value never shifts layout. Everything scales with the system
 font setting except the 96 px value, which caps at 1.3x to stay on one line.
 
-**The font binaries are not in the handoff bundle.** Both families are OFL
-licensed, so redistribution is fine, but the files must be added to
-`core/design/src/main/res/font/` before any screen ships.
+Outfit and JetBrains Mono are bundled in `core/design/src/main/res/font/`.
 
 ---
 
@@ -167,7 +165,7 @@ Radii: 7, 12, 20, 26.
   80 percent luminance. It appears only after the user has asked for light.
 - **Contrast.** Body text holds at least 4.6:1 against its surface at every point
   on the ramp. The 96 px numerals sit at 3.2:1 deliberately: at that size a higher
-  ratio is glare, not legibility. `core/tokens` tests both bounds.
+  ratio is glare, not legibility. These ratios are design targets.
 - **Nothing appears without being asked for.** No modals, toasts, or snackbars the
   user did not cause.
 - **Every primary control sits in the bottom third**, within 260 px of the bottom
@@ -182,7 +180,7 @@ Radii: 7, 12, 20, 26.
 
 ## 8. Screen inventory
 
-The bundle contains these, and they map onto the module tree one to one.
+The table maps the original prototype to the current Android implementation.
 
 | Screens in the bundle | Module |
 |---|---|
@@ -190,11 +188,11 @@ The bundle contains these, and they map onto the module tree one to one.
 | Schedule: sun-linked, fixed, shift | `feature/schedule` |
 | Presets: list, edit | `feature/presets` |
 | Advanced | `feature/settings` |
-| Mission card untinted and tinted, donate sheet, thank you | `feature/mission` |
+| About Horizon, inline tip amounts, thank you | `feature/mission` |
 | Permission explainer | `feature/permission` |
-| Notification: collapsed, expanded | `surface/notification` |
-| QS tile: on, off | `surface/tile` |
-| Widget: 4x1, 2x2 | `surface/widget` |
+| Notification: collapsed, expanded | `surface/overlay` |
+| QS tile: on, off | `app` |
+| Widget: 4x1, 2x2 | `app` |
 | Panic disable strip | `surface/overlay` |
 | App icon options A through E | `app` |
 
