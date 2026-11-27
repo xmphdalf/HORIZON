@@ -3,6 +3,7 @@ package dev.horizon.filter
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
+import androidx.core.content.edit
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -74,7 +75,7 @@ class ScheduleReceiver : BroadcastReceiver() {
         val scheduler = Schedule(context)
         val boot = intent.action == Intent.ACTION_BOOT_COMPLETED
         if (boot && !p.getBoolean("restore", false)) {
-            p.edit().putBoolean("filter_running", false).apply()
+            p.edit { putBoolean("filter_running", false) }
             scheduler.arm()
             return
         }

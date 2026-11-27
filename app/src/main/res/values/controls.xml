@@ -3,6 +3,6 @@
     <string name="increase">Increase brightness</string>
     <string name="less">−</string>
     <string name="more">+</string>
-    <string name="state_on">Turn on</string>
-    <string name="state_off">Turn off</string>
+    <string name="widget_state_on">Turn on</string>
+    <string name="widget_state_off">Turn off</string>
 </resources>

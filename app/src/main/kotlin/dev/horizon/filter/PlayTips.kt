@@ -1,6 +1,7 @@
 package dev.horizon.filter
 
 import android.app.Activity
+import androidx.core.content.edit
 import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +60,7 @@ internal class PlayTips(private val activity: Activity, private val protectCheck
     }
 
     private fun markOutstanding(value: Boolean) {
-        prefs.edit().putBoolean("outstanding", value).apply()
+        prefs.edit { putBoolean("outstanding", value) }
     }
 
     fun resume(sheetOpen: Boolean) {
