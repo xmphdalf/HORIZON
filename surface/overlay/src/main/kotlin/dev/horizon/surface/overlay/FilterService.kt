@@ -187,9 +187,15 @@ class FilterService : Service() {
         val progress = if (rampDuration == 0L) 1f else ((SystemClock.elapsedRealtime() - rampStart).toFloat() / rampDuration).coerceIn(0f, 1f)
         if (progress >= 1f) rampDuration = 0L
         val warmth = ((6500 - kelvin) / 5500f).coerceIn(0f, 1f)
-        val darkness = 1f - dim.coerceIn(8, 100) / 100f
-        val alpha = (0.38f * warmth + 0.40f * darkness) .times(progress).coerceAtMost(cap)
-        val intensity = 1f - darkness * 0.86f
+        val target = 1f - (1f - dim.coerceIn(8, 100) / 100f) * progress
+        val tintAlpha = 0.38f * warmth * progress
+        // Compose the tint, then attenuate the result. Use hardware only for the
+        // portion the touch-safe overlay cannot supply.
+        val minimumTransmission = ((1f - cap) / (1f - tintAlpha)).coerceIn(0f, 1f)
+        val transmission = maxOf(target, minimumTransmission)
+        val hardwarePercent = kotlin.math.round(100f * target / transmission).toInt().coerceIn(8, 100)
+        val alpha = (1f - transmission * (1f - tintAlpha)).coerceIn(0f, cap)
+        val intensity = if (alpha == 0f) 0f else (transmission * tintAlpha / alpha).coerceIn(0f, 1f)
         val rgb = prefs.getInt("rgb", -1)
         val base = if (rgb == -1) Color.rgb(255, (210 - 118 * warmth).toInt(), 0) else rgb
         view.setBackgroundColor(Color.rgb((Color.red(base) * intensity).toInt(), (Color.green(base) * intensity).toInt(),
@@ -201,7 +207,7 @@ class FilterService : Service() {
             }
             if (commit && view.visibility == View.VISIBLE) {
                 if (prefs.getBoolean("deep", true)) {
-                    if (!brightness.capture() || !brightness.apply((100 + (dim - 100) * progress).toInt().coerceIn(8, 100))) { disable(); return }
+                    if (!brightness.capture() || !brightness.apply(hardwarePercent)) { disable(); return }
                 } else brightness.restore()
                 requireNotNull(getSystemService(NotificationManager::class.java)).notify(1, notification())
                 publish()
