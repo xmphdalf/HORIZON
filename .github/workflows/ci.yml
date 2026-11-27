@@ -66,11 +66,17 @@ jobs:
 
       - name: No INTERNET permission anywhere
         run: |
-          if grep -rn "android.permission.INTERNET" --include="*.xml" .; then
-            echo "::error::INTERNET permission found. See requirement.md section 8."
-            exit 1
-          fi
-          echo "No INTERNET permission declared."
+          python - <<'PYTHON'
+          import pathlib
+          import xml.etree.ElementTree as ET
+          android = '{http://schemas.android.com/apk/res/android}'
+          tools = '{http://schemas.android.com/tools}'
+          for path in pathlib.Path('.').rglob('AndroidManifest.xml'):
+              for node in ET.parse(path).getroot():
+                  if (node.tag.startswith('uses-permission') and node.get(android + 'name') == 'android.permission.INTERNET'
+                          and node.get(tools + 'node') != 'remove'):
+                      raise SystemExit(f'{path} requests INTERNET')
+          PYTHON
 
   instrumented:
     name: Instrumented tests, API ${{ matrix.api-level }}

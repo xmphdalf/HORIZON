@@ -1,0 +1,9 @@
+<resources>
+    <string name="turn_off_now">Turn off now</string>
+    <string name="less">−</string>
+    <string name="more">+</string>
+    <string name="pause">Pause 1 hr</string>
+    <string name="less_brightness">Decrease brightness</string>
+    <string name="more_brightness">Increase brightness</string>
+    <string name="undo_off">Filter off · brightness restored\nTap to undo · 8s</string>
+</resources>

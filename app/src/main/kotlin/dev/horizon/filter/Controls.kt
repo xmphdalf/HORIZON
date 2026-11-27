@@ -1,5 +1,10 @@
 package dev.horizon.filter
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
+import dev.horizon.core.data.readPresets
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -52,14 +57,31 @@ open class FilterWidget : AppWidgetProvider() {
         val on = p.getBoolean("filter_running", false)
         val wide = this is WideWidget
         val view = RemoteViews(context.packageName, if (wide) R.layout.widget_wide else R.layout.widget_square)
+        val warmth = p.getInt("kelvin", 3400)
+        val brightness = p.getInt("dim", 82)
+        val preset = readPresets(p).firstOrNull { it.kelvin == warmth && it.dim == brightness && it.rgb == p.getInt("rgb", -1) }
+        val bitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_8888)
+        val arc = RectF(4f, 4f, 156f, 156f)
+        val brush = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.STROKE
+            strokeWidth = 5f
+            strokeCap = Paint.Cap.ROUND
+            color = 0xff4b3a2a.toInt()
+        }
+        Canvas(bitmap).apply {
+            drawArc(arc, 180f, 180f, false, brush)
+            brush.color = 0xfff2a65a.toInt()
+            if (on) drawArc(arc, 180f, 180f * ((4600 - warmth) / 3000f).coerceIn(0f, 1f), false, brush)
+        }
+        view.setImageViewBitmap(R.id.arc, bitmap)
         view.setTextViewText(R.id.value, if (on) "${p.getInt("kelvin", 3400)} K" else "Off")
-        view.setTextViewText(R.id.detail, if (on) "${p.getInt("dim", 82)}% · ON" else "HORIZON")
+        view.setTextViewText(R.id.detail, if (on) "${preset?.name ?: "$brightness%"} · on" else "HORIZON")
         fun wire(id: Int, action: String) {
             val command = Intent(context, javaClass).setAction(action)
             view.setOnClickPendingIntent(id, PendingIntent.getBroadcast(context, id, command, PendingIntent.FLAG_IMMUTABLE))
         }
         wire(R.id.power, if (on) FILTER_OFF else "TOGGLE")
-        view.setTextViewText(R.id.power, if (on) "Turn off" else "Turn on")
+        view.setTextViewText(R.id.power, context.getString(if (on) R.string.state_off else R.string.state_on))
         if (wide) { wire(R.id.less, "LESS"); wire(R.id.more, "MORE") }
         manager.updateAppWidget(ids, view)
     }

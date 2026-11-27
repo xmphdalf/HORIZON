@@ -122,7 +122,7 @@ class MainActivity : ComponentActivity() {
             when (page) {
                 "Schedule" -> ScheduleScreen(prefs.getBoolean("schedule", false) && schedule.allowed(), prefs.getBoolean("solar", false),
                     prefs.getBoolean("invert", false), timeLabel(true) to timeLabel(false),
-                    prefs.getString("city", "Gandhinagar").orEmpty(), prefs.getInt("ramp", 0), ::scheduleAction, ::back)
+                    prefs.getString("city", "Gandhinagar").orEmpty(), prefs.getInt("ramp", 0), schedule.selectedDays(), ::scheduleAction, ::back)
                 "Presets" -> PresetsScreen(rows, SavedPreset("", kelvin, dim, prefs.getInt("rgb", -1)),
                     { savePresets(prefs, it) }, ::applyPreset, ::back)
                 "Settings" -> AdvancedScreen(prefs.getBoolean("deep", true), prefs.getBoolean("restore", false),
@@ -252,6 +252,16 @@ class MainActivity : ComponentActivity() {
             "offsetStart", "offsetEnd" -> {
                 val v = prefs.getInt(key, if (solar) 0 else if (evening) 1320 else 450) + value
                 setNumber(key, if (solar) v.coerceIn(-120, 120) else Math.floorMod(v, 1440))
+            }
+            "days" -> {
+                val days = schedule.selectedDays().toMutableSet()
+                val labels = java.time.DayOfWeek.values().map { it.getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.getDefault()) }
+                AlertDialog.Builder(this).setTitle("Days after shift").setMultiChoiceItems(labels.toTypedArray(),
+                    BooleanArray(7) { it + 1 in days }) { _, i, checked -> if (checked) days.add(i + 1) else days.remove(i + 1) }
+                    .setNegativeButton("Cancel", null).setPositiveButton("Save") { _, _ ->
+                        prefs.edit { putStringSet("days", days.map(Int::toString).toSet()) }
+                        schedule.arm()
+                    }.show()
             }
             "city" -> chooseCity()
         }

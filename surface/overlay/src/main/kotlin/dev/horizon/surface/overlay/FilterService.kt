@@ -19,6 +19,7 @@ import android.hardware.input.InputManager
 import android.os.Binder
 import android.os.Build
 import android.provider.Settings
+import android.widget.RemoteViews
 import android.view.View
 import android.view.WindowManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,8 @@ class FilterService : Service() {
     private var layer: View? = null
     private val prefs by lazy { getSharedPreferences("manual_filter", Context.MODE_PRIVATE) }
     private val handler = Handler(Looper.getMainLooper())
+    private var undoView: View? = null
+    private val finishUndo = Runnable { dismissUndo(); if (!running.value) stopSelf() }
     private var kelvinValue = 3400
     private var dimValue = 82
     private var inCheckout = false
@@ -122,7 +125,14 @@ class FilterService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == STOP || intent == null) {
+        if (intent?.action == STOP && running.value) {
+            clear()
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            offerUndo()
+            return START_NOT_STICKY
+        }
+        dismissUndo()
+        if (intent?.action == STOP || intent?.action == "SCHEDULE_END" || intent == null) {
             disable()
             return START_NOT_STICKY
         }
@@ -208,7 +218,39 @@ class FilterService : Service() {
         stopSelf()
     }
 
+    private fun dismissUndo() {
+        handler.removeCallbacks(finishUndo)
+        undoView?.let { if (it.isAttachedToWindow) windows.removeViewImmediate(it) }
+        undoView = null
+    }
+
+    private fun offerUndo() {
+        val dp = resources.displayMetrics.density
+        val strip = android.widget.TextView(this).apply {
+            setText(R.string.undo_off)
+            setTextColor(Color.rgb(25, 20, 16))
+            gravity = android.view.Gravity.CENTER
+            setPadding((24 * dp).toInt(), (12 * dp).toInt(), (24 * dp).toInt(), (12 * dp).toInt())
+            setBackgroundResource(R.drawable.escape_key)
+            setOnClickListener {
+                dismissUndo()
+                startForegroundService(Intent(this@FilterService, FilterService::class.java))
+            }
+        }
+        val layout = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT,
+        ).apply { gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL; y = (64 * dp).toInt() }
+        try {
+            windows.addView(strip, layout)
+            undoView = strip
+            handler.postDelayed(finishUndo, 8000)
+        } catch (_: SecurityException) { stopSelf() } catch (_: WindowManager.BadTokenException) { stopSelf() }
+    }
+
     private fun clear() {
+        dismissUndo()
         handler.removeCallbacks(tick)
         pausedUntil = 0
         rampDuration = 0
@@ -235,11 +277,15 @@ class FilterService : Service() {
             .setContentText(if (pausedUntil > System.currentTimeMillis()) "Paused for one hour" else "Horizon")
             .setOnlyAlertOnce(true).setOngoing(true)
             .addAction(Notification.Action.Builder(null, "Turn off", stop).build())
-        for ((command, label) in listOf("LESS" to "−", "MORE" to "+", "PAUSE" to "Pause 1 hr")) {
+        val controls = RemoteViews(packageName, R.layout.filter_controls)
+        controls.setTextViewText(R.id.status, "${kelvinValue} K · ${dimValue}%")
+        controls.setOnClickPendingIntent(R.id.stop, stop)
+        for ((command, id) in listOf("LESS" to R.id.less, "MORE" to R.id.more, "PAUSE" to R.id.pause)) {
             val action = PendingIntent.getService(this, 0, Intent(this, FilterService::class.java).setAction(command),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-            builder.addAction(Notification.Action.Builder(null, label, action).build())
+            controls.setOnClickPendingIntent(id, action)
         }
+        builder.setCustomBigContentView(controls)
         packageManager.getLaunchIntentForPackage(packageName)?.let {
             builder.setContentIntent(PendingIntent.getActivity(this, 1, it, PendingIntent.FLAG_IMMUTABLE))
         }

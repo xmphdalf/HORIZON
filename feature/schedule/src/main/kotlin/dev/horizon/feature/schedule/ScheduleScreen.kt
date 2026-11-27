@@ -15,7 +15,7 @@ import dev.horizon.core.design.*
 import kotlin.math.*
 
 @Composable
-fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pair<String, String>, city: String, ramp: Int,
+fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pair<String, String>, city: String, ramp: Int, days: Set<Int>,
                    action: (String, Int) -> Unit, back: () -> Unit) {
     val title = when { inverse -> "Inverted · night shift"; solar -> "Follows the sun"; else -> "Fixed times" }
     Page("Schedule", title, back) {
@@ -23,6 +23,7 @@ fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pa
         val muted = Muted
         val ember = Ember
         val ground = Ground
+        Box(contentAlignment = androidx.compose.ui.Alignment.BottomCenter) {
         Canvas(Modifier.fillMaxWidth().aspectRatio(1.85f).pointerInput(solar, inverse) {
             var left = true
             var motion = 0f
@@ -43,12 +44,20 @@ fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pa
             }
             val start = progress(times.first, .2f)
             val end = progress(times.second, .8f)
-            drawArc(ember, 180 + start * 180, (end - start).coerceAtLeast(0f) * 180, false, origin, bounds, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
+            val band = Stroke(4.dp.toPx(), cap = StrokeCap.Round)
+            if (inverse) {
+                drawArc(ember, 180 + start * 180, (end - start).coerceAtLeast(0f) * 180, false, origin, bounds, style = band)
+            } else {
+                drawArc(ember, 180f, start * 180, false, origin, bounds, style = band)
+                drawArc(ember, 180 + end * 180, (1f - end) * 180, false, origin, bounds, style = band)
+            }
             listOf(start, end).forEach {
                 val angle = Math.PI * (1 + it)
                 val point = Offset(center.x + radius * cos(angle).toFloat(), origin.y + radius + radius * sin(angle).toFloat())
                 drawCircle(ground, 9.dp.toPx(), point); drawCircle(ember, 9.dp.toPx(), point, style = Stroke(2.dp.toPx()))
             }
+        }
+        Text(if (inverse) "NOON" else "MIDNIGHT", modifier = Modifier.padding(bottom = 24.dp), color = Muted, fontFamily = Mono, fontSize = 11.sp)
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Action(times.first + " · on", Modifier.weight(1f)) { action("start", 0) }
@@ -62,6 +71,15 @@ fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pa
         if (solar) Setting("Location", city) { action("city", 0) }
         Setting("Ramp over", "$ramp min") { action("ramp", 0) }
         Setting("Invert schedule", if (inverse) "On" else "Off") { action("invert", 0) }
+        if (inverse) {
+            val label = when (days) {
+                (1..7).toSet() -> "Every day"
+                (1..5).toSet() -> "Mon–Fri"
+                emptySet<Int>() -> "None"
+                else -> days.sorted().joinToString(" · ") { java.time.DayOfWeek.of(it).getDisplayName(java.time.format.TextStyle.SHORT, java.util.Locale.getDefault()) }
+            }
+            Setting("Days", label) { action("days", 0) }
+        }
         Action(if (enabled) "Schedule on" else "Enable schedule", Modifier.fillMaxWidth(), enabled) { action("schedule", 0) }
     }
 }

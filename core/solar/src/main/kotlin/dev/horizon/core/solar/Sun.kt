@@ -46,6 +46,7 @@ public fun sunEvent(date: LocalDate, zone: ZoneId, lat: Double, lon: Double, ris
     val hourAngle = (if (rise) CIRCLE - angle else angle) / DEGREES_PER_HOUR
     val meanTime = hourAngle + ascension - DAILY_TIME_DRIFT * day - MEAN_TIME_OFFSET
     val utc = (meanTime - longitudeHour).mod(DAY_HOURS)
-    val result = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((utc * SECONDS_PER_HOUR).roundToLong()).withZoneSameInstant(zone)
+    val utcSeconds = (utc * SECONDS_PER_HOUR).roundToLong()
+    val result = date.atStartOfDay(ZoneOffset.UTC).plusSeconds(utcSeconds).withZoneSameInstant(zone)
     return result.plusDays(date.toEpochDay() - result.toLocalDate().toEpochDay())
 }

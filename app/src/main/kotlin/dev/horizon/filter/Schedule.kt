@@ -35,6 +35,16 @@ internal class Schedule(private val context: Context) {
             ?.plusMinutes(prefs.getInt(if (evening) "sunset_offset" else "sunrise_offset", 0).toLong())
     }
 
+    fun selectedDays(): Set<Int> = prefs.getStringSet("days", null)?.mapNotNull(String::toIntOrNull)?.toSet() ?: (1..7).toSet()
+
+    private fun scheduledOn(date: LocalDate, start: Boolean): Boolean {
+        if (!prefs.getBoolean("invert", false)) return true
+        val end = event(date, false)
+        val begin = event(date, true)
+        val owner = if (!start && begin != null && end != null && !end.isAfter(begin)) date.minusDays(1) else date
+        return owner.dayOfWeek.value in selectedDays()
+    }
+
     fun arm() {
         val now = ZonedDateTime.now()
         for (start in listOf(true, false)) {
@@ -42,7 +52,8 @@ internal class Schedule(private val context: Context) {
             val pending = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
             alarm.cancel(pending)
             if (allowed() && prefs.getBoolean("schedule", false)) {
-                val next = (-1L..8L).mapNotNull { event(now.toLocalDate().plusDays(it), start) }.firstOrNull { it.isAfter(now) }
+                val next = (-1L..370L).asSequence().map { now.toLocalDate().plusDays(it) }
+                    .filter { scheduledOn(it, start) }.mapNotNull { event(it, start) }.firstOrNull { it.isAfter(now) }
                 if (next != null) alarm.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next.toInstant().toEpochMilli(), pending)
             }
         }
@@ -71,7 +82,7 @@ class ScheduleReceiver : BroadcastReceiver() {
         val active = p.getBoolean("schedule", false)
         when {
             active && intent.action == "END" -> if (p.getBoolean("filter_running", false)) {
-                context.startService(Intent(context, FilterService::class.java).setAction("dev.horizon.filter.STOP"))
+                context.startService(Intent(context, FilterService::class.java).setAction("SCHEDULE_END"))
             } else Unit
             (active && intent.action == "START") || (boot && p.getBoolean("filter_running", false)) -> {
                 if (Settings.canDrawOverlays(context) && Settings.System.canWrite(context)) {
