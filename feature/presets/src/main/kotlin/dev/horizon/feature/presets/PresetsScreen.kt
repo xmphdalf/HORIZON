@@ -22,6 +22,7 @@ fun PresetsScreen(rows: List<SavedPreset>, current: SavedPreset, save: (List<Sav
     var name by rememberSaveable { mutableStateOf("") }
     var deleted by remember { mutableStateOf<Pair<Int, SavedPreset>?>(null) }
     LaunchedEffect(deleted) { if (deleted != null) { delay(8000); deleted = null } }
+    androidx.activity.compose.BackHandler(edit >= 0) { edit = -1 }
     if (edit >= 0) {
         val preset = rows.getOrNull(edit) ?: current
         Page("Presets", if (edit < rows.size) "Rename preset" else "Save current as preset", { edit = -1 }) {

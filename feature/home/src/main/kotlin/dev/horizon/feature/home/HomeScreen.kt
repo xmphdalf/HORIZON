@@ -39,26 +39,6 @@ import kotlinx.coroutines.delay
 
 private val outfit = FontFamily(Font(dev.horizon.core.design.R.font.outfit))
 private val mono = FontFamily(Font(dev.horizon.core.design.R.font.jetbrainsmono))
-private val grounds = listOf(Color(0xff08090b), Color(0xff100c09), Color(0xff140b05), Color(0xff170a02))
-private val accents = listOf(Color(0xff6e7c8c), Color(0xfff2a65a), Color(0xffde8f41), Color(0xffc97a34))
-private val inks = listOf(Color(0xffe9ecee), Color(0xffe5d2bc), Color(0xffdec198), Color(0xffd3a876))
-
-private fun ramp(samples: List<Color>, k: Int): Color {
-    val stops = intArrayOf(4600, 3400, 2400, 1700)
-    val i = when { k >= 3400 -> 0; k >= 2400 -> 1; else -> 2 }
-    val t = ((stops[i] - k).toFloat() / (stops[i] - stops[i + 1])).coerceIn(0f, 1f)
-    if (t == 0f) return samples[i]
-    if (t == 1f) return samples[i + 1]
-    val a = samples[i].convert(ColorSpaces.Oklab)
-    val b = samples[i + 1].convert(ColorSpaces.Oklab)
-    val h = atan2(a.blue, a.green)
-    val delta = atan2(b.blue, b.green) - h
-    val angle = h + t * atan2(sin(delta), cos(delta))
-    val c = hypot(a.green, a.blue) * (1 - t) + hypot(b.green, b.blue) * t
-    return Color(a.red + (b.red - a.red) * t, c * cos(angle), c * sin(angle), 1f, ColorSpaces.Oklab)
-        .convert(ColorSpaces.Srgb)
-}
-
 /** Home and its accessible controls share the same warmth and brightness values. */
 @Composable
 fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Boolean) -> Unit,
@@ -68,9 +48,10 @@ fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Bool
                shortcuts: List<Triple<String, Int, Int>> = listOf(Triple("Reading", 3400, 82), Triple("Deep Night", 1700, 14)),
                onPreset: ((String) -> Unit)? = null) {
     val k = if (active) kelvin else 4600
-    val ground = remember(k) { ramp(grounds, k) }
-    val ink = remember(k) { ramp(inks, k) }
-    val accent = remember(k) { ramp(accents, k) }
+    val colors = remember(k) { dev.horizon.core.design.paletteAt(k) }
+    val ground = colors.ground
+    val ink = colors.ink
+    val accent = colors.accent
     var dragging by remember { mutableStateOf(false) }
     val update by rememberUpdatedState(onChange)
     val current by rememberUpdatedState(kelvin to dim)

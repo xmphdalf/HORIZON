@@ -20,6 +20,9 @@ fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pa
     val title = when { inverse -> "Inverted · night shift"; solar -> "Follows the sun"; else -> "Fixed times" }
     Page("Schedule", title, back) {
         val adjust by rememberUpdatedState(action)
+        val muted = Muted
+        val ember = Ember
+        val ground = Ground
         Canvas(Modifier.fillMaxWidth().aspectRatio(1.85f).pointerInput(solar, inverse) {
             var left = true
             var motion = 0f
@@ -32,7 +35,7 @@ fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pa
             val radius = minOf(size.width * .43f, size.height * .85f)
             val origin = Offset(center.x - radius, size.height - radius * 1.12f)
             val bounds = Size(radius * 2, radius * 2)
-            drawArc(Muted.copy(alpha = .24f), 180f, 180f, false, origin, bounds, style = Stroke(2.dp.toPx()))
+            drawArc(muted.copy(alpha = .24f), 180f, 180f, false, origin, bounds, style = Stroke(2.dp.toPx()))
             fun progress(text: String, fallback: Float): Float {
                 val parts = text.split(":")
                 val minutes = (parts.getOrNull(0)?.toIntOrNull() ?: return fallback) * 60 + (parts.getOrNull(1)?.toIntOrNull() ?: return fallback)
@@ -40,11 +43,11 @@ fun ScheduleScreen(enabled: Boolean, solar: Boolean, inverse: Boolean, times: Pa
             }
             val start = progress(times.first, .2f)
             val end = progress(times.second, .8f)
-            drawArc(Ember, 180 + start * 180, (end - start).coerceAtLeast(0f) * 180, false, origin, bounds, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
+            drawArc(ember, 180 + start * 180, (end - start).coerceAtLeast(0f) * 180, false, origin, bounds, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
             listOf(start, end).forEach {
                 val angle = Math.PI * (1 + it)
                 val point = Offset(center.x + radius * cos(angle).toFloat(), origin.y + radius + radius * sin(angle).toFloat())
-                drawCircle(Ground, 9.dp.toPx(), point); drawCircle(Ember, 9.dp.toPx(), point, style = Stroke(2.dp.toPx()))
+                drawCircle(ground, 9.dp.toPx(), point); drawCircle(ember, 9.dp.toPx(), point, style = Stroke(2.dp.toPx()))
             }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

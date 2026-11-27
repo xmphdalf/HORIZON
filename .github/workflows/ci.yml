@@ -103,4 +103,13 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           disable-animations: true
-          script: ./gradlew :app:connectedDebugAndroidTest --stacktrace
+          script: |
+            ./gradlew :app:connectedDebugAndroidTest --stacktrace
+            adb pull /sdcard/Android/data/dev.horizon.filter/files/screens screenshots || true
+
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: screens-api-${{ matrix.api-level }}
+          path: screenshots
+          retention-days: 7

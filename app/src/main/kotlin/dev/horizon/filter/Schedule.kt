@@ -30,11 +30,6 @@ internal class Schedule(private val context: Context) {
             return date.atTime(time / 60, time % 60).atZone(zone)
         }
         val city = prefs.getString("city", "Gandhinagar")
-        if (city == "Device location") {
-            val seconds = prefs.getLong("sun_${date}_${!evening}", 0L)
-            if (seconds == 0L) return null
-            return Instant.ofEpochSecond(seconds).atZone(zone).plusMinutes(prefs.getInt(if (evening) "sunset_offset" else "sunrise_offset", 0).toLong())
-        }
         val point = cities[city] ?: coords(city.orEmpty()) ?: return null
         return sunEvent(date, zone, point.first, point.second, !evening)
             ?.plusMinutes(prefs.getInt(if (evening) "sunset_offset" else "sunrise_offset", 0).toLong())
@@ -68,7 +63,8 @@ class ScheduleReceiver : BroadcastReceiver() {
         val scheduler = Schedule(context)
         val boot = intent.action == Intent.ACTION_BOOT_COMPLETED
         if (boot && !p.getBoolean("restore", false)) {
-            p.edit().putBoolean("filter_running", false).putBoolean("schedule", false).apply()
+            p.edit().putBoolean("filter_running", false).apply()
+            scheduler.arm()
             return
         }
         scheduler.arm()

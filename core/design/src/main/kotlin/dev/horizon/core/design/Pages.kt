@@ -8,15 +8,54 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import kotlin.math.*
+import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 
-public val Ground: Color = Color(0xff100c09)
-public val Surface: Color = Color(0xff191310)
-public val Ink: Color = Color(0xffe5d2bc)
-public val Muted: Color = Color(0xffbfaa92)
-public val Ember: Color = Color(0xfff2a65a)
+private val grounds = listOf(Color(0xff08090b), Color(0xff100c09), Color(0xff140b05), Color(0xff170a02))
+private val accents = listOf(Color(0xff6e7c8c), Color(0xfff2a65a), Color(0xffde8f41), Color(0xffc97a34))
+private val inks = listOf(Color(0xffe9ecee), Color(0xffe5d2bc), Color(0xffdec198), Color(0xffd3a876))
+
+private fun ramp(samples: List<Color>, k: Int): Color {
+    val stops = intArrayOf(4600, 3400, 2400, 1700)
+    val i = when { k >= 3400 -> 0; k >= 2400 -> 1; else -> 2 }
+    val t = ((stops[i] - k).toFloat() / (stops[i] - stops[i + 1])).coerceIn(0f, 1f)
+    if (t == 0f) return samples[i]
+    if (t == 1f) return samples[i + 1]
+    val a = samples[i].convert(ColorSpaces.Oklab)
+    val b = samples[i + 1].convert(ColorSpaces.Oklab)
+    val h = atan2(a.blue, a.green)
+    val delta = atan2(b.blue, b.green) - h
+    val angle = h + t * atan2(sin(delta), cos(delta))
+    val c = hypot(a.green, a.blue) * (1 - t) + hypot(b.green, b.blue) * t
+    return Color(a.red + (b.red - a.red) * t, c * cos(angle), c * sin(angle), 1f, ColorSpaces.Oklab)
+        .convert(ColorSpaces.Srgb)
+}
+
+public data class HorizonColors(public val ground: Color, public val surface: Color, public val ink: Color, public val muted: Color, public val accent: Color)
+private val palette = staticCompositionLocalOf { paletteAt(3400) }
+
+public fun paletteAt(kelvin: Int): HorizonColors = HorizonColors(
+    ramp(grounds, kelvin), ramp(listOf(Color(0xff101216), Color(0xff191310), Color(0xff1e120a), Color(0xff231004)), kelvin),
+    ramp(inks, kelvin), ramp(inks, kelvin).copy(alpha = .74f), ramp(accents, kelvin),
+)
+
+@Composable
+public fun HorizonTheme(kelvin: Int, content: @Composable () -> Unit) {
+    val colors = remember(kelvin) { paletteAt(kelvin) }
+    CompositionLocalProvider(palette provides colors) {
+        MaterialTheme(colorScheme = darkColorScheme(primary = colors.accent, surface = colors.surface,
+            onSurface = colors.ink, onSurfaceVariant = colors.muted, background = colors.ground), content = content)
+    }
+}
+
+public val Ground: Color @Composable get() = palette.current.ground
+public val Surface: Color @Composable get() = palette.current.surface
+public val Ink: Color @Composable get() = palette.current.ink
+public val Muted: Color @Composable get() = palette.current.muted
+public val Ember: Color @Composable get() = palette.current.accent
 public val Outfit: FontFamily = FontFamily(Font(R.font.outfit))
 public val Mono: FontFamily = FontFamily(Font(R.font.jetbrainsmono))
 

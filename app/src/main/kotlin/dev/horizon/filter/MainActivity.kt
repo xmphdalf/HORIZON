@@ -7,6 +7,7 @@ import android.app.TimePickerDialog
 import android.content.SharedPreferences
 import android.os.Process
 import android.widget.EditText
+import android.location.Location
 import android.location.LocationManager
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
@@ -87,6 +88,19 @@ class MainActivity : ComponentActivity() {
         kelvin = prefs.getInt("kelvin", 3400)
         dim = prefs.getInt("dim", 82)
         if (intent.action == FILTER_OFF) { control(this, FILTER_OFF); finish(); return }
+        if (intent.action == "android.service.quicksettings.action.QS_TILE_PREFERENCES") {
+            val presets = readPresets(prefs)
+            val recent = org.json.JSONArray(prefs.getString("recent_presets", "[]"))
+            val names = (List(recent.length()) { recent.getString(it) } + presets.map { it.name }).distinct()
+            val cycle = names.mapNotNull { name -> presets.find { it.name == name } }.take(3)
+            if (cycle.isNotEmpty() && canStart()) {
+                val index = cycle.indexOfFirst { it.kelvin == kelvin && it.dim == dim }
+                val next = cycle[(index + 1) % cycle.size]
+                prefs.edit { putInt("kelvin", next.kelvin); putInt("dim", next.dim); putInt("rgb", next.rgb) }
+                control(this, "APPLY")
+                finish(); return
+            }
+        }
         page = savedInstanceState?.getString("page") ?: "Home"
         prefs.registerOnSharedPreferenceChangeListener(listener)
         bound = bindService(Intent(this, FilterService::class.java), connection, Context.BIND_AUTO_CREATE)
@@ -95,6 +109,7 @@ class MainActivity : ComponentActivity() {
             androidx.compose.runtime.LaunchedEffect(active) { if (active) starting = false }
             BackHandler(page != "Home") { back() }
             val rows = remember(revision) { readPresets(prefs) }
+            dev.horizon.core.design.HorizonTheme(if (active) kelvin else 4600) {
             when (page) {
                 "Schedule" -> ScheduleScreen(prefs.getBoolean("schedule", false) && schedule.allowed(), prefs.getBoolean("solar", false),
                     prefs.getBoolean("invert", false), timeLabel(true) to timeLabel(false),
@@ -111,6 +126,7 @@ class MainActivity : ComponentActivity() {
                         page = "Mission"; prefs.edit { putBoolean("mission_seen", true) }
                     }, prefs.getBoolean("mission_seen", false), rows.take(2).map { Triple(it.name, it.kelvin, it.dim) },
                     { name -> rows.firstOrNull { it.name == name }?.let(::applyPreset) })
+            }
             }
         }
     }
@@ -165,7 +181,12 @@ class MainActivity : ComponentActivity() {
     private fun back() { page = if (page == "Science") "Settings" else "Home" }
 
     private fun applyPreset(preset: SavedPreset) {
-        prefs.edit { putInt("rgb", preset.rgb) }
+        val recent = org.json.JSONArray(prefs.getString("recent_presets", "[]"))
+        val names = listOf(preset.name) + List(recent.length()) { recent.getString(it) }
+        prefs.edit {
+            putInt("rgb", preset.rgb)
+            putString("recent_presets", org.json.JSONArray(names.distinct().take(3)).toString())
+        }
         page = "Home"
         change(preset.kelvin, preset.dim, true)
     }
@@ -258,18 +279,15 @@ class MainActivity : ComponentActivity() {
             AlertDialog.Builder(this).setMessage("No recent location is available. Choose a city or enter coordinates.")
                 .setPositiveButton("Choose city") { _, _ -> chooseCity() }.setNegativeButton("Cancel", null).show()
         } else {
-            // Keep only the computed events; device coordinates never enter persistent storage.
-            val today = LocalDate.now()
-            prefs.edit {
-                for (offset in -1L..32L) {
-                    val date = today.plusDays(offset)
-                    for (rise in listOf(true, false)) {
-                        val time = dev.horizon.core.solar.sunEvent(date, java.time.ZoneId.systemDefault(), location.latitude, location.longitude, rise)
-                        putLong("sun_${date}_$rise", time?.toEpochSecond() ?: 0L)
-                    }
-                }
-            }
-            saveCity("Device location")
+            val nearest = cities.minBy { (_, point) ->
+                val distance = FloatArray(1)
+                Location.distanceBetween(location.latitude, location.longitude, point.first, point.second, distance)
+                distance[0]
+            }.key
+            AlertDialog.Builder(this).setTitle("Use $nearest?")
+                .setMessage("This is the nearest bundled city. Horizon saves only the city name and computes each sunrise and sunset offline.")
+                .setPositiveButton("Use city") { _, _ -> saveCity(nearest) }
+                .setNegativeButton("Choose another") { _, _ -> chooseCity() }.show()
         }
     }
 
