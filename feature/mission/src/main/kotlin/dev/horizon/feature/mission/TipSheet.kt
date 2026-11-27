@@ -39,8 +39,8 @@ fun AboutScreen(expanded: Boolean, prices: Map<String, String>, message: String,
                 Copy("That keeps this one alive, and the next one free.")
                 Action("Back to the app", Modifier.fillMaxWidth(), click = close)
             } else {
-                Text("Keep the lamp on", fontFamily = Outfit, fontSize = 28.sp)
-                Copy("You already have every feature. A one-time tip helps me keep building Horizon.")
+                Text("Keep the lamp on", color = Ink, fontFamily = Outfit, fontSize = 28.sp)
+                Copy("If Horizon has made your nights a little easier, a one-time tip helps me keep building thoughtful, free apps like this one.")
                 if (prices.isNotEmpty()) Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     prices.forEach { (id, price) ->
                         Action(price, Modifier.weight(1f), chosen = selected == id, enabled = !busy) { selected = id }
