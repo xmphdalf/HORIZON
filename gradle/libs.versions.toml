@@ -2,6 +2,7 @@
 # no version literal ever appears in a module build.gradle.kts.
 
 [versions]
+billing = "9.1.0"
 # Build toolchain. Verified working together in Phase 0 of the scaffolding pass:
 # AGP 9 carries Kotlin built in, so org.jetbrains.kotlin.android is never applied.
 # Declaring KGP in the root plugins block upgrades that built-in Kotlin from the
@@ -38,6 +39,7 @@ androidx-test-uiautomator = "2.3.0"
 coroutines = "1.10.2"
 
 [libraries]
+play-billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
 # Referenced from build-logic so convention plugins can configure these plugins.
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

@@ -18,7 +18,9 @@ class ScreensTest {
         val instrument = InstrumentationRegistry.getInstrumentation()
         val context = instrument.targetContext
         val device = UiDevice.getInstance(instrument)
-        val output = File(context.getExternalFilesDir(null), "screens").apply { mkdirs() }
+        val testOutput = InstrumentationRegistry.getArguments().getString("additionalTestOutputDir")
+        val root = testOutput?.let { File(it) } ?: context.getExternalFilesDir(null)
+        val output = File(root, "screens").apply { mkdirs() }
         fun tap(text: String) {
             requireNotNull(device.wait(Until.findObject(By.text(text)), 5000)) { text }.click()
         }
@@ -47,6 +49,9 @@ class ScreensTest {
             ?: requireNotNull(device.wait(Until.findObject(By.text("◯")), 2000))
         mission.click()
         capture("mission", "I build apps that ask for nothing.")
-        tap("Back to the app")
+        tap("Leave a tip")
+        capture("tip", "Keep the lamp on")
+        tap("I’m good, thanks")
+        capture("home-after-decline", "Schedule")
     }
 }

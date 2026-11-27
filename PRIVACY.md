@@ -57,3 +57,7 @@ Entering a city by hand does the same job without granting the permission.
 Any change to this document changes the four commitments in
 [requirement.md](requirement.md), which is not something that happens quietly.
 The git history of this file is the change log.
+
+## Optional Google Play tips
+
+If you choose to tip, the Play Store processes the payment using your Play account. Horizon displays the price returned by Play and checks whether the purchase completed. It does not collect card details, create a Horizon account, or send a receipt to a Horizon server.

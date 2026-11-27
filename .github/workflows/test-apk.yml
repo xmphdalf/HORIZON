@@ -48,4 +48,4 @@ jobs:
       - name: Publish installable test APK
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" Horizon-test.apk SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease --title "Horizon $GITHUB_REF_NAME" --notes "Manual filter test build. CI signs this APK with a temporary debug key. Reinstalling a later test build may require uninstalling the previous one."
+        run: gh release create "$GITHUB_REF_NAME" Horizon-test.apk SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease --title "Horizon $GITHUB_REF_NAME" --notes "Horizon Android test build. CI signs this APK with a temporary debug key. Reinstalling a later test build may require uninstalling the previous one."

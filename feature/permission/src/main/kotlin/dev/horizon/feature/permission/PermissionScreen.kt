@@ -17,7 +17,7 @@ fun PermissionScreen(overlay: Boolean, write: Boolean, proceed: () -> Unit, back
         Text("PERMISSIONS REQUESTED", fontFamily = Mono, color = Muted, fontSize = 11.sp)
         Copy("Display over other apps · " + if (overlay) "Allowed" else "Required")
         Copy("Modify system settings · " + if (write) "Allowed" else "Required")
-        Copy("A foreground service keeps the tint active. Notifications add a quick off action. Alarms, boot restore, approximate location and usage access support optional features.")
+        Copy("A foreground service keeps the tint active. Notifications add a quick off action. Alarms, boot restore, approximate location and usage access support optional features. Play Billing lets you make a one-time tip through the Play Store.")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Action("Not now", Modifier.weight(1f), click = back)
             Action("Open settings", Modifier.weight(1f), click = proceed)

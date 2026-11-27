@@ -80,12 +80,12 @@ public fun Copy(text: String) {
 }
 
 @Composable
-public fun Action(text: String, modifier: Modifier = Modifier, chosen: Boolean = false, click: () -> Unit) {
+public fun Action(text: String, modifier: Modifier = Modifier, chosen: Boolean = false, enabled: Boolean = true, click: () -> Unit) {
     val shape = RoundedCornerShape(14.dp)
     Box(modifier.defaultMinSize(minHeight = 50.dp).clip(shape).background(if (chosen) Ember.copy(alpha = .13f) else Surface)
         .border(1.dp, Ember.copy(alpha = if (chosen) .40f else .14f), shape)
-        .clickable(onClick = click).padding(horizontal = 14.dp, vertical = 8.dp), contentAlignment = Alignment.Center) {
-        Text(text, color = if (chosen) Ember else Ink, fontFamily = Outfit, fontSize = 15.sp)
+        .clickable(enabled = enabled, onClick = click).padding(horizontal = 14.dp, vertical = 8.dp), contentAlignment = Alignment.Center) {
+        Text(text, color = if (!enabled) Muted.copy(alpha = .45f) else if (chosen) Ember else Ink, fontFamily = Outfit, fontSize = 15.sp)
     }
 }
 

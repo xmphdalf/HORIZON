@@ -36,6 +36,7 @@ class FilterService : Service() {
     private val handler = Handler(Looper.getMainLooper())
     private var kelvinValue = 3400
     private var dimValue = 82
+    private var inCheckout = false
     private var pausedUntil = 0L
     private var rampStart = 0L
     private var rampDuration = 0L
@@ -46,6 +47,12 @@ class FilterService : Service() {
 
     /** Reevaluate an exclusion immediately when the user edits Settings. */
     fun rulesChanged() { if (running.value) reconcile() }
+
+    /** Hide the overlay and return physical brightness while Google Play owns checkout. */
+    fun checkoutVisible(visible: Boolean) {
+        inCheckout = visible
+        rulesChanged()
+    }
 
     private fun reconcile() {
         val excluded = prefs.getStringSet("excluded", emptySet()).orEmpty()
@@ -62,7 +69,7 @@ class FilterService : Service() {
                 }
             }
         }
-        val hidden = pausedUntil > now || foreground in excluded
+        val hidden = inCheckout || pausedUntil > now || foreground in excluded
         val view = layer ?: return
         if (hidden && view.visibility == View.VISIBLE) {
             view.visibility = View.INVISIBLE
@@ -110,6 +117,7 @@ class FilterService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        if (prefs.getBoolean("filter_running", false)) publish()
         if (Settings.System.canWrite(this)) brightness.restore()
     }
 
@@ -136,7 +144,7 @@ class FilterService : Service() {
         try {
             if (brightness.capture()) {
                 attach(kelvinValue, dimValue)
-                if (running.value) { publish(); reconcile() }
+                if (running.value) reconcile()
             } else {
                 disable()
             }
@@ -188,7 +196,6 @@ class FilterService : Service() {
                 requireNotNull(getSystemService(NotificationManager::class.java)).notify(1, notification())
                 publish()
             }
-            if (commit && prefs.getStringSet("excluded", emptySet()).orEmpty().isNotEmpty() && !handler.hasMessages(0)) handler.post(tick)
         } catch (_: SecurityException) {
             disable()
         }

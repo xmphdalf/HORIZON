@@ -49,6 +49,10 @@ class MainActivity : ComponentActivity() {
     private var dim by mutableIntStateOf(82)
     private var starting = false
     private var granting = false
+    private var showTips by mutableStateOf(false)
+    private val tipsDelegate = lazy { PlayTips(this) { visible -> service?.checkoutVisible(visible) } }
+    private val tips by tipsDelegate
+    private var permissionOrigin = "Home"
     private var page by mutableStateOf("Home")
     private var revision by mutableIntStateOf(0)
     private val schedule by lazy { Schedule(this) }
@@ -76,7 +80,10 @@ class MainActivity : ComponentActivity() {
     }
     private val grant = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         granting = false
-        if (canStart()) { page = "Home"; maybeNotifyThenStart() } else page = "Permissions"
+        if (canStart()) {
+            page = permissionOrigin
+            if (page == "Schedule") scheduleAction("schedule", 0) else if (page == "Home") maybeNotifyThenStart()
+        } else page = "Permissions"
     }
     private val notifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         granting = false
@@ -102,6 +109,8 @@ class MainActivity : ComponentActivity() {
             }
         }
         page = savedInstanceState?.getString("page") ?: "Home"
+        permissionOrigin = savedInstanceState?.getString("permissionOrigin") ?: "Home"
+        showTips = savedInstanceState?.getBoolean("tips") ?: false
         prefs.registerOnSharedPreferenceChangeListener(listener)
         bound = bindService(Intent(this, FilterService::class.java), connection, Context.BIND_AUTO_CREATE)
         setContent {
@@ -120,13 +129,15 @@ class MainActivity : ComponentActivity() {
                     prefs.getInt("rgb", -1), prefs.getStringSet("excluded", emptySet()).orEmpty().map { it to appLabel(it) },
                     hasUsageAccess(), ::advancedAction, { id -> exclusion(id, false) }, ::back)
                 "Permissions" -> PermissionScreen(Settings.canDrawOverlays(this), Settings.System.canWrite(this), ::requestSpecial, ::back)
-                "Science", "Mission" -> MissionScreen(page == "Science", ::back)
+                "Science", "Mission" -> MissionScreen(page == "Science", ::back) { showTips = true; tips.open() }
                 else -> HomeScreen(active, kelvin, dim, ::change, ::toggle, { page = "Presets" },
                     { page = "Schedule" }, { page = "Settings" }, {
                         page = "Mission"; prefs.edit { putBoolean("mission_seen", true) }
                     }, prefs.getBoolean("mission_seen", false), rows.take(2).map { Triple(it.name, it.kelvin, it.dim) },
                     { name -> rows.firstOrNull { it.name == name }?.let(::applyPreset) })
             }
+            if (showTips) dev.horizon.feature.mission.TipSheet(tips.prices, tips.message, tips.busy, tips.received,
+                tips::purchase, tips::open) { showTips = false; page = "Home" }
             }
         }
     }
@@ -147,8 +158,10 @@ class MainActivity : ComponentActivity() {
 
     private fun enable() {
         if (granting || starting) return
-        if (canStart()) maybeNotifyThenStart() else page = "Permissions"
+        if (canStart()) maybeNotifyThenStart() else openPermissions()
     }
+
+    private fun openPermissions() { permissionOrigin = page; page = "Permissions" }
 
     private fun requestSpecial() {
         val action = when {
@@ -178,7 +191,7 @@ class MainActivity : ComponentActivity() {
         window.decorView.postDelayed({ starting = false }, 1000)
     }
 
-    private fun back() { page = if (page == "Science") "Settings" else "Home" }
+    private fun back() { page = when (page) { "Science" -> "Settings"; "Permissions" -> permissionOrigin; else -> "Home" } }
 
     private fun applyPreset(preset: SavedPreset) {
         val recent = org.json.JSONArray(prefs.getString("recent_presets", "[]"))
@@ -222,7 +235,7 @@ class MainActivity : ComponentActivity() {
             }
             "schedule" -> when {
                 prefs.getBoolean("schedule", false) && schedule.allowed() -> setSchedule(false)
-                !canStart() -> page = "Permissions"
+                !canStart() -> openPermissions()
                 Build.VERSION.SDK_INT >= 31 && !schedule.allowed() -> alarmGrant.launch(
                     Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, "package:$packageName".toUri()))
                 else -> setSchedule(true)
@@ -296,7 +309,7 @@ class MainActivity : ComponentActivity() {
             "deep", "restore" -> prefs.edit { putBoolean(action, !prefs.getBoolean(action, action == "deep")) }
             "rgb" -> prefs.edit { putInt("rgb", value) }
             "science" -> page = "Science"
-            "permission" -> page = "Permissions"
+            "permission" -> openPermissions()
             "apps" -> if (hasUsageAccess()) chooseApp() else startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         }
         if (service?.active?.value == true && action in setOf("deep", "rgb")) service?.update(kelvin, dim, true)
@@ -330,10 +343,12 @@ class MainActivity : ComponentActivity() {
         service?.rulesChanged()
     }
 
-    override fun onResume() { super.onResume(); revision++ }
-    override fun onSaveInstanceState(outState: Bundle) { super.onSaveInstanceState(outState); outState.putString("page", page) }
+    override fun onResume() { super.onResume(); revision++
+        if (tipsDelegate.isInitialized() || showTips || getSharedPreferences("play_support", MODE_PRIVATE).getBoolean("outstanding", false)) tips.resume(showTips) }
+    override fun onSaveInstanceState(outState: Bundle) { super.onSaveInstanceState(outState); outState.putString("page", page); outState.putBoolean("tips", showTips); outState.putString("permissionOrigin", permissionOrigin) }
 
     override fun onDestroy() {
+        if (tipsDelegate.isInitialized()) tips.close()
         prefs.unregisterOnSharedPreferenceChangeListener(listener)
         if (bound) unbindService(connection)
         super.onDestroy()
