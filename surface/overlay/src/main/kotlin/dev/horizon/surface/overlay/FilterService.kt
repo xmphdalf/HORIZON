@@ -5,7 +5,14 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
+import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.PowerManager
+import android.os.SystemClock
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.hardware.input.InputManager
@@ -25,7 +32,61 @@ class FilterService : Service() {
     /** Changes only after the window is attached or removed. */
     val active = running.asStateFlow()
     private var layer: View? = null
+    private val prefs by lazy { getSharedPreferences("manual_filter", Context.MODE_PRIVATE) }
+    private val handler = Handler(Looper.getMainLooper())
+    private var kelvinValue = 3400
+    private var dimValue = 82
+    private var pausedUntil = 0L
+    private var rampStart = 0L
+    private var rampDuration = 0L
+    private var foreground = ""
+    private var lastQuery = 0L
     private var cap = 1f
+    private val tick = Runnable { reconcile() }
+
+    /** Reevaluate an exclusion immediately when the user edits Settings. */
+    fun rulesChanged() { if (running.value) reconcile() }
+
+    private fun reconcile() {
+        val excluded = prefs.getStringSet("excluded", emptySet()).orEmpty()
+        val now = System.currentTimeMillis()
+        if (excluded.isNotEmpty() && requireNotNull(getSystemService(PowerManager::class.java)).isInteractive) {
+            val events = requireNotNull(getSystemService(UsageStatsManager::class.java))
+                .queryEvents(if (lastQuery == 0L) now - 60000L else lastQuery, now)
+            lastQuery = now
+            if (events != null) {
+                val event = UsageEvents.Event()
+                while (events.hasNextEvent()) {
+                    events.getNextEvent(event)
+                    if (event.eventType == 1) foreground = event.packageName
+                }
+            }
+        }
+        val hidden = pausedUntil > now || foreground in excluded
+        val view = layer ?: return
+        if (hidden && view.visibility == View.VISIBLE) {
+            view.visibility = View.INVISIBLE
+            if (Settings.System.canWrite(this)) brightness.restore()
+        } else if (!hidden) {
+            val returning = view.visibility != View.VISIBLE
+            if (returning) { if (!brightness.capture()) { disable(); return }; view.visibility = View.VISIBLE }
+            if (returning || rampDuration > 0) update(kelvinValue, dimValue, true)
+        }
+        handler.removeCallbacks(tick)
+        val next = when {
+            excluded.isNotEmpty() -> 2000L
+            rampDuration > 0 -> 15000L
+            pausedUntil > now -> pausedUntil - now
+            else -> return
+        }
+        handler.postDelayed(tick, next)
+    }
+
+    private fun publish() {
+        prefs.edit().putBoolean("filter_running", running.value).apply()
+        sendBroadcast(Intent().setClassName(packageName, "dev.horizon.filter.ControlsChanged"))
+    }
+
     private val params = WindowManager.LayoutParams(
         -1, -1, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
@@ -57,6 +118,16 @@ class FilterService : Service() {
             disable()
             return START_NOT_STICKY
         }
+        kelvinValue = intent.getIntExtra("kelvin", prefs.getInt("kelvin", 3400))
+        dimValue = intent.getIntExtra("dim", prefs.getInt("dim", 82))
+        when (intent.action) {
+            "LESS" -> dimValue = (dimValue - 10).coerceAtLeast(8)
+            "MORE" -> dimValue = (dimValue + 10).coerceAtMost(100)
+            "PAUSE" -> pausedUntil = System.currentTimeMillis() + 3600000L
+            else -> pausedUntil = 0
+        }
+        rampDuration = intent.getIntExtra("ramp", 0).toLong() * 60000
+        rampStart = SystemClock.elapsedRealtime()
         startForeground(1, notification())
         if (!Settings.canDrawOverlays(this) || !Settings.System.canWrite(this)) {
             disable()
@@ -64,7 +135,8 @@ class FilterService : Service() {
         }
         try {
             if (brightness.capture()) {
-                attach(intent.getIntExtra("kelvin", 3400), intent.getIntExtra("dim", 82))
+                attach(kelvinValue, dimValue)
+                if (running.value) { publish(); reconcile() }
             } else {
                 disable()
             }
@@ -91,17 +163,32 @@ class FilterService : Service() {
     /** Writes system brightness only on commit. Drag samples update the existing window. */
     fun update(kelvin: Int, dim: Int, commit: Boolean) {
         val view = layer ?: return
+        kelvinValue = kelvin
+        dimValue = dim
+        if (commit) prefs.edit().putInt("kelvin", kelvin).putInt("dim", dim).apply()
+        val progress = if (rampDuration == 0L) 1f else ((SystemClock.elapsedRealtime() - rampStart).toFloat() / rampDuration).coerceIn(0f, 1f)
+        if (progress >= 1f) rampDuration = 0L
         val warmth = ((6500 - kelvin) / 5500f).coerceIn(0f, 1f)
         val darkness = 1f - dim.coerceIn(8, 100) / 100f
-        val alpha = (0.38f * warmth + 0.40f * darkness).coerceAtMost(cap)
+        val alpha = (0.38f * warmth + 0.40f * darkness) .times(progress).coerceAtMost(cap)
         val intensity = 1f - darkness * 0.86f
-        view.setBackgroundColor(Color.rgb((255 * intensity).toInt(), ((210 - 118 * warmth) * intensity).toInt(), 0))
+        val rgb = prefs.getInt("rgb", -1)
+        val base = if (rgb == -1) Color.rgb(255, (210 - 118 * warmth).toInt(), 0) else rgb
+        view.setBackgroundColor(Color.rgb((Color.red(base) * intensity).toInt(), (Color.green(base) * intensity).toInt(),
+            (Color.blue(base) * intensity).toInt()))
         try {
             if (alpha != params.alpha) {
                 params.alpha = alpha
                 windows.updateViewLayout(view, params)
             }
-            if (commit && !brightness.apply(dim.coerceIn(8, 100))) disable()
+            if (commit && view.visibility == View.VISIBLE) {
+                if (prefs.getBoolean("deep", true)) {
+                    if (!brightness.capture() || !brightness.apply((100 + (dim - 100) * progress).toInt().coerceIn(8, 100))) { disable(); return }
+                } else brightness.restore()
+                requireNotNull(getSystemService(NotificationManager::class.java)).notify(1, notification())
+                publish()
+            }
+            if (commit && prefs.getStringSet("excluded", emptySet()).orEmpty().isNotEmpty() && !handler.hasMessages(0)) handler.post(tick)
         } catch (_: SecurityException) {
             disable()
         }
@@ -115,9 +202,13 @@ class FilterService : Service() {
     }
 
     private fun clear() {
+        handler.removeCallbacks(tick)
+        pausedUntil = 0
+        rampDuration = 0
         layer?.let { if (it.isAttachedToWindow) windows.removeViewImmediate(it) }
         layer = null
         running.value = false
+        publish()
         if (Settings.System.canWrite(this)) brightness.restore()
     }
 
@@ -133,8 +224,15 @@ class FilterService : Service() {
         val stop = PendingIntent.getService(this, 0, Intent(this, FilterService::class.java).setAction(STOP),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val builder = Notification.Builder(this, channel).setSmallIcon(R.drawable.filter_status)
-            .setContentTitle("Horizon").setContentText("Screen filter is on").setOngoing(true)
+            .setContentTitle("Filter on · ${kelvinValue}K · ${dimValue}%")
+            .setContentText(if (pausedUntil > System.currentTimeMillis()) "Paused for one hour" else "Horizon")
+            .setOnlyAlertOnce(true).setOngoing(true)
             .addAction(Notification.Action.Builder(null, "Turn off", stop).build())
+        for ((command, label) in listOf("LESS" to "−", "MORE" to "+", "PAUSE" to "Pause 1 hr")) {
+            val action = PendingIntent.getService(this, 0, Intent(this, FilterService::class.java).setAction(command),
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            builder.addAction(Notification.Action.Builder(null, label, action).build())
+        }
         packageManager.getLaunchIntentForPackage(packageName)?.let {
             builder.setContentIntent(PendingIntent.getActivity(this, 1, it, PendingIntent.FLAG_IMMUTABLE))
         }

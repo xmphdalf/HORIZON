@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.*
 import kotlinx.coroutines.delay
 
-private val outfit = FontFamily(Font(R.font.outfit))
-private val mono = FontFamily(Font(R.font.jetbrainsmono))
+private val outfit = FontFamily(Font(dev.horizon.core.design.R.font.outfit))
+private val mono = FontFamily(Font(dev.horizon.core.design.R.font.jetbrainsmono))
 private val grounds = listOf(Color(0xff08090b), Color(0xff100c09), Color(0xff140b05), Color(0xff170a02))
 private val accents = listOf(Color(0xff6e7c8c), Color(0xfff2a65a), Color(0xffde8f41), Color(0xffc97a34))
 private val inks = listOf(Color(0xffe9ecee), Color(0xffe5d2bc), Color(0xffdec198), Color(0xffd3a876))
@@ -62,7 +62,11 @@ private fun ramp(samples: List<Color>, k: Int): Color {
 /** Home and its accessible controls share the same warmth and brightness values. */
 @Composable
 fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Boolean) -> Unit,
-               onToggle: () -> Unit, onCustom: () -> Unit) {
+               onToggle: () -> Unit, onCustom: () -> Unit,
+               onSchedule: (() -> Unit)? = null, onSettings: (() -> Unit)? = null,
+               onMission: (() -> Unit)? = null, missionSeen: Boolean = false,
+               shortcuts: List<Triple<String, Int, Int>> = listOf(Triple("Reading", 3400, 82), Triple("Deep Night", 1700, 14)),
+               onPreset: ((String) -> Unit)? = null) {
     val k = if (active) kelvin else 4600
     val ground = remember(k) { ramp(grounds, k) }
     val ink = remember(k) { ramp(inks, k) }
@@ -72,6 +76,10 @@ fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Bool
     val current by rememberUpdatedState(kelvin to dim)
     val haptic = LocalHapticFeedback.current
     Column(Modifier.fillMaxSize().background(ground).safeDrawingPadding().padding(horizontal = 22.dp)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            if (onSchedule != null) Text("Schedule", Modifier.clickable(onClick = onSchedule).padding(12.dp), color = ink, fontFamily = outfit)
+            if (onSettings != null) Text("Settings", Modifier.clickable(onClick = onSettings).padding(12.dp), color = ink, fontFamily = outfit)
+        }
         Column(Modifier.weight(1f).fillMaxWidth().pointerInput(Unit) {
             var rawK = 0f
             var rawDim = 0f
@@ -100,9 +108,15 @@ fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Bool
             Spacer(Modifier.height(36.dp))
             Readout(active, dragging, kelvin, dim, ink, onChange)
         }
+        if (onMission != null) Text(if (missionSeen) "◯" else "Free forever. Here’s why →",
+            Modifier.align(Alignment.CenterHorizontally).clickable(onClickLabel = "Our mission", onClick = onMission).padding(12.dp),
+            color = ink.copy(alpha = .70f), fontFamily = outfit, fontSize = 13.sp)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Chip("Reading", accent, ink, Modifier.weight(1f), active && kelvin == 3400 && dim == 82) { onChange(3400, 82, true) }
-            Chip("Deep Night", accent, ink, Modifier.weight(1f), active && kelvin == 1700 && dim == 14) { onChange(1700, 14, true) }
+            shortcuts.take(2).forEach { (name, k, percent) ->
+                Chip(name, accent, ink, Modifier.weight(1f), active && kelvin == k && dim == percent) {
+                    if (onPreset == null) onChange(k, percent, true) else onPreset(name)
+                }
+            }
             Chip("+", accent, ink, Modifier.width(48.dp), false, onCustom)
         }
         Spacer(Modifier.height(16.dp))

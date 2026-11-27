@@ -2,6 +2,22 @@ package dev.horizon.filter
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.AppOpsManager
+import android.app.TimePickerDialog
+import android.content.SharedPreferences
+import android.os.Process
+import android.widget.EditText
+import android.location.LocationManager
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.*
+import dev.horizon.core.data.*
+import dev.horizon.feature.schedule.ScheduleScreen
+import dev.horizon.feature.presets.PresetsScreen
+import dev.horizon.feature.settings.AdvancedScreen
+import dev.horizon.feature.permission.PermissionScreen
+import dev.horizon.feature.mission.MissionScreen
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -32,6 +48,21 @@ class MainActivity : ComponentActivity() {
     private var dim by mutableIntStateOf(82)
     private var starting = false
     private var granting = false
+    private var page by mutableStateOf("Home")
+    private var revision by mutableIntStateOf(0)
+    private val schedule by lazy { Schedule(this) }
+    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == "kelvin") kelvin = prefs.getInt("kelvin", 3400)
+        if (key == "dim") dim = prefs.getInt("dim", 82)
+        revision++
+    }
+    private val alarmGrant = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (schedule.allowed()) setSchedule(true)
+    }
+    private val locate = registerForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
+        if (ok) locateCity()
+    }
+
     private var bound = false
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
@@ -44,7 +75,7 @@ class MainActivity : ComponentActivity() {
     }
     private val grant = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         granting = false
-        if (Settings.canDrawOverlays(this) && Settings.System.canWrite(this)) maybeNotifyThenStart()
+        if (canStart()) { page = "Home"; maybeNotifyThenStart() } else page = "Permissions"
     }
     private val notifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         granting = false
@@ -55,11 +86,32 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         kelvin = prefs.getInt("kelvin", 3400)
         dim = prefs.getInt("dim", 82)
+        if (intent.action == FILTER_OFF) { control(this, FILTER_OFF); finish(); return }
+        page = savedInstanceState?.getString("page") ?: "Home"
+        prefs.registerOnSharedPreferenceChangeListener(listener)
         bound = bindService(Intent(this, FilterService::class.java), connection, Context.BIND_AUTO_CREATE)
         setContent {
             val active = service?.active?.collectAsState()?.value == true
             androidx.compose.runtime.LaunchedEffect(active) { if (active) starting = false }
-            HomeScreen(active, kelvin, dim, ::change, ::toggle, ::customPreset)
+            BackHandler(page != "Home") { back() }
+            val rows = remember(revision) { readPresets(prefs) }
+            when (page) {
+                "Schedule" -> ScheduleScreen(prefs.getBoolean("schedule", false) && schedule.allowed(), prefs.getBoolean("solar", false),
+                    prefs.getBoolean("invert", false), timeLabel(true) to timeLabel(false),
+                    prefs.getString("city", "Gandhinagar").orEmpty(), prefs.getInt("ramp", 0), ::scheduleAction, ::back)
+                "Presets" -> PresetsScreen(rows, SavedPreset("", kelvin, dim, prefs.getInt("rgb", -1)),
+                    { savePresets(prefs, it) }, ::applyPreset, ::back)
+                "Settings" -> AdvancedScreen(prefs.getBoolean("deep", true), prefs.getBoolean("restore", false),
+                    prefs.getInt("rgb", -1), prefs.getStringSet("excluded", emptySet()).orEmpty().map { it to appLabel(it) },
+                    hasUsageAccess(), ::advancedAction, { id -> exclusion(id, false) }, ::back)
+                "Permissions" -> PermissionScreen(Settings.canDrawOverlays(this), Settings.System.canWrite(this), ::requestSpecial, ::back)
+                "Science", "Mission" -> MissionScreen(page == "Science", ::back)
+                else -> HomeScreen(active, kelvin, dim, ::change, ::toggle, { page = "Presets" },
+                    { page = "Schedule" }, { page = "Settings" }, {
+                        page = "Mission"; prefs.edit { putBoolean("mission_seen", true) }
+                    }, prefs.getBoolean("mission_seen", false), rows.take(2).map { Triple(it.name, it.kelvin, it.dim) },
+                    { name -> rows.firstOrNull { it.name == name }?.let(::applyPreset) })
+            }
         }
     }
 
@@ -79,24 +131,17 @@ class MainActivity : ComponentActivity() {
 
     private fun enable() {
         if (granting || starting) return
-        when {
-            !Settings.canDrawOverlays(this) -> explain("Display over other apps",
-                "Horizon uses a touch-through layer to tint your screen.", Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-            !Settings.System.canWrite(this) -> explain("Modify system settings",
-                "Horizon saves your brightness before dimming and restores it when you turn the filter off.",
-                Settings.ACTION_MANAGE_WRITE_SETTINGS)
-            else -> maybeNotifyThenStart()
-        }
+        if (canStart()) maybeNotifyThenStart() else page = "Permissions"
     }
 
-    private fun explain(title: String, reason: String, action: String) {
+    private fun requestSpecial() {
+        val action = when {
+            !Settings.canDrawOverlays(this) -> Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+            !Settings.System.canWrite(this) -> Settings.ACTION_MANAGE_WRITE_SETTINGS
+            else -> { back(); return }
+        }
         granting = true
-        AlertDialog.Builder(this).setTitle(title).setMessage(reason)
-            .setNegativeButton("Decline") { _, _ -> granting = false }
-            .setOnCancelListener { granting = false }
-            .setPositiveButton("Open settings") { _, _ ->
-                grant.launch(Intent(action, "package:$packageName".toUri()))
-            }.show()
+        grant.launch(Intent(action, "package:$packageName".toUri()))
     }
 
     private fun maybeNotifyThenStart() {
@@ -117,20 +162,161 @@ class MainActivity : ComponentActivity() {
         window.decorView.postDelayed({ starting = false }, 1000)
     }
 
-    private fun customPreset() {
-        val dialog = AlertDialog.Builder(this).setTitle("Custom preset")
-            .setMessage("Save the current ${kelvin} K and $dim% brightness.")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Save") { _, _ ->
-                prefs.edit { putInt("custom_k", kelvin).putInt("custom_dim", dim) }
-            }
-        if (prefs.contains("custom_k")) dialog.setNeutralButton("Apply saved") { _, _ ->
-            change(prefs.getInt("custom_k", kelvin), prefs.getInt("custom_dim", dim), true)
-        }
-        dialog.show()
+    private fun back() { page = if (page == "Science") "Settings" else "Home" }
+
+    private fun applyPreset(preset: SavedPreset) {
+        prefs.edit { putInt("rgb", preset.rgb) }
+        page = "Home"
+        change(preset.kelvin, preset.dim, true)
     }
 
+    private fun timeLabel(start: Boolean): String = schedule.event(LocalDate.now(), start)
+        ?.format(DateTimeFormatter.ofPattern("HH:mm")) ?: "No sun event"
+
+    private fun setSchedule(enabled: Boolean) {
+        prefs.edit { putBoolean("schedule", enabled) }
+        schedule.arm()
+    }
+
+    private fun setNumber(key: String, value: Int) {
+        prefs.edit { putInt(key, value) }
+        schedule.arm()
+    }
+
+    private fun scheduleAction(action: String, value: Int) {
+        val solar = prefs.getBoolean("solar", false)
+        val invert = prefs.getBoolean("invert", false)
+        val evening = (action == "start" || action == "offsetStart") != invert
+        val key = if (solar) { if (evening) "sunset_offset" else "sunrise_offset" }
+            else if (evening) "evening" else "morning"
+        when (action) {
+            "solar", "invert" -> {
+                prefs.edit { putBoolean(action, if (action == "solar") value == 1 else !invert) }; schedule.arm()
+            }
+            "ramp" -> {
+                val minutes = intArrayOf(0, 5, 15, 20, 30, 45, 60)
+                AlertDialog.Builder(this).setTitle("Ramp over").setItems(minutes.map { "$it min" }.toTypedArray()) { _, i ->
+                    setNumber("ramp", minutes[i])
+                }.show()
+            }
+            "schedule" -> when {
+                prefs.getBoolean("schedule", false) && schedule.allowed() -> setSchedule(false)
+                !canStart() -> page = "Permissions"
+                Build.VERSION.SDK_INT >= 31 && !schedule.allowed() -> alarmGrant.launch(
+                    Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, "package:$packageName".toUri()))
+                else -> setSchedule(true)
+            }
+            "start", "end" -> if (solar) {
+                val offsets = (-12..12).map { it * 5 }
+                AlertDialog.Builder(this).setTitle("Solar offset").setItems(offsets.map { "$it min" }.toTypedArray()) { _, i ->
+                    setNumber(key, offsets[i])
+                }.show()
+            } else {
+                val v = prefs.getInt(key, if (evening) 1320 else 450)
+                TimePickerDialog(this, { _, hour, minute -> setNumber(key, hour * 60 + minute) }, v / 60, v % 60, true).show()
+            }
+            "offsetStart", "offsetEnd" -> {
+                val v = prefs.getInt(key, if (solar) 0 else if (evening) 1320 else 450) + value
+                setNumber(key, if (solar) v.coerceIn(-120, 120) else Math.floorMod(v, 1440))
+            }
+            "city" -> chooseCity()
+        }
+    }
+
+    private fun chooseCity() {
+        val options = cities.keys.toList() + listOf("Use approximate location", "Enter latitude, longitude")
+        AlertDialog.Builder(this).setTitle("Sunrise and sunset").setItems(options.toTypedArray()) { _, i ->
+            when (i) {
+                cities.size -> locate.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                cities.size + 1 -> {
+                    val field = EditText(this).apply { hint = "23.22, 72.64" }
+                    val dialog = AlertDialog.Builder(this).setTitle("Coordinates").setView(field)
+                        .setNegativeButton("Cancel", null).setPositiveButton("Save", null).create()
+                    dialog.show()
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                        val v = field.text.toString()
+                        if (coords(v) == null) field.error = "Enter latitude, longitude"
+                        else { saveCity(v); dialog.dismiss() }
+                    }
+                }
+                else -> saveCity(options[i])
+            }
+        }.show()
+    }
+
+    private fun saveCity(city: String) {
+        prefs.edit { putString("city", city) }; schedule.arm()
+    }
+
+    private fun locateCity() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) return
+        val manager = requireNotNull(getSystemService(LocationManager::class.java))
+        val location = manager.getProviders(true).mapNotNull { provider ->
+            try { manager.getLastKnownLocation(provider) } catch (_: SecurityException) { null }
+        }.maxByOrNull { it.time }
+        if (location == null) {
+            AlertDialog.Builder(this).setMessage("No recent location is available. Choose a city or enter coordinates.")
+                .setPositiveButton("Choose city") { _, _ -> chooseCity() }.setNegativeButton("Cancel", null).show()
+        } else {
+            // Keep only the computed events; device coordinates never enter persistent storage.
+            val today = LocalDate.now()
+            prefs.edit {
+                for (offset in -1L..32L) {
+                    val date = today.plusDays(offset)
+                    for (rise in listOf(true, false)) {
+                        val time = dev.horizon.core.solar.sunEvent(date, java.time.ZoneId.systemDefault(), location.latitude, location.longitude, rise)
+                        putLong("sun_${date}_$rise", time?.toEpochSecond() ?: 0L)
+                    }
+                }
+            }
+            saveCity("Device location")
+        }
+    }
+
+    private fun advancedAction(action: String, value: Int) {
+        when (action) {
+            "deep", "restore" -> prefs.edit { putBoolean(action, !prefs.getBoolean(action, action == "deep")) }
+            "rgb" -> prefs.edit { putInt("rgb", value) }
+            "science" -> page = "Science"
+            "permission" -> page = "Permissions"
+            "apps" -> if (hasUsageAccess()) chooseApp() else startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        }
+        if (service?.active?.value == true && action in setOf("deep", "rgb")) service?.update(kelvin, dim, true)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun hasUsageAccess(): Boolean {
+        val ops = requireNotNull(getSystemService(AppOpsManager::class.java))
+        val mode = ops.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), packageName)
+        return mode == AppOpsManager.MODE_ALLOWED
+    }
+
+    @Suppress("DEPRECATION")
+    private fun appLabel(id: String) = try {
+        packageManager.getApplicationLabel(packageManager.getApplicationInfo(id, 0)).toString()
+    } catch (_: android.content.pm.PackageManager.NameNotFoundException) { id }
+
+    @Suppress("DEPRECATION")
+    private fun chooseApp() {
+        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+        val apps = packageManager.queryIntentActivities(intent, 0).map { it.activityInfo.packageName }.distinct()
+            .filter { it != packageName }.map { it to appLabel(it) }.sortedBy { it.second.lowercase() }
+        AlertDialog.Builder(this).setTitle("Turn filter off in").setItems(apps.map { it.second }.toTypedArray()) { _, i ->
+            exclusion(apps[i].first, true)
+        }.show()
+    }
+
+    private fun exclusion(id: String, add: Boolean) {
+        val current = prefs.getStringSet("excluded", emptySet()).orEmpty()
+        prefs.edit { putStringSet("excluded", if (add) current + id else current - id) }
+        service?.rulesChanged()
+    }
+
+    override fun onResume() { super.onResume(); revision++ }
+    override fun onSaveInstanceState(outState: Bundle) { super.onSaveInstanceState(outState); outState.putString("page", page) }
+
     override fun onDestroy() {
+        prefs.unregisterOnSharedPreferenceChangeListener(listener)
         if (bound) unbindService(connection)
         super.onDestroy()
     }

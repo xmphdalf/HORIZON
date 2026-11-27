@@ -169,6 +169,7 @@ This list is the complete set. The in-app permission screen must show exactly th
 | `POST_NOTIFICATIONS` | The control notification | Yes |
 | `RECEIVE_BOOT_COMPLETED` | Restore state after reboot | Yes |
 | `PACKAGE_USAGE_STATS` | Per-app rules (F-19). Feature disabled if denied. | Yes |
+| `SCHEDULE_EXACT_ALARM` | User-selected schedule times | Yes |
 | `ACCESS_COARSE_LOCATION` | Local sunset calculation. Manual city entry is the alternative. | Yes |
 
 **`INTERNET` is never declared.** This is the single most legible privacy signal available in this category and it is treated as a product feature, stated on the store listing and in the app. Any future feature requiring it is rejected.

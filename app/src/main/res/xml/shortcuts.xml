@@ -1,0 +1,1 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"><shortcut android:shortcutId="off" android:icon="@drawable/horizon_mark" android:shortcutShortLabel="@string/panic_off"><intent android:action="dev.horizon.filter.STOP" android:targetPackage="dev.horizon.filter" android:targetClass="dev.horizon.filter.MainActivity"/></shortcut></shortcuts>

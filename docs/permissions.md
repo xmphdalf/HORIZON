@@ -17,6 +17,7 @@ commit.
 | `android.permission.POST_NOTIFICATIONS` | The control notification | Yes |
 | `android.permission.RECEIVE_BOOT_COMPLETED` | Restore state after reboot | Yes |
 | `android.permission.PACKAGE_USAGE_STATS` | Per-app rules. Feature disabled if denied. | Yes |
+| `android.permission.SCHEDULE_EXACT_ALARM` | User-selected schedule times | Yes |
 | `android.permission.ACCESS_COARSE_LOCATION` | Local sunset calculation. Manual city entry is the alternative. | Yes |
 
 ## INTERNET is never declared

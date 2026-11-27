@@ -8,12 +8,13 @@ android {
 
     defaultConfig {
         applicationId = "dev.horizon.filter"
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "1.0.0-rc1"
     }
 }
 
 dependencies {
+    implementation(libs.compose.material3)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     androidTestImplementation(libs.androidx.test.junit)
