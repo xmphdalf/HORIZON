@@ -9,11 +9,11 @@ env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   release:
-    name: Build and publish
+    name: Verify release build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,5 +72,44 @@ jobs:
             app/build/outputs/apk/release/SHA256SUMS.txt
           retention-days: 90
 
-      # TODO(#3): signing runs locally until a key exists. The keystore is never
-      # committed and never read by tooling; see SECURITY.md.
+  publish:
+    needs: release
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release
+          path: unsigned
+
+      - name: Verify version and sign
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          apk=unsigned/app-release-unsigned.apk
+          tools=$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          version=$("$tools/aapt" dump badging "$apk" | sed -n "s/^package:.* versionName='\([^']*\)'.*/\1/p")
+          [[ "$GITHUB_REF_NAME" == "v$version" ]]
+          : "${KEYSTORE:?Missing release signing keystore}"
+          key="$RUNNER_TEMP/horizon.keystore"
+          trap 'rm -f "$key"' EXIT
+          printf '%s' "$KEYSTORE" | base64 --decode > "$key"
+          "$tools/apksigner" sign --ks "$key" --ks-key-alias "$KEY_ALIAS" --ks-pass env:STORE_PASS --key-pass env:KEY_PASS --out Horizon.apk "$apk"
+          "$tools/apksigner" verify --verbose Horizon.apk
+          sha256sum Horizon.apk > SHA256SUMS.txt
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          flags=()
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then flags+=(--prerelease); fi
+          gh release create "$GITHUB_REF_NAME" Horizon.apk SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes "${flags[@]}"
