@@ -7,11 +7,6 @@ is not available to you, open a normal issue that says only that you have found 
 security problem and would like a private channel, without describing the problem
 itself.
 
-There is no bounty. This is a free project with no revenue.
-
-Expect a slower response than a commercial project would offer. That is stated
-plainly here rather than promised and then missed.
-
 ## Threat model
 
 Horizon holds no user data worth stealing: no accounts, no identifiers, no
@@ -44,11 +39,7 @@ anywhere on a classpath, including transitive ones.
 The app declares no `INTERNET` permission, so even a fully compromised dependency
 cannot open a network connection from within the app process.
 
-Releases are reproducible so the published APK can be verified against this
-source. Verify the signature before installing a build you did not compile
-yourself, especially one obtained outside F-Droid or Play. Clones repackaged with
-ads are inevitable under a free licence; the published signature is how you tell
-them apart.
+Test APKs from GitHub Actions are debug-signed. The test workflow includes a SHA-256 checksum alongside the APK.
 
 ## Signing material
 

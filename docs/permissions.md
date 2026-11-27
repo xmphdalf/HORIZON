@@ -30,9 +30,3 @@ future feature requiring it is rejected.
 The audit fails on `android.permission.INTERNET` specifically, before it checks
 anything else, so the failure message names the commitment rather than reading as
 a generic list mismatch.
-
-## Manual filter build
-
-The manual filter declares overlay access, write settings, foreground service,
-its special-use type, and notifications. The service subtype describes the
-user-enabled tint and immediate off action. Store review is pending.

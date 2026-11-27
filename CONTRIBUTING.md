@@ -1,27 +1,16 @@
 # Contributing
 
-## Before anything else
+## Development setup
 
-Read [CLAUDE.md](CLAUDE.md). It is short and it holds the commitments, the stack,
-and the commands.
+Use JDK 17 and Android SDK Platform 37. Run the project checks from the repository root.
 
-The four commitments in [requirement.md](requirement.md) section 2 are not
-negotiable. A change that adds a network capability, an analytics dependency, or
-a paid tier will be declined regardless of what it enables. This is not a
-judgement about the contribution; it is that the project has one property worth
-protecting and that property is the absence of those things.
-
-## Setting up
-
-Requires JDK 17 or newer and the Android SDK with platform 37 installed.
-
-```
-./gradlew build     Compile everything and run the tests
-./gradlew check     The above plus detekt, lint, and the structural gates
+```sh
+./gradlew check
+./gradlew -p build-logic test
+./gradlew :app:connectedDebugAndroidTest
 ```
 
-There is nothing else to configure. No API keys, no local properties, no service
-accounts, because there are no services.
+The last command requires a connected device or emulator. CI runs the device tests on API 26 and 36.
 
 ## The gates will stop you
 
@@ -105,10 +94,4 @@ lifecycle.
 
 ## Reporting bugs
 
-Use the issue tracker. There is no email support and no SLA: this is a free
-project with no revenue, and pretending otherwise would be the fifth dark
-pattern.
-
-Include your device, Android version, and manufacturer skin. Battery managers on
-some skins kill foreground services aggressively, and that is the single most
-common cause of "it stopped working".
+Include your device model, Android version, steps to reproduce, and what you expected to happen. Report security issues privately using the [security policy](SECURITY.md).
