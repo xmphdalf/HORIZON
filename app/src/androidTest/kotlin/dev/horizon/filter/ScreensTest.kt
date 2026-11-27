@@ -49,7 +49,7 @@ class ScreensTest {
             ?: requireNotNull(device.wait(Until.findObject(By.text("◯")), 2000))
         mission.click()
         capture("mission", "I build apps that ask for nothing.")
-        tap("Leave a tip")
+        tap("Keep the lamp on")
         capture("tip", "Keep the lamp on")
         tap("I’m good, thanks")
         capture("home-after-decline", "Schedule")

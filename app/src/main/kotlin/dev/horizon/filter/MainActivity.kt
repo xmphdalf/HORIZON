@@ -16,7 +16,8 @@ import dev.horizon.feature.schedule.ScheduleScreen
 import dev.horizon.feature.presets.PresetsScreen
 import dev.horizon.feature.settings.AdvancedScreen
 import dev.horizon.feature.permission.PermissionScreen
-import dev.horizon.feature.mission.MissionScreen
+import dev.horizon.feature.mission.ScienceScreen
+import dev.horizon.feature.mission.MissionCard
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import android.content.ComponentName
@@ -129,12 +130,13 @@ class MainActivity : ComponentActivity() {
                     prefs.getInt("rgb", -1), prefs.getStringSet("excluded", emptySet()).orEmpty().map { it to appLabel(it) },
                     hasUsageAccess(), ::advancedAction, { id -> exclusion(id, false) }, ::back)
                 "Permissions" -> PermissionScreen(Settings.canDrawOverlays(this), Settings.System.canWrite(this), ::requestSpecial, ::back)
-                "Science", "Mission" -> MissionScreen(page == "Science", ::back) { showTips = true; tips.open() }
+                "Science" -> ScienceScreen(::back)
                 else -> HomeScreen(active, kelvin, dim, ::change, ::toggle, { page = "Presets" },
                     { page = "Schedule" }, { page = "Settings" }, {
                         page = "Mission"; prefs.edit { putBoolean("mission_seen", true) }
                     }, prefs.getBoolean("mission_seen", false), rows.take(2).map { Triple(it.name, it.kelvin, it.dim) },
-                    { name -> rows.firstOrNull { it.name == name }?.let(::applyPreset) })
+                    { name -> rows.firstOrNull { it.name == name }?.let(::applyPreset) },
+                    missionCard = if (page == "Mission") { { MissionCard(::back) { showTips = true; tips.open() } } } else null)
             }
             if (showTips) dev.horizon.feature.mission.TipSheet(tips.prices, tips.message, tips.busy, tips.received,
                 tips::purchase, tips::open) { showTips = false; page = "Home" }

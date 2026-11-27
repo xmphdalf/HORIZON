@@ -46,7 +46,7 @@ fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Bool
                onSchedule: (() -> Unit)? = null, onSettings: (() -> Unit)? = null,
                onMission: (() -> Unit)? = null, missionSeen: Boolean = false,
                shortcuts: List<Triple<String, Int, Int>> = listOf(Triple("Reading", 3400, 82), Triple("Deep Night", 1700, 14)),
-               onPreset: ((String) -> Unit)? = null) {
+               onPreset: ((String) -> Unit)? = null, missionCard: (@Composable () -> Unit)? = null) {
     val k = if (active) kelvin else 4600
     val colors = remember(k) { dev.horizon.core.design.paletteAt(k) }
     val ground = colors.ground
@@ -89,8 +89,11 @@ fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Bool
             Spacer(Modifier.height(36.dp))
             Readout(active, dragging, kelvin, dim, ink, onChange)
         }
-        if (onMission != null) Text(if (missionSeen) "◯" else "Free forever. Here’s why →",
-            Modifier.align(Alignment.CenterHorizontally).clickable(onClickLabel = "Our mission", onClick = onMission).padding(12.dp),
+        if (missionCard != null) missionCard()
+        else if (onMission != null) Text(if (missionSeen) "◯" else "Free forever. Here’s why →",
+            Modifier.align(Alignment.CenterHorizontally).clip(RoundedCornerShape(24.dp))
+                .background(if (missionSeen) Color.Transparent else colors.surface)
+                .clickable(onClickLabel = "A note from the maker", onClick = onMission).padding(12.dp),
             color = ink.copy(alpha = .70f), fontFamily = outfit, fontSize = 13.sp)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             shortcuts.take(2).forEach { (name, k, percent) ->

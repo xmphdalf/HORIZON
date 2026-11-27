@@ -118,7 +118,7 @@ internal class PlayTips(private val activity: Activity, private val protectCheck
         val product = offers[id] ?: return
         val offer = product.oneTimePurchaseOfferDetailsList?.firstOrNull() ?: return
         val params = BillingFlowParams.ProductDetailsParams.newBuilder()
-            .setProductDetails(product).setOfferToken(offer.offerToken).build()
+            .setProductDetails(product).apply { offer.offerToken?.let { setOfferToken(it) } }.build()
         busy = true
         checkout = true
         message = ""
