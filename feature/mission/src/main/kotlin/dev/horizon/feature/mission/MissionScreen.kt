@@ -27,10 +27,12 @@ fun ScienceScreen(back: () -> Unit) {
 @Composable
 fun MissionCard(back: () -> Unit, tip: () -> Unit) {
     Column(Modifier.fillMaxWidth().heightIn(max = 258.dp).background(Surface, RoundedCornerShape(20.dp))
-        .verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+        .padding(12.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
         Text("I build apps that ask for nothing.", fontFamily = Outfit, color = Ink, fontSize = 23.sp)
+        Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
         Copy("No ads. No accounts. No tracking. Your filter settings live on your phone.")
         Copy("If Horizon has made your nights easier, you’re welcome to keep the lamp on. Every feature is already unlocked.")
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Action("Keep the lamp on", Modifier.weight(1f), click = tip)
             Action("Not now", Modifier.weight(1f), click = back)

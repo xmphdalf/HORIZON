@@ -35,7 +35,7 @@ private fun ramp(samples: List<Color>, k: Int): Color {
 }
 
 public data class HorizonColors(public val ground: Color, public val surface: Color, public val ink: Color, public val muted: Color, public val accent: Color)
-private val palette = staticCompositionLocalOf { paletteAt(3400) }
+private val LocalPalette = staticCompositionLocalOf { paletteAt(3400) }
 
 public fun paletteAt(kelvin: Int): HorizonColors = HorizonColors(
     ramp(grounds, kelvin), ramp(listOf(Color(0xff101216), Color(0xff191310), Color(0xff1e120a), Color(0xff231004)), kelvin),
@@ -45,17 +45,17 @@ public fun paletteAt(kelvin: Int): HorizonColors = HorizonColors(
 @Composable
 public fun HorizonTheme(kelvin: Int, content: @Composable () -> Unit) {
     val colors = remember(kelvin) { paletteAt(kelvin) }
-    CompositionLocalProvider(palette provides colors) {
+    CompositionLocalProvider(LocalPalette provides colors) {
         MaterialTheme(colorScheme = darkColorScheme(primary = colors.accent, surface = colors.surface,
             onSurface = colors.ink, onSurfaceVariant = colors.muted, background = colors.ground), content = content)
     }
 }
 
-public val Ground: Color @Composable get() = palette.current.ground
-public val Surface: Color @Composable get() = palette.current.surface
-public val Ink: Color @Composable get() = palette.current.ink
-public val Muted: Color @Composable get() = palette.current.muted
-public val Ember: Color @Composable get() = palette.current.accent
+public val Ground: Color @Composable get() = LocalPalette.current.ground
+public val Surface: Color @Composable get() = LocalPalette.current.surface
+public val Ink: Color @Composable get() = LocalPalette.current.ink
+public val Muted: Color @Composable get() = LocalPalette.current.muted
+public val Ember: Color @Composable get() = LocalPalette.current.accent
 public val Outfit: FontFamily = FontFamily(Font(R.font.outfit))
 public val Mono: FontFamily = FontFamily(Font(R.font.jetbrainsmono))
 
