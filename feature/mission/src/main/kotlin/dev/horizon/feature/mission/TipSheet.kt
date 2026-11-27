@@ -20,15 +20,15 @@ import kotlinx.coroutines.delay
 /** Prices come directly from Play so checkout and the sheet always agree. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TipSheet(prices: Map<String, String>, message: String, busy: Boolean, received: Boolean,
-             purchase: (String) -> Unit, retry: () -> Unit, close: () -> Unit) {
+fun AboutScreen(expanded: Boolean, prices: Map<String, String>, message: String, busy: Boolean, received: Boolean,
+             open: () -> Unit, purchase: (String) -> Unit, retry: () -> Unit, close: () -> Unit) {
     var selected by rememberSaveable { mutableStateOf<String?>(null) }
     val dismiss by rememberUpdatedState(close)
     LaunchedEffect(received) { if (received) { delay(6000); dismiss() } }
-    ModalBottomSheet(onDismissRequest = close, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = Ground, contentColor = Ink) {
-        Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 22.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    Page("About Horizon", "Why Horizon is free", close) {
+        Copy("I built Horizon for quieter nights. Your filter works offline, your settings stay on your phone, and every feature is free.")
+        if (!expanded) Action("Leave a tip", Modifier.fillMaxWidth(), click = open)
+        else Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             if (received) {
                 val color = Ember
                 Canvas(Modifier.size(64.dp, 34.dp)) {

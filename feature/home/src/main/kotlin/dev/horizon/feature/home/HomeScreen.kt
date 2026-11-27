@@ -44,9 +44,9 @@ private val mono = FontFamily(Font(dev.horizon.core.design.R.font.jetbrainsmono)
 fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Boolean) -> Unit,
                onToggle: () -> Unit, onCustom: () -> Unit,
                onSchedule: (() -> Unit)? = null, onSettings: (() -> Unit)? = null,
-               onMission: (() -> Unit)? = null, missionSeen: Boolean = false,
+               onAbout: () -> Unit = {},
                shortcuts: List<Triple<String, Int, Int>> = listOf(Triple("Reading", 3400, 82), Triple("Deep Night", 1700, 14)),
-               onPreset: ((String) -> Unit)? = null, missionCard: (@Composable () -> Unit)? = null) {
+               onPreset: ((String) -> Unit)? = null) {
     val k = if (active) kelvin else 4600
     val colors = remember(k) { dev.horizon.core.design.paletteAt(k) }
     val ground = colors.ground
@@ -89,12 +89,9 @@ fun HomeScreen(active: Boolean, kelvin: Int, dim: Int, onChange: (Int, Int, Bool
             Spacer(Modifier.height(36.dp))
             Readout(active, dragging, kelvin, dim, ink, onChange)
         }
-        if (missionCard != null) missionCard()
-        else if (onMission != null) Text(if (missionSeen) "◯" else "Free forever. Here’s why →",
-            Modifier.align(Alignment.CenterHorizontally).clip(RoundedCornerShape(24.dp))
-                .background(if (missionSeen) Color.Transparent else colors.surface)
-                .clickable(onClickLabel = "A note from the maker", onClick = onMission).padding(12.dp),
-            color = ink.copy(alpha = .70f), fontFamily = outfit, fontSize = 13.sp)
+        Text("Why Horizon is free", Modifier.align(Alignment.CenterHorizontally)
+            .clickable(onClick = onAbout).padding(horizontal = 16.dp, vertical = 14.dp),
+            color = ink.copy(alpha = .82f), fontFamily = outfit, fontSize = 14.sp)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             shortcuts.take(2).forEach { (name, k, percent) ->
                 Chip(name, accent, ink, Modifier.weight(1f), active && kelvin == k && dim == percent) {

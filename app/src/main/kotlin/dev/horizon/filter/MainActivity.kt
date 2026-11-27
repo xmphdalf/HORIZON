@@ -17,7 +17,6 @@ import dev.horizon.feature.presets.PresetsScreen
 import dev.horizon.feature.settings.AdvancedScreen
 import dev.horizon.feature.permission.PermissionScreen
 import dev.horizon.feature.mission.ScienceScreen
-import dev.horizon.feature.mission.MissionCard
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import android.content.ComponentName
@@ -130,16 +129,14 @@ class MainActivity : ComponentActivity() {
                     prefs.getInt("rgb", -1), prefs.getStringSet("excluded", emptySet()).orEmpty().map { it to appLabel(it) },
                     hasUsageAccess(), ::advancedAction, { id -> exclusion(id, false) }, ::back)
                 "Permissions" -> PermissionScreen(Settings.canDrawOverlays(this), Settings.System.canWrite(this), ::requestSpecial, ::back)
+                "About" -> dev.horizon.feature.mission.AboutScreen(showTips, tips.prices, tips.message, tips.busy, tips.received,
+                    { showTips = true; tips.open() }, tips::purchase, tips::open, ::back)
                 "Science" -> ScienceScreen(::back)
                 else -> HomeScreen(active, kelvin, dim, ::change, ::toggle, { page = "Presets" },
-                    { page = "Schedule" }, { page = "Settings" }, {
-                        page = "Mission"; prefs.edit { putBoolean("mission_seen", true) }
-                    }, prefs.getBoolean("mission_seen", false), rows.take(2).map { Triple(it.name, it.kelvin, it.dim) },
-                    { name -> rows.firstOrNull { it.name == name }?.let(::applyPreset) },
-                    missionCard = if (page == "Mission") { { MissionCard(::back) { showTips = true; tips.open() } } } else null)
+                    { page = "Schedule" }, { page = "Settings" }, onAbout = { page = "About" }, shortcuts = rows.take(2).map { Triple(it.name, it.kelvin, it.dim) },
+                    onPreset = { name -> rows.firstOrNull { it.name == name }?.let(::applyPreset) })
             }
-            if (showTips) dev.horizon.feature.mission.TipSheet(tips.prices, tips.message, tips.busy, tips.received,
-                tips::purchase, tips::open) { showTips = false; page = "Home" }
+
             }
         }
     }
@@ -193,7 +190,7 @@ class MainActivity : ComponentActivity() {
         window.decorView.postDelayed({ starting = false }, 1000)
     }
 
-    private fun back() { page = when (page) { "Science" -> "Settings"; "Permissions" -> permissionOrigin; else -> "Home" } }
+    private fun back() { showTips = false; page = when (page) { "Science" -> "Settings"; "Permissions" -> permissionOrigin; else -> "Home" } }
 
     private fun applyPreset(preset: SavedPreset) {
         val recent = org.json.JSONArray(prefs.getString("recent_presets", "[]"))

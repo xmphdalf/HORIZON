@@ -45,13 +45,10 @@ class ScreensTest {
         tap("Settings")
         capture("advanced", "Advanced")
         device.pressBack()
-        val mission = device.wait(Until.findObject(By.textContains("Free forever")), 2000)
-            ?: requireNotNull(device.wait(Until.findObject(By.text("◯")), 2000))
-        mission.click()
-        capture("mission", "I build apps that ask for nothing.")
-        tap("Keep the lamp on")
+        tap("Why Horizon is free")
+        tap("Leave a tip")
         capture("tip", "Keep the lamp on")
         tap("I’m good, thanks")
-        capture("home-after-decline", "Schedule")
+        capture("home-after-decline", "Why Horizon is free")
     }
 }
