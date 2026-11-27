@@ -1,83 +1,34 @@
-# Horizon
+<p align="center"><img src="docs/assets/horizon.svg" width="88" height="88" alt="Horizon’s amber arc and sun"></p>
+<h1 align="center">Horizon</h1>
+<p align="center">A warmer, dimmer screen for late-night reading on Android.</p>
 
-A system-wide screen warmth and dimming utility for Android. It tints the display
-toward amber, dims it below the manufacturer's brightness floor, and schedules
-itself around local sunset.
+Horizon lets you adjust warmth and brightness with a thumb, save a comfortable preset, and have it switch on at sunset. The filter works offline. Every feature is free.
 
-Free. Every feature, forever. No paywall, no advertising, no data collection, and
-no `INTERNET` permission at all.
+## Try the Android test build
 
-## Status
+Open a successful run in [Android test APK](https://github.com/xmphdalf/HORIZON/actions/workflows/test-apk.yml) while signed in to GitHub. Under **Artifacts**, download and unzip **Horizon-test**, then install `Horizon-test.apk` on Android 8 or later.
 
-Scaffolding. The repository structure, build logic, and quality gates are in
-place and green. The application itself is not built yet. See
-[CHANGELOG.md](CHANGELOG.md).
+Tap **Turn filter on**. Android will ask for permission to display the tint over other apps and to adjust system brightness. Drag up to warm the screen or left to dim it. To restore your original brightness, tap **Turn off** in the notification.
 
-## Why it exists
+## Everyday controls
 
-Screen comfort software has been colonised by dark patterns: filters that nag,
-tint apps that watch you, premium tiers that hold a single slider hostage.
-Horizon is the inverse.
+- **Presets** let you switch between Reading and Deep Night or save your own warmth, brightness, and tint.
+- **Schedules** follow fixed times or locally calculated sunrise and sunset. Choose a city or enter coordinates to use solar scheduling.
+- **Quick Settings, widgets, and the notification** put the filter within reach while another app is open.
+- **Per-app exclusions** let you turn the filter off for selected apps when usage access is enabled.
 
-An app requesting "draw over other apps" has the exact shape of malware. Trust is
-the only currency in this category. Having nothing to sell is what makes the
-trust claim credible instead of marketing copy.
+## Build locally
 
-Every claim here is meant to be falsifiable by checking Android's own settings,
-not believed on the strength of a privacy policy.
+Use JDK 17 and Android SDK Platform 37. From the repository root, run:
 
-## What it does
-
-- System-wide colour temperature control, with per-channel RGB for users who need
-  a tint other than amber
-- Dimming below the system floor, by combining the overlay with real brightness
-  control
-- Schedules on a fixed clock, on local sunrise and sunset computed offline, or
-  inverted for shift workers
-- Presets, a Quick Settings tile, home screen widgets, and a control notification
-- Panic disable that restores brightness and removes the tint in one action, from
-  the notification, the widget, or the launcher icon
-
-## Building
-
-Requires JDK 17 or newer and the Android SDK.
-
-```
-./gradlew build     Compile everything and run the tests
-./gradlew check     The above plus detekt, lint, and the structural gates
+```sh
+./gradlew :app:assembleDebug
 ```
 
-## Privacy
+The APK is written to `app/build/outputs/apk/debug/app-debug.apk`. For checks and device tests, see [Contributing](CONTRIBUTING.md).
 
-The app collects nothing, transmits nothing, and stores all settings locally on
-the device. There is no network code because there is no network permission.
+## Project notes
 
-The complete permission list is in [docs/permissions.md](docs/permissions.md).
-The build fails if the merged manifest ever declares anything outside it, and
-fails by name on `INTERNET`.
+Horizon stores filter settings on your device. Google Play handles optional one-time tips through **Why Horizon is free** on Home. [Privacy](PRIVACY.md) · [Android permissions](docs/permissions.md)
 
-See [PRIVACY.md](PRIVACY.md).
-
-## Documentation
-
-| Document | Holds |
-|---|---|
-| [requirement.md](requirement.md) | Product requirements, permissions, budgets |
-| [scaffolding.md](scaffolding.md) | Repository contract and code quality bar |
-| [docs/architecture.md](docs/architecture.md) | Module graph |
-| [docs/design-system.md](docs/design-system.md) | The Horizon ramp, gesture, motion |
-| [docs/science.md](docs/science.md) | What the evidence supports, and what it does not |
-| [docs/oem-quirks.md](docs/oem-quirks.md) | Per-manufacturer behaviour |
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: the four commitments
-are not negotiable, and a change that adds a network capability will be declined
-regardless of what it enables.
-
-## Licence
-
-GPLv3. See [LICENSE](LICENSE).
-
-Strong copyleft is deliberate. When the privacy claim is the product, a derivative
-must not be able to close the source and quietly add network code.
+[Architecture](docs/architecture.md) · [Design](docs/design/README.md) · [Science behind the filter](docs/science.md) · [GPLv3 license](LICENSE)

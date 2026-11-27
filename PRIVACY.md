@@ -1,59 +1,15 @@
-# Privacy Policy
+# Privacy
 
-The app collects nothing, transmits nothing, and stores all settings locally on
-the device.
+Horizon runs the filter on your device. It has no Horizon account, advertising, or analytics. The app’s merged manifest omits the Android internet permission.
 
-That is the whole policy. The rest of this document explains how you can check it
-rather than take it on trust.
+## Local settings
 
-## How to verify
+Horizon stores presets, schedules, app exclusions, and filter preferences in private app storage. It saves your brightness and brightness mode so it can restore them when the filter turns off. Android cloud backup is disabled.
 
-**The permission list.** Open Android Settings, find Horizon, and look at its
-permissions. `INTERNET` is not there and never will be. An app without it cannot
-open a network connection at all: this is enforced by the operating system, not
-by our good intentions. The complete list of what the app does request is in
-[docs/permissions.md](docs/permissions.md).
+Solar scheduling uses a selected city or coordinates you enter. If you grant approximate location access, Horizon suggests a nearby supported city and asks you to confirm it. Sunrise and sunset are calculated on the device.
 
-**The source.** The whole app is here. The build fails if any manifest declares
-`INTERNET`, and fails if any analytics, advertising, crash-reporting, or
-networking library appears anywhere on a classpath. Those checks live in
-`build-logic/convention/src/main/kotlin/dev/horizon/buildlogic/` and run on every
-pull request.
+If you enable per-app exclusions, Horizon uses Android usage events to identify the foreground app and decide when to suspend the tint. You can revoke usage access in Android settings. [Permission details](docs/permissions.md)
 
-**The build.** Releases are reproducible, so the published APK can be verified
-against this source. See [SECURITY.md](SECURITY.md) for the signature.
+## Optional tips
 
-## What is stored, and where
-
-Settings, presets, and schedules live in a Proto DataStore file in the app's
-private storage. Uninstalling the app deletes them. Nothing is backed up to a
-cloud service: `allowBackup` is off.
-
-If you use the export feature, you choose the destination and the file is plain
-JSON you can read. That is the entire sync story, and it is deliberate: a local
-file instead of a hosted service means there is no server holding your data and
-no server to breach.
-
-## What is not collected
-
-No accounts. No identifiers. No usage analytics. No crash reports. No advertising
-or attribution SDKs. No "anonymous telemetry to improve the product".
-
-There is no crash reporter that transmits, which does mean shipping partly blind.
-The alternative under consideration is an on-device log you can read and attach
-to an issue yourself, if you want to. It would never send anything on its own.
-
-## Location
-
-If you choose sunset scheduling, the app may ask for coarse location to compute
-sunrise and sunset times. That computation happens entirely on the device using a
-NOAA algorithm compiled into the app. The coordinates are used to calculate two
-times and are not stored, logged, or sent anywhere.
-
-Entering a city by hand does the same job without granting the permission.
-
-## Changes
-
-Any change to this document changes the four commitments in
-[requirement.md](requirement.md), which is not something that happens quietly.
-The git history of this file is the change log.
+Google Play processes one-time tips through your Play account. Horizon displays the price supplied by Play and checks the purchase status. Your card details stay with the payment provider.

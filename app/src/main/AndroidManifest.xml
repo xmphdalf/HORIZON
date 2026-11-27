@@ -1,26 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--
-      This list is audited by the permissionAudit task against the table in
-      requirement.md section 8. Adding a permission here without adding it there
-      fails the build.
-
-      INTERNET is never declared. That is requirement.md section 8 and the third
-      of the four commitments, and it is what makes the privacy claim checkable
-      rather than a promise.
-
-      Only the two non-optional permissions are declared so far. The remaining
-      five in the section 8 table land with the features that need them, in the
-      same commit as their docs and their entry on the in-app permission screen,
-      per the definition of done in scaffolding.md section 11.
-    -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <!-- Billing binds to the Play Store. Its optional diagnostic transport has no network access. -->
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <application
-        android:allowBackup="false"
-        android:label="Horizon"
-        android:supportsRtl="true" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <queries><intent><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent></queries>
+    <application android:allowBackup="false" android:icon="@mipmap/horizon"
+        android:label="Horizon" android:theme="@android:style/Theme.Material.NoActionBar" android:supportsRtl="true">
+        <service android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery" tools:node="remove"/>
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/><category android:name="android.intent.category.DEFAULT"/></intent-filter>
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts"/>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <receiver android:name=".ControlsChanged" android:exported="false"/>
+        <receiver android:name=".ScheduleReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <service android:name=".FilterTile" android:exported="true" android:icon="@drawable/horizon_mark"
+            android:label="Filter" android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE"/></intent-filter>
+        </service>
+        <receiver android:name=".FilterWidget" android:exported="false" android:label="Horizon 2 × 2">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_square"/>
+        </receiver>
+        <receiver android:name=".WideWidget" android:exported="false" android:label="Horizon 4 × 1">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_wide"/>
+        </receiver>
+        <service android:name="dev.horizon.surface.overlay.FilterService"
+            android:foregroundServiceType="specialUse" android:exported="false">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-enabled screen warmth and dimming overlay with an immediate notification off action" />
+        </service>
+    </application>
 </manifest>

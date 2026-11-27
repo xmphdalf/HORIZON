@@ -165,10 +165,12 @@ This list is the complete set. The in-app permission screen must show exactly th
 |---|---|---|
 | `SYSTEM_ALERT_WINDOW` | The overlay itself | No |
 | `WRITE_SETTINGS` | Lowering and restoring system brightness, required to dim past the touch opacity ceiling (4.1) | No |
-| `FOREGROUND_SERVICE` and its service type | Keeping the overlay alive | No |
+| `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SPECIAL_USE` | Keeping the overlay alive | No |
+| `com.android.vending.BILLING` | Optional one-time support purchase through Google Play | Yes |
 | `POST_NOTIFICATIONS` | The control notification | Yes |
 | `RECEIVE_BOOT_COMPLETED` | Restore state after reboot | Yes |
 | `PACKAGE_USAGE_STATS` | Per-app rules (F-19). Feature disabled if denied. | Yes |
+| `SCHEDULE_EXACT_ALARM` | User-selected schedule times | Yes |
 | `ACCESS_COARSE_LOCATION` | Local sunset calculation. Manual city entry is the alternative. | Yes |
 
 **`INTERNET` is never declared.** This is the single most legible privacy signal available in this category and it is treated as a product feature, stated on the store listing and in the app. Any future feature requiring it is rejected.
@@ -194,19 +196,11 @@ The visual direction is Horizon, delivered as a design handoff bundle. Full deta
 
 ---
 
-## 10. Donations
+## 10. Optional support
 
-**Entry point.** A small element in the middle of the home layout, above the preset chips and below the value readout: quieter than either real control, inside the thumb zone but behind both in reading order. It tints and dims with the rest of the app, so it lives in the room rather than sitting on top of it.
+Home always displays **Why Horizon is free** above the presets. It opens the About Horizon page. Selecting **Leave a tip** reveals the available amounts on that page.
 
-**Three states.** Collapsed pill with one line of text. Expanded card with the mission copy and two actions. After one expansion it collapses permanently to a bare ring, still tappable, still carrying its full TalkBack label, never badged, never re-expanded, never animated again.
-
-**Fairness requirements, non-negotiable.**
-- The decline action and the donate action share the same height, radius, fill, border, font, weight, and color, differing only in label, at fifty-fifty width. Nothing is ghosted, nothing is default-focused.
-- No amount is preselected, marked popular, or visually emphasized. Continue stays inert until an amount is chosen.
-- The decline option in the donate sheet is a full-size button beside the others, not a text link.
-- Zero is a valid amount and returns straight to the app with no confirmation and no second ask.
-
-**Implementation constraint, unresolved.** Google Play Billing uses fixed product IDs. It has no arbitrary amount and no zero. A custom amount therefore requires an external payment link opened as a browser intent, which needs no `INTERNET` permission but is a different screen than the one designed. Google Play policy on donations by individual developers must be checked before this ships. See section 15.
+Google Play supplies localized prices and handles checkout. No amount is preselected. Continue is enabled after a selection, and declining returns to Home. Every filter feature is free. See the [Play catalog and testing guide](docs/play-tips.md).
 
 ---
 
@@ -264,7 +258,7 @@ Recorded so settled questions are not silently reopened.
 
 1. **License.** GPLv3 blocks closed forks but is awkward against some app store terms. MPL-2.0 is more permissive with weaker anti-clone protection. Blocks the first public commit.
 2. **iOS.** A system-wide filter is impossible there. Options: skip iOS entirely, ship a limited in-app reader with the filter applied, or publish a Shortcuts-based guide instead of an app. Currently leaning toward skipping.
-3. **Donation mechanism.** Play Billing versus an external link, and what Play policy currently permits for an individual developer. Blocks section 10.
+3. **Donation mechanism.** The Android implementation uses Google Play one-time purchases. Catalog activation and license testing are required before release.
 4. **Foreground service type.** Which declared type fits a screen filter on API 34 and above, and what justification Play requires for it.
 5. **Migraine preset reachability.** The preset sits at 1000 K but the drag range bottoms out at 1600 K, so it is preset-only. Extend the gesture range or accept the split, deliberately.
 6. **Dim floor by panel type.** How far the combined overlay and brightness reduction can go on OLED versus LCD before F-08 is violated.

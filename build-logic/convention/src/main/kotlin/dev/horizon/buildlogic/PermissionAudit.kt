@@ -10,7 +10,7 @@ package dev.horizon.buildlogic
  */
 public object PermissionAudit {
 
-    private val TABLE_ROW = Regex("""^\|\s*`(android\.permission\.[A-Z_]+)`\s*\|""")
+    private val TABLE_ROW = Regex("""^\|\s*`((?:android\.permission\.[A-Z_]+|com\.android\.vending\.BILLING))`\s*\|""")
     private val MANIFEST_PERMISSION = Regex("""<uses-permission[^>]*android:name\s*=\s*"([^"]+)"""")
 
     /** The permission whose absence is the product claim, not merely a policy. */

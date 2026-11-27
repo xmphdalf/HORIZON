@@ -1,0 +1,51 @@
+name: Android test APK
+on:
+  pull_request:
+    paths:
+      - '**/*.kt'
+      - '**/*.kts'
+      - 'app/src/**'
+      - 'feature/**'
+      - 'surface/**'
+      - '.github/workflows/test-apk.yml'
+  workflow_dispatch:
+  push:
+    tags: ['test-v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0"'
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :core:model:test :app:permissionAuditDebug :app:assembleDebug :app:assembleDebugAndroidTest
+      - run: cp app/build/outputs/apk/debug/app-debug.apk Horizon-test.apk && sha256sum Horizon-test.apk > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Horizon-test
+          path: |
+            Horizon-test.apk
+            SHA256SUMS.txt
+
+  prerelease:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/test-v')
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Horizon-test
+      - name: Publish installable test APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" Horizon-test.apk SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease --title "Horizon $GITHUB_REF_NAME" --notes "Horizon Android test build. CI signs this APK with a temporary debug key. Reinstalling a later test build may require uninstalling the previous one."

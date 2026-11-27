@@ -8,6 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.compose.material3)
     implementation(project(":core:model"))
     implementation(project(":core:common"))
     implementation(project(":core:tokens"))
