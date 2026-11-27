@@ -196,19 +196,11 @@ The visual direction is Horizon, delivered as a design handoff bundle. Full deta
 
 ---
 
-## 10. Donations
+## 10. Optional support
 
-**Entry point.** A small element in the middle of the home layout, above the preset chips and below the value readout: quieter than either real control, inside the thumb zone but behind both in reading order. It tints and dims with the rest of the app, so it lives in the room rather than sitting on top of it.
+Home always displays **Why Horizon is free** above the presets. It opens the About Horizon page. Selecting **Leave a tip** reveals the available amounts on that page.
 
-**Three states.** Collapsed pill with one line of text. Expanded card with the mission copy and two actions. After one expansion it collapses permanently to a bare ring, still tappable, still carrying its full TalkBack label, never badged, never re-expanded, never animated again.
-
-**Fairness requirements, non-negotiable.**
-- The decline action and the donate action share the same height, radius, fill, border, font, weight, and color, differing only in label, at fifty-fifty width. Nothing is ghosted, nothing is default-focused.
-- No amount is preselected, marked popular, or visually emphasized. Continue stays inert until an amount is chosen.
-- The decline option in the donate sheet is a full-size button beside the others, not a text link.
-- Zero is a valid amount and returns straight to the app with no confirmation and no second ask.
-
-**Google Play implementation.** Offer three one-time consumable support products. Display the localized prices supplied by Play. Declining is always free and returns directly to Home. Google Play handles checkout. See docs/play-tips.md for the catalog and test setup.
+Google Play supplies localized prices and handles checkout. No amount is preselected. Continue is enabled after a selection, and declining returns to Home. Every filter feature is free. See the [Play catalog and testing guide](docs/play-tips.md).
 
 ---
 
