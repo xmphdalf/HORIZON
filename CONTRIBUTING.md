@@ -95,3 +95,11 @@ lifecycle.
 ## Reporting bugs
 
 Include your device model, Android version, steps to reproduce, and what you expected to happen. Report security issues privately using the [security policy](SECURITY.md).
+
+## Publishing a version
+
+Set the app's `versionName` and increment `versionCode` in `app/build.gradle.kts`. After the change passes CI and lands on main, tag that commit with `v` followed by the exact version name. For example, `1.0.0-rc1` uses the tag `v1.0.0-rc1`.
+
+The Release workflow checks the build, compares two release APKs, verifies the size budget, and signs the APK. The GitHub environment named `release` supplies `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and `ANDROID_KEY_PASSWORD`. Keep the same release key for app updates and restrict who can push release tags.
+
+Version tags publish the signed APK and its SHA-256 checksum to GitHub Releases. Versions with a hyphen are marked as prereleases. A manual workflow run verifies the build without publishing it.
